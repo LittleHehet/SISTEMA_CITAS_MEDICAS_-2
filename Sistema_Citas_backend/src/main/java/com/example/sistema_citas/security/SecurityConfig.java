@@ -9,6 +9,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
+import java.util.List;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -28,13 +30,24 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .authenticationProvider(customAuthenticationProvider) // ⬅️ Aquí usamos el tuyo
+                .cors(cors -> cors.configurationSource(request -> {
+                    var corsConfig = new org.springframework.web.cors.CorsConfiguration();
+                    corsConfig.setAllowedOrigins(List.of("http://localhost:5173")); // frontend React
+                    corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                    corsConfig.setAllowedHeaders(List.of("*"));
+                    corsConfig.setAllowCredentials(true);
+                    return corsConfig;
+                }))
+                .authenticationProvider(customAuthenticationProvider)
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers( "/",
-                                "/Sign-up/**", "/About/**", "/Sign-in/**", "/Salir/**","/medico-foto/**",
-                                "/css/**", "/images/**","/BuscarCita","/ConfirmarCita/**","/HorarioExtendido/**"
+                        .requestMatchers(
+                                "/", "/Sign-up/**", "/About/**", "/Sign-in/**", "/Salir/**",
+                                "/medico-foto/**", "/css/**", "/images/**",
+                                "/BuscarCita", "/ConfirmarCita/**", "/HorarioExtendido/**",
+                                "/api/about", "/api/**" // Permitir APIs REST
                         ).permitAll()
+
                         .requestMatchers("/Approve/**").hasRole("ADMINISTRADOR")
                         .requestMatchers("/Medico-Perfil/**",
                                 "/GestionCitas/**", "/completarCita/**",
@@ -51,8 +64,8 @@ public class SecurityConfig {
                 )
 
                 .formLogin(form -> form
-                        .loginPage("/Sign-in")  // Vista personalizada
-                        .loginProcessingUrl("/Sign-in/Sign-in")  // Acción del form
+                        .loginPage("/Sign-in")
+                        .loginProcessingUrl("/Sign-in/Sign-in")
                         .successHandler(customSuccessHandler)
                         .failureHandler(customFailureHandler)
                         .permitAll()
@@ -66,18 +79,14 @@ public class SecurityConfig {
                         .permitAll()
                 )
 
-                .csrf(csrf -> csrf.disable())  // Opcional, si no usas CSRF tokens
+                .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session
-                        .invalidSessionUrl("/Sign-in")  // Redirección si la sesión expira
+                        .invalidSessionUrl("/Sign-in")
                 );
 
         return http.build();
     }
 
-    //    @Bean
-//    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-//        return config.getAuthenticationManager();
-//    }
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
         return http.getSharedObject(AuthenticationManagerBuilder.class)
@@ -85,10 +94,3 @@ public class SecurityConfig {
                 .build();
     }
 }
-
-// Rutas específicas para cada perfil
-//                        .requestMatchers("/Medico-Perfil/**","/medico-foto/**" ,
-//                                "/actualizar/**", "/medico-foto/**").hasRole("MEDICO")
-//                        .requestMatchers("/ConfirmarCita/**", "/BuscarCita").hasRole("PACIENTE")
-//                        .requestMatchers("/Approve/**" ).hasRole("ADMINISTRADOR")
-//                        .anyRequest().authenticated()

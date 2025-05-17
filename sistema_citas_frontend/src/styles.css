@@ -1,0 +1,772 @@
+/* Eliminar los estilos*/
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    border: none;
+
+}
+
+:root{
+    --bg-color: #f7f7f7;
+    --second-bg-color: #eaeaee;
+    --text-color: #000000;
+    --main-color: #649aed;
+    --primary-dark-color: #136af1;
+    --border-color: #ddd;
+    --input-bg: #fff;
+    --input-focus: #a3c4f3;
+    --error-color: #721c24;
+    --success-color: #155724;
+    --success-bg-color: #d4edda;
+    --success-border-color: #28a745;
+    --error-bg-color: #f8d7da;
+    --error-border-color: #dc3545;
+    --pending-color: #ec6f2b;
+}
+html{
+    font-size: 62.5%;
+    overflow-x: hidden;
+}
+
+body{
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-size: 1.6rem;
+    font-family: "AR One Sans", serif;
+}
+
+
+/*Header
+------------*/
+
+.header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 10%;
+    background-color: var(--second-bg-color);
+}
+
+
+.header-logo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.header-logo p{
+    color: var(--main-color);
+    font-weight: 600;
+}
+
+.header .logo {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+}
+
+.phone-number {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+}
+
+.phone-number i {
+    color: var(--main-color);
+    font-weight: 600;
+    margin-right: 10px;
+}
+
+.navbar{
+    display: flex;
+    gap: 1.5rem;
+}
+
+.navbar a{
+    color: var(--text-color);
+    font-weight: 600;
+    transition: .3s ease;
+    border-bottom: .2rem solid transparent;
+    text-transform: uppercase;
+}
+
+.navbar a:hover,
+.navbar a.active{
+    border-bottom-color: var(--main-color) ;
+    color: var(--main-color);
+}
+
+.div a {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    border: 0.2rem solid var(--main-color);
+    border-radius: 50%;
+    font-size: 1.6rem;
+    color: var(--main-color);
+    margin: 1rem 1rem 1rem 0;
+    transition: 0.3s ease;
+}
+.user-badge {
+    color: var(--text-color);
+    font-weight: 600;
+    transition: .3s ease;
+    text-transform: uppercase;
+    border-bottom: .2rem solid transparent;
+}
+
+.user-badge:hover {
+    border-bottom-color: var(--main-color);
+    color: var(--main-color);
+}
+
+/* About
+---------- */
+.about {
+    padding: 4rem 10%;
+    background-color: var(--second-bg-color);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.about  h1 {
+    text-align: center;
+    font-size: 3rem;
+    color: var(--primary-dark-color);
+    margin-bottom: 3rem;
+}
+
+.about h2 {
+    color: var(--primary-dark-color);
+    font-size: 2rem;
+    margin-bottom: 2rem;
+}
+
+.about p {
+    font-size: 1.6rem;
+    margin-bottom: 2rem;
+    line-height: 1.5;
+}
+
+.about  ul {
+    list-style-type: disc;
+    margin-left: 20px;
+    margin-bottom: 2rem;
+}
+.about  ul   li {
+    font-size: 1.6rem;
+    margin-bottom: 0.5rem;
+}
+
+.about strong {
+    color: var(--primary-dark-color);
+}
+
+
+/* Login and Sing Up
+---------- */
+.login ,
+.sign-up {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+
+.login-box  {
+    background-color: var(--main-color);
+    border: 1px solid var(--primary-dark-color);
+    border-radius: 10px;
+    box-shadow: 0 0 10px var(--primary-dark-color);
+    padding: 15px;
+    width: 350px;
+    text-align: center;
+}
+
+.sign-up-box {
+    background-color: var(--main-color);
+    border: 1px solid var(--primary-dark-color);
+    border-radius: 10px;
+    box-shadow: 0 0 10px var(--primary-dark-color);
+    padding: 15px;
+    width: 350px;
+    text-align: left;
+}
+
+.login-images {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 20px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+input , select {
+    margin: 10px 0;
+    padding: 10px;
+    width: 100%;
+    border: 1px solid var(--second-bg-color);
+    border-radius: 5px;
+}
+
+select {
+    height: 40px;
+}
+
+button {
+    margin: 1rem auto;
+    padding: 10px 20px;
+    background-color: var(--primary-dark-color);
+    color: var(--bg-color);
+    cursor: pointer;
+    width: 40%;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0.1rem solid var(--text-color);
+    transition: 0.3s ease;
+}
+
+button:hover {
+    transform: scale(1.1) translate(-0.5rem);
+    background-color: var(--primary-dark-color);
+    color: var(--bg-color);
+    box-shadow: 0 0 1.5rem var(--primary-dark-color);
+}
+
+.sign-up p ,
+.sign-up h2{
+    text-align: center;
+}
+
+.message.error p {
+    color: black;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+/*Medico
+------------*/
+
+/* Contenedor principal */
+.container {
+    max-width: 600px;
+    margin: 5rem auto;
+    background: var(--second-bg-color);
+    padding: 3rem;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Título */
+.title {
+    text-align: center;
+    font-size: 2.5rem;
+    color: var(--primary-dark-color);
+    margin-bottom: 2rem;
+}
+
+/* Mensajes */
+.message.success {
+    background-color: var(--success-bg-color);
+    color: var(--success-color);
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-left: 5px solid var(--success-border-color);
+    border-radius: 5px;
+}
+
+.message.error {
+    background-color: var(--error-bg-color);
+    color: var(--error-color);
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-left: 5px solid var(--error-border-color);
+    border-radius: 5px;
+}
+
+/* Formulario */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    font-size: 1.6rem;
+    color: var(--primary-dark-color);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.6rem;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    background: var(--input-bg);
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--input-focus);
+    box-shadow: 0 0 8px var(--input-focus);
+}
+
+/* Textarea */
+textarea {
+    resize: none;
+    height: 100px;
+}
+
+/* Botón de guardar */
+.submit-button {
+    width: 80%;
+    padding: 1.2rem;
+    font-size: 1.8rem;
+    background: var(--primary-dark-color);
+    color: var(--bg-color);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+}
+
+.submit-button:hover {
+    background: var(--main-color);
+    transform: scale(1.05);
+    box-shadow: 0 0 10px var(--primary-dark-color);
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+        padding: 2rem;
+    }
+}
+
+
+
+/*////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+/* General */
+
+
+.ListMedico {
+    width: 80%;
+    margin: 2rem auto;
+    background-color: var(--second-bg-color);
+    padding: 2rem;
+    border-radius: 8px;
+}
+
+/* Formulario de búsqueda */
+.search-form {
+    background-color: var(--input-bg);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+}
+
+.search-form h2 {
+    margin-bottom: 1rem;
+    text-align: center;
+    color: var(--main-color);
+}
+
+.input-group {
+    margin-bottom: 1.5rem;
+}
+
+.input-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.input-group select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background-color: var(--input-bg);
+}
+
+.search-btn {
+    display: block;
+    width: 100%;
+    padding: 1rem;
+    background-color: var(--main-color);
+    color: var(--input-bg);
+    font-weight: bold;
+    text-transform: uppercase;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search-btn:hover {
+    background-color: var(--primary-dark-color);
+}
+
+/* Listado de médicos */
+.medicos-list {
+    margin-top: 2rem;
+}
+
+.medicos-list h3 {
+    color: var(--main-color);
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.medico-card {
+    background-color: var(--input-bg);
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.medico-card p {
+    margin: 0.5rem 0;
+}
+
+.medico-card strong {
+    font-weight: bold;
+}
+
+/*Approve
+-----------------*/
+
+
+.approve-title {
+    text-align: center;
+    color: var(--main-color);
+    padding: 20px;
+}
+
+.approve {
+    max-width: 600px;
+    margin: 0 auto 50px auto;
+    background: var(--bg-color);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px var(--main-color);
+
+}
+.doctor-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.doctor-table th, .doctor-table td {
+    border: 1px solid var(--bg-color);
+    padding: 10px;
+    text-align: left;
+}
+
+.doctor-table th {
+    background-color: var(--primary-dark-color);
+    color: var(--bg-color);
+}
+
+.approval-select {
+    width: 100%;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+.submit-button {
+    margin: 1rem auto; /* Centra solo los botones */
+    padding: 10px 20px;
+    background-color: var(--primary-dark-color);
+    color: var(--bg-color);
+    cursor: pointer;
+    width: 70%; /* El botón ocupará el 70% del ancho */
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0.1rem solid var(--text-color);
+    transition: 0.3s ease;
+}
+
+.submit-button:hover {
+    transform: scale(1.1) translate(-0.5rem);
+    background-color: var(--main-color);
+    color: var(--bg-color);
+    box-shadow: 0 0 1.5rem var(--main-color);
+}
+
+
+
+
+/* Footer
+--------- */
+
+
+.footer {
+    background-color: var(--second-bg-color);
+    color: var(--main-color);
+    padding: 0.5rem 0;
+    text-align: center;
+}
+
+.footer-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+
+.social-media {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.social-media a {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    border: 0.2rem solid var(--main-color);
+    border-radius: 50%;
+    font-size: 1.6rem;
+    color: var(--main-color);
+    margin: 1rem 1rem 1rem 0;
+    transition: 0.3s ease;
+}
+
+.social-media a:hover {
+    transform: scale(1.1) translate(-0.5rem);
+    background-color: var(--main-color);
+    color: var(--bg-color);
+    box-shadow: 0 0 1.5rem var(--main-color);
+}
+
+/*==========================================================================================================Estructura de la Confirmación de la Cita*/
+
+/* Estilos para centrar los datos dentro de la página */
+
+.containerConfirmarCita {
+    max-width: 600px;
+    margin: 5rem auto;
+    background: var(--second-bg-color);
+    padding: 3rem;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    border: 1px solid var(--border-color); /* Añadir borde para mejor definición */
+}
+
+/* Título */
+.titleConfirmarCita {
+    font-size: 2.5rem;
+    color: var(--primary-dark-color);
+    margin-bottom: 2rem;
+}
+
+/* Estilo de los detalles de la cita */
+.form-groupConfirmarCita {
+    font-size: 1.6rem;
+    margin-bottom: 1.5rem;
+    list-style: none; /* Elimina los puntos de lista */
+    padding-left: 0;
+}
+
+/* Estilo de los elementos de la lista */
+.form-groupConfirmarCita li {
+    margin-bottom: 1rem; /* Separar los detalles */
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.form-groupConfirmarCita li strong {
+    color: var(--primary-dark-color); /* Resaltar las etiquetas */
+}
+
+/* Botón Volver al inicio */
+.submit-buttonConfirmarCita {
+    width: 100%;
+    padding: 1.2rem;
+    font-size: 1.8rem;
+    background: var(--primary-dark-color);
+    color: var(--bg-color);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+    display: inline-block; /* Cambiar de block a inline-block */
+    margin: 20px auto; /* Centrado del botón */
+}
+
+.submit-buttonConfirmarCita:hover {
+    background: var(--main-color);
+    transform: scale(1.05);
+    box-shadow: 0 0 10px var(--primary-dark-color);
+}
+
+/*=========================================================================================================Fin de la Estructura Confirmación de la Cita*/
+
+/*  Historico
+----------*/
+
+/* Contenedor principal */
+.historic ,
+.Gestion{
+    text-align: center;
+    max-width: 800px; /* Limita el ancho del contenedor */
+    margin: 0 auto; /* Centra el contenedor en la pantalla */
+    padding: 20px;
+}
+
+.historic h1 span ,
+.Gestion h1 span{
+    margin-bottom: 30px;
+    color: var(--main-color);
+    text-align: center;
+}
+
+
+
+/* Filtros */
+.filter form{
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centra los filtros horizontalmente */
+    gap: 10px; /* Espacio entre los elementos */
+    margin-bottom: 20px;
+
+}
+
+.filter label {
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.filter select {
+    width: 150px; /* Tamaño fijo para los desplegables */
+    padding: 5px;
+    border: 1px solid var(--input-bg);
+    border-radius: 4px;
+    background-color: var(--border-color);
+    font-size: 1.4rem;
+}
+
+
+/* Estilos para la tabla sin bordes */
+.table {
+    max-width: 100%; /* Limita el ancho máximo */
+    margin: 0 auto; /* Centra la tabla */
+    border-radius: 8px; /* Bordes redondeados */
+    overflow: hidden; /* Asegura que el borde redondeado funcione */
+}
+
+
+.table th,
+.table td {
+    padding: 25px 20px; /* Espaciado interno */
+    text-align: left; /* Alineación del texto */
+}
+
+/* Estilos para el encabezado de la tabla */
+.table-header {
+    background-color: var(--input-focus); /* Color de fondo */
+    font-weight: bold; /* Texto en negrita */
+}
+
+/* Estilos para las filas de la tabla */
+.table-row:nth-child(even) {
+    background-color: var(--second-bg-color); /* Fondo para filas pares */
+}
+
+.table-row:hover {
+    background-color: var(--input-focus); /* Color al pasar el mouse */
+}
+
+/* Estilos para las celdas de estado */
+.status-pending {
+    color: var(--pending-color);
+    font-weight: bold;
+}
+
+.status-attended {
+    color: var(--success-border-color);
+    font-weight: bold;
+}
+
+/* Estilos para los enlaces de acciones */
+.table-actions a {
+    color: var(--main-color);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.table-actions a:hover {
+    text-decoration: underline; /* Subrayado al pasar el mouse */
+}
+
+/* Cita
+-----------*/
+
+
+/* Centrar el contenido principal */
+.content-container {
+    margin: 20px auto;
+    max-width: 800px;
+    padding: 20px;
+    background-color: var(--second-bg-color);
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+.content-container p{
+    text-align: center;
+}
+/* Estilo de la imagen del médico */
+.medico-image {
+    border-radius: 50%;
+    object-fit: cover;
+    width: 100px;
+    height: 100px;
+    margin: 10px auto;  /* Centering the image */
+    display: block; /* Make the image a block element */
+}
+
+/* Estilos de texto */
+.content-container h1,
+.content-container h2 {
+    color: var(--main-color);
+    margin-bottom: 20px;
+}
+
+/* Clase para los datos de la cita */
+.cita-details {
+    text-align: left;
+    margin: 10px 0;
+}
+
+.cita-details strong {
+    color: var(--primary-dark-color);
+}
