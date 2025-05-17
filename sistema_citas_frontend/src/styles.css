@@ -30,12 +30,14 @@ html{
     overflow-x: hidden;
 }
 
-body{
+body {
     background-color: var(--bg-color);
+    font-family: "AR One Sans", sans-serif;
     color: var(--text-color);
-    font-size: 1.6rem;
-    font-family: "AR One Sans", serif;
+    margin: 0;
+    padding: 0;
 }
+
 
 
 /*Header
@@ -127,10 +129,13 @@ body{
 /* About
 ---------- */
 .about {
-    padding: 4rem 10%;
+    width: 100%;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 4rem 3rem;
     background-color: var(--second-bg-color);
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 }
 
 .about  h1 {
@@ -769,4 +774,10 @@ textarea {
 
 .cita-details strong {
     color: var(--primary-dark-color);
+}
+
+.center-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }

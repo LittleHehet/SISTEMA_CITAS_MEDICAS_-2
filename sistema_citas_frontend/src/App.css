@@ -1,8 +1,10 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* o 'center' si querés que quede verticalmente centrado */
+  min-height: 100vh;
   padding: 2rem;
-  text-align: center;
+  background-color: var(--bg-color); /* si no usás variables, poné un color fijo como #f7f7f7 */
 }
 
 .logo {
