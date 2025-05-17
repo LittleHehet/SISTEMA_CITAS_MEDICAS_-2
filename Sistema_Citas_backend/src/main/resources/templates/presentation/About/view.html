@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+
+<head th:replace="~{fragments/head :: head}" >
+</head>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
+<div class="about">
+    <h1>Acerca de Nosotros</h1>
+    <p>Bienvenido al Sistema de Citas Médicas</p>
+
+    <h2>Conoce al Equipo</h2>
+    <p>Nuestro equipo está compuesto por estudiantes dedicados que trabajaron juntos para hacer realidad este proyecto:</p>
+    <ul>
+      <li><strong>Kendra Artavia Caballero</strong> (ID: 402580003)</li>
+      <li><strong>William Rodríguez Campos</strong> (ID: 118070563)</li>
+      <li><strong>Alexia Alvarado Alfaro</strong> (ID: 402580319)</li>
+    </ul>
+
+    <h2>Descripción del Proyecto</h2>
+    <p>El <strong>Sistema de Citas Médicas</strong> permite a los pacientes:</p>
+    <ul>
+      <li>Buscar médicos especialistas por especialidad y ubicación.</li>
+      <li>Ver los horarios disponibles para los próximos tres días.</li>
+      <li>Reservar citas en línea después de iniciar sesión o registrarse.</li>
+    </ul>
+    <p>Para los médicos, el sistema ofrece herramientas para:</p>
+    <ul>
+      <li>Registrarse y configurar su disponibilidad semanal.</li>
+      <li>Confirmar y gestionar citas.</li>
+      <li>Agregar notas y actualizar el estado de las consultas.</li>
+    </ul>
+    <p>Los administradores pueden:</p>
+    <ul>
+      <li>Aprobar o rechazar registros de médicos.</li>
+      <li>Gestionar cuentas de usuarios y configuraciones del sistema.</li>
+    </ul>
+
+    <h2>Tecnologías Utilizadas</h2>
+    <p>El sistema fue desarrollado utilizando:</p>
+    <ul>
+      <li><strong>Java</strong> con el framework <strong>Spring MVC</strong> para el backend.</li>
+      <li><strong>Thymeleaf</strong> como motor de plantillas para el renderizado en el servidor.</li>
+      <li><strong>MySQL</strong> para la gestión de la base de datos.</li>
+      <li><strong>HTML/CSS</strong> para el frontend, asegurando una interfaz de usuario limpia y responsive.</li>
+    </ul>
+
+    <h2>Nuestra Misión</h2>
+    <p>Nuestro objetivo es simplificar el proceso de agendamiento de citas médicas,
+      facilitando que los pacientes encuentren al especialista adecuado y que los médicos gestionen sus horarios de manera eficiente. Creemos que la tecnología puede desempeñar un papel crucial en mejorar la accesibilidad y eficiencia en el ámbito de la salud.</p>
+  </div>
+</body>
+
+
+<footer th:replace="~{fragments/footer::footer}"></footer>
+
+</body>
+</html>

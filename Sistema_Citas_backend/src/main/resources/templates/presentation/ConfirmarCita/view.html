@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head th:replace="~{fragments/head :: head}"></head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Información del Médico</title>
+</head>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
+
+<div class="containerConfirmarCita">
+    <h1 class="titleConfirmarCita">Información del Médico Seleccionado</h1>
+
+    <!-- Mostrar nombre completo del médico -->
+    <div class="form-groupConfirmarCita">
+        <div th:if="${medico.foto != null}">
+            <img th:src="@{'/medico-foto?id=' + ${medico.id}}"
+                 alt="Foto de perfil"
+                 width="50" height="50" style="border-radius: 50%; object-fit: cover;">
+        </div>
+        <div th:if="${medico.foto == null}">
+            <span>No Foto</span>
+        </div>
+
+        <label>Nombre Completo:</label>
+        <p th:text="${medico.Usuarios.Nombre} + ' ' + ${medico.Usuarios.Apellido}"></p>
+    </div>
+
+    <!-- Mostrar especialidad del médico -->
+    <div class="form-groupConfirmarCita">
+        <label>Especialidad:</label>
+        <p th:text="${medico.Especialidad.EspecialidadNombre}"></p>
+    </div>
+
+    <!-- Mostrar localidad del médico -->
+    <div class="form-groupConfirmarCita">
+        <label>Localidad:</label>
+        <p th:text="${medico.Localidad.LocalidadNombre}"></p>
+    </div>
+
+    <!-- Mostrar el día y horario seleccionado -->
+    <div class="form-groupConfirmarCita">
+        <label>Horario Seleccionado:</label>
+        <p th:text="${dia} + ' ' + ${horaInicio} + ' - ' + ${horaFin}"></p>
+    </div>
+
+    <!-- 🔴 Aquí va el mensaje de error -->
+    <div th:if="${error}" class="alert alert-danger" style="color:red; font-weight:bold;">
+        <p th:text="${error}"></p>
+    </div>
+
+    <!-- Formulario para enviar la cita al controlador -->
+    <form action="/ConfirmarCita" method="POST">
+        <!-- Pasar el ID del médico y otros detalles -->
+        <input type="hidden" name="medicoId" th:value="${medico.id}" />
+        <input type="hidden" name="fecha" th:value="${#temporals.format(fecha, 'yyyy-MM-dd')}" />
+
+        <input type="hidden" name="dia" th:value="${dia}" />
+        <input type="hidden" name="horaInicio" th:value="${horaInicio}" />
+        <input type="hidden" name="horaFin" th:value="${horaFin}" />
+
+        <!-- Botón de confirmación -->
+        <button type="submit" class="submit-buttonConfirmarCita">Confirmar</button>
+    </form>
+    <!-- Formulario para enviar la cita al controlador -->
+    <a th:href="'/BuscarCita'"
+       class="btn btn-return">
+        <button>Regresar</button>
+    </a>
+</div>
+
+<footer th:replace="~{fragments/footer::footer}"></footer>
+</body>
+</html>

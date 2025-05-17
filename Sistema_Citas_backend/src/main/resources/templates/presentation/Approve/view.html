@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+
+<head th:replace="~{fragments/head :: head}" >
+</head>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
+
+<body>
+        <h1 class="approve-title">Approve doctors</h1>
+        <div class="approve">
+        <form action="/Approve/Approve" method="post">
+            <table class="doctor-table">
+                <thead>
+                <tr>
+                    <th>Cédula</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Aprobación</th>
+                    <th>Enviar</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="usuario : ${usuarios}">
+                    <td th:text="${usuario.cedula}"></td>
+                    <td th:text="${usuario.nombre}"></td>
+                    <td th:text="${usuario.apellido}"></td>
+                    <td>
+                        <select th:name="'estado-' + ${usuario.cedula}" required>
+                            <option th:value="'pendiente-' + ${usuario.cedula}">Pendiente</option>
+                            <option th:value="'aprobado-' + ${usuario.cedula}">Aprobado</option>
+                        </select>
+                    </td>
+
+                    <td>
+                        <button type="submit" class="submit-button">Send</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="message success" th:if="${confirmacion}">
+                <p th:text="${confirmacion}"></p>
+            </div>
+        </form>
+    </div>
+</body>
+
+
+<footer th:replace="~{fragments/footer::footer}"></footer>
+
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head th:replace="~{fragments/head :: head}"></head>
+
+<body>
+
+<header th:replace="~{fragments/header :: header}"></header>
+<div class="view-all-button">
+    <a th:href="'/BuscarCita'"
+       class="btn btn-return">
+        <button>Regresar</button>
+    </a>
+</div>
+<!-- Cuadro del médico -->
+    <div class="medico-info">
+        <!-- Mostrar nombre completo del médico -->
+        <div>
+            <p th:text="'Nombre del Medico: '+ ' '+${medico.getNombre()} + ' ' + ${medico.getApellido()}"></p>
+            <p th:text="'Especialidad: '+ ' '+${medico.Especialidad.EspecialidadNombre}"></p>
+            <p th:text="'Localidad: '+ ' '+${medico.Localidad.LocalidadNombre}"></p>
+        </div>
+        <!-- Mostrar los horarios disponibles -->
+        <div class="input-group">
+            <p>Horarios Disponibles:</p>
+            <div class="medico-buttons">
+                <!-- Iterar sobre los días de la semana -->
+                <th:block th:each="dia : ${semanaCompleta}">
+                    <p th:text="'Día: ' + ${dia.Nombre}"></p>
+
+                    <!-- Iterar sobre los horarios de ese día -->
+                    <th:block th:each="horario : ${dia.Horarios}">
+                            <button th:text="'Horario: ' + ${horario.horainicio} + ' - ' + ${horario.horafin}"></button>
+                        </a>
+                    </th:block>
+                </th:block>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+<footer th:replace="~{fragments/footer::footer}"></footer>
+</html>

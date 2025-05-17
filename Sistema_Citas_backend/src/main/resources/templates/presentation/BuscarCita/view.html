@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head th:replace="~{fragments/head :: head}"></head>
+
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
+
+<div class="ListMedico">
+    <!-- Formulario de búsqueda -->
+    <div class="search-form">
+        <h2>Buscar Médicos</h2>
+        <form action="/BuscarCita" method="GET">
+            <div class="input-group">
+                <label for="especialidad">Especialidad:</label>
+                <select name="especialidad" id="especialidad">
+                    <option value="">Seleccione una especialidad</option>
+                    <option th:each="esp : ${especialidades}" th:value="${esp.id}" th:text="${esp.especialidadNombre}"></option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="localidad">Localidad:</label>
+                <select name="localidad" id="localidad">
+                    <option value="">Seleccione una localidad</option>
+                    <option th:each="loc : ${localidades}" th:value="${loc.id}" th:text="${loc.localidadNombre}"></option>
+                </select>
+            </div>
+
+            <button type="submit" class="search-btn">Buscar</button>
+        </form>
+    </div>
+
+    <!-- Cuadro con médicos -->
+    <div class="medicos-list">
+        <h3>Medicos disponibles:</h3>
+        <th:block th:each="entry : ${medicosSemana}">
+            <!-- 'entry.key' es el medico y 'entry.value' es la lista de días (semana) -->
+            <div class="medico-card">
+                <div th:if="${entry.key.foto != null}">
+                    <img th:src="@{'/medico-foto?id=' + ${entry.key.id}}"
+                         alt="Foto de perfil"
+                         width="50" height="50" style="border-radius: 50%; object-fit: cover;">
+                </div>
+                <div th:if="${entry.key.foto == null}">
+                    <span>No Foto</span>
+                </div>
+
+                <p th:text="'Nombre: ' + ${entry.key.Usuarios.Nombre} + ' ' + ${entry.key.Usuarios.Apellido}"></p>
+                <p th:text="'Especialidad: ' + ${entry.key.Especialidad.EspecialidadNombre}"></p>
+                <p th:text="'Provincia: ' + ${entry.key.Localidad.LocalidadNombre}"></p>
+
+
+
+                <div class="input-group">
+                    <p>Horarios Disponibles:</p>
+                    <!-- Botón para ver todos los horarios -->
+                    <div class="view-all-button">
+                        <a th:href="'/HorarioExtendido?medicoId=' + ${entry.key.id}"
+                           class="btn btn-secondary">
+                            <button>Ver horarios</button>
+                        </a>
+                    </div>
+                    <div class="medico-buttons">
+                        <!-- Iterar sobre los días asociados al médico -->
+                        <th:block th:each="dia : ${entry.value}">
+                            <p th:text="'Día: ' + ${dia.Nombre} + '-'+${#temporals.format(dia.fecha,'dd/MM/yyyy')}"></p>
+
+                            <!-- Iterar sobre los horarios de ese día -->
+                            <th:block th:each="horario : ${dia.Horarios}">
+                                <a th:href="'/ConfirmarCita?medicoId=' + ${entry.key.id} + '&dia=' + ${dia.Nombre} +
+                                '&fecha=' + ${#temporals.format(dia.fecha, 'yyyy-MM-dd')} +
+                                '&horaInicio=' + ${horario.horainicio} + '&horaFin=' + ${horario.horafin}" class="btn btn-primary">
+                                    <button th:text="'Horario: ' + ${horario.horainicio} + ' - ' + ${horario.horafin}"></button>
+                                </a>
+
+                            </th:block>
+                        </th:block>
+                    </div>
+                </div>
+            </div>
+
+        </th:block>
+    </div>
+
+
+</div>
+
+</body>
+</html>

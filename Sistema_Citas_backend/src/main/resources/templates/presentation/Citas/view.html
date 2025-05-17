@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head th:replace="~{fragments/head :: head}"></head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Detalle de la Cita</title>
+</head>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
+
+<div class="content-container">
+  <h1>Detalle de la Cita</h1>
+
+
+
+  <div class="cita-details">
+    <p><strong>Usuario:</strong> <span th:text="${cita.usuario.nombre + ' ' + cita.usuario.apellido}"></span></p>
+
+    <div th:if="${cita.medico.foto != null}">
+      <img th:src="@{'/medico-foto?id=' + ${cita.medico.id}}"
+           alt="Foto de perfil"
+           class="medico-image">
+    </div>
+    <div th:if="${cita.medico.foto == null}">
+      <span>No Foto</span>
+    </div>
+
+    <p><strong>Médico:</strong> <span th:text="${cita.medico.nombre + ' ' + cita.medico.apellido}"></span></p>
+    <p><strong>Nota:</strong> <span th:text="${cita.nota}"></span></p>
+    <!-- Si es MÉDICO, mostrar botón para editar -->
+    <th:block th:if="${session.usuario.perfil == 'MEDICO'}">
+      <a th:href="@{/editarNota(id=${cita.id})}" class="submit-button">Editar Nota</a>
+    </th:block>
+
+    <p><strong>Hora de inicio:</strong> <span th:text="${cita.horainicio}"></span></p>
+    <p><strong>Hora de fin:</strong> <span th:text="${cita.horafinal}"></span></p>
+    <p><strong>Día:</strong> <span th:text="${cita.dia}"></span></p>
+    <p><strong>Estado:</strong> <span th:text="${cita.estado}"></span></p>
+    <p><strong>Fecha:</strong> <span th:text="${#temporals.format(cita.fechaHora, 'dd/MM/yyyy')}"></span></p>
+  </div>
+
+  <!--/*@thymesVar id="prevUrl2" type=""*/-->
+  <a th:href="${prevUrl2}" class="submit-button">Regresar</a>
+
+
+</div>
+
+
+
+<footer th:replace="~{fragments/footer::footer}"></footer>
+</body>
+</html>
+

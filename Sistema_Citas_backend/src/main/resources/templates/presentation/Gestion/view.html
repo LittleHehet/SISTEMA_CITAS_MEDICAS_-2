@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:replace="~{fragments/head :: head}">
+    <title>Gestion</title>
+</head>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
+
+
+<div class="Gestion">
+    <h1>Medico - <span th:text="${usuario.nombre + ' ' + usuario.apellido}"></span> - Historial de Citas</h1>
+
+    <div class="filter">
+        <form method="GET" action="/GestionCitas">
+            <label for="filter-status">Estado:</label>
+            <select id="filter-status" name="estado">
+                <option value="all">Todos</option>
+                <option value="pendiente">Pendiente</option>
+                <option value="completada">Atendida</option>
+            </select>
+
+            <label for="filter-usuario">Usuario:</label>
+            <select id="filter-usuario" name="usuarioId">
+                <option value="0">Todos</option>
+                <option th:each="usuario : ${usuarios}"
+                        th:value="${usuario.id}"
+                        th:text="${usuario.nombre + ' ' + usuario.apellido}">
+                </option>
+            </select>
+            <button type="submit" class="search-btn">Buscar</button>
+        </form>
+    </div>
+
+    <table class="table">
+        <thead>
+        <tr class="table-header">
+            <th>Usuario</th>
+            <th>Fecha</th>
+            <th>Hora de inicio </th>
+            <th>Hora de fin </th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="cita : ${citas}">
+            <td th:text="${cita.usuario.nombre + ' ' + cita.usuario.apellido}"></td>
+            <td th:text="${#temporals.format(cita.fechaHora, 'dd/MM/yyyy')}"></td>
+            <td th:text="${cita.horainicio}"></td>
+            <td th:text="${cita.horafinal}"></td>
+            <td th:text="${cita.estado}"></td>
+            <td>
+                <!-- Botones condicionales según el estado -->
+                <div th:if="${cita.estado == 'pendiente'}">
+                    <form th:action="@{/completarCita}" method="post" style="display:inline;">
+                        <input type="hidden" name="id" th:value="${cita.id}">
+                        <button type="submit" class="submit-button">Completar</button>
+                    </form>
+
+                    <form th:action="@{/cancelarCita}" method="post" style="display:inline;">
+                        <input type="hidden" name="id" th:value="${cita.id}">
+                        <button type="submit" class=".submit-button">Cancelar</button>
+                    </form>
+                </div>
+                <div th:if="${cita.estado == 'completada' || cita.estado == 'cancelada'}">
+                    <!-- Usar un enlace para redirigir a la página de detalles -->
+                    <a th:href="@{/verDetalleCita(id=${cita.id})}" class="submit-button">Ver</a>
+
+                </div>
+            </td>
+
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+<footer th:replace="~{fragments/footer::footer}"></footer>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+
+<head th:replace="~{fragments/head :: head}"></head>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
+
+
+<div class="login">
+    <div class="login-box">
+        <div>
+            <div><img class="login-images" th:src="@{/images/user.png}" /></div>
+        </div>
+        <h1>Iniciar sesión</h1>
+        <form action="/Sign-in/Sign-in" method="post">
+            <input type="text" name="username" placeholder="Usuario" required pattern="\d+" title="Solo números">
+            <input type="password" name="password" placeholder="Contraseña" required>
+            <button type="submit">Iniciar sesión</button>
+        </form>
+
+        <!-- Mostrar mensaje de error según tipo -->
+        <div class="message error" th:if="${param.error}">
+            <p th:if="${param.error[0] == 'pending'}">Tu cuenta de médico está pendiente de aprobación.</p>
+            <p th:if="${param.error[0] == 'true'}">Credenciales incorrectas. Intenta de nuevo.</p>
+        </div>
+
+
+        <!-- Confirmación (por ejemplo: registrado con éxito) -->
+        <div class="message success" th:if="${confirmacion}">
+            <p th:text="${confirmacion}"></p>
+        </div>
+
+        <!-- Mostrar mensaje si la sesión expiró -->
+        <div class="message error" th:if="${param.expired}">
+            <p>La sesión ha expirado. Por favor, inicie sesión de nuevo.</p>
+        </div>
+
+        <!-- Mensaje si cerró sesión correctamente -->
+        <div class="message success" th:if="${param.logout}">
+            <p>Sesión cerrada correctamente.</p>
+        </div>
+
+        <!-- Registro -->
+        <div class="register-link">
+            <p>¿No tienes una cuenta?</p>
+            <a href="/Sign-up"><button type="button">Regístrate</button></a>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{fragments/footer::footer}"></footer>
+</body>
+</html>

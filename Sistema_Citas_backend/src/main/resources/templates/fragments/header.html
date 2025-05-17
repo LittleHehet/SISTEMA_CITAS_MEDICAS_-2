@@ -1,0 +1,52 @@
+<header th:fragment="header"  class="header">
+
+
+    <div class="header-logo">
+
+        <div><img class="logo" th:src="@{/images/doctor-patient.png}"   alt="Medical Appointments Logo" /></div>
+
+        <p>Citas Medicas</p>
+    </div>
+
+    <div class="phone-number">
+        <i class='bx bxs-phone-call'></i>
+        <p >+506 5467 0937</p>
+    </div>
+
+    <nav class="navbar">
+        <a href="/About">Acerca de</a>
+        <th:block th:if="${session.usuario != null}">
+            <th:block th:if="${session.usuario.getPerfil() == 'PACIENTE'}">
+                <!-- Paciente -->
+                <a href="/BuscarCita">Búsqueda</a>
+                <a href="/historicoPaciente">Historial</a>
+                <a href="/Salir">Salir</a>
+                <!-- Nombre con ícono -->
+                <span class="user-badge">👤 <span th:text="${session.usuario.nombre}">Paciente</span></span>
+            </th:block>
+            <th:block th:if="${session.usuario.getPerfil() == 'MEDICO'}">
+                <div th:if="${session.medicoId != null}">
+                    <a href="/GestionCitas">Citas</a>
+                    <a href="/Medico-Perfil">Perfil</a>
+                    <a href="/Salir">Salir</a>
+                    <span class="user-badge">🩺 <span th:text="${session.usuario.nombre}">Médico</span></span>
+                </div>
+            </th:block>
+
+            </th:block>
+
+            <th:block th:if="${session.usuario.getPerfil() == 'ADMINISTRADOR'}">
+                <!-- Administrador -->
+                <a href="/Approve">Administrar</a>
+                <a href="/Salir">Salir</a>
+                <span class="user-badge">🛠️ <span th:text="${session.usuario.nombre}">Admin</span></span>
+            </th:block>
+            <th:block th:if="${session.usuario.getPerfil() == 'ANONIMO'}">
+                <!-- Anónimo -->
+                <a href="/BuscarCita">Busqueda</a>
+                <a href="/Sign-in">Iniciar sesión</a>
+            </th:block>
+        </th:block>
+    </nav>
+
+</header>

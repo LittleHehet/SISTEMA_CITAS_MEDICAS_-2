@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+
+<head th:replace="~{fragments/head :: head}" >
+</head>
+
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
+
+<div class="container">
+    <h2 class="title">Actualizar Información del Médico</h2>
+
+    <!-- Mensajes de éxito o error -->
+    <div th:if="${mensaje}" class="message success" th:text="${mensaje}"></div>
+    <div th:if="${error}" class="message error" th:text="${error}"></div>
+
+    <!-- Formulario para edición -->
+    <form th:action="@{/actualizar}" method="post" enctype="multipart/form-data" th:object="${medico}">
+
+        <div class="form-group">
+            <label for="id">ID (Cédula)</label>
+            <input type="number" id="id" th:value="${medico.usuarios.cedula}" readonly>
+            <input type="hidden" th:field="*{id}" />
+        </div>
+
+        <div class="form-group">
+            <label for="nombre">Nombre</label>
+            <input type="text" id="nombre" th:field="*{usuarios.nombre}" readonly>
+        </div>
+
+        <div class="form-group">
+            <label for="apellido">Apellido</label>
+            <input type="text" id="apellido" th:field="*{usuarios.apellido}" readonly>
+        </div>
+
+        <div class="form-group">
+            <label for="especialidad">Especialidad</label>
+            <select id="especialidad" th:field="*{especialidad}" required>
+                <option value="">Seleccione una especialidad</option>
+                <option th:each="esp : ${especialidades}" th:value="${esp.id}" th:text="${esp.especialidadNombre}"></option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="costo">Costo de Consulta (colones)</label>
+            <select id="costo" th:field="*{costo}" required>
+                <option value="">Seleccione un costo</option>
+                <option th:value="${medico.costo}" th:text="${medico.costo} + ' colones'" selected="selected"></option>
+                <option th:each="c : ${#numbers.sequence(5000, 50000, 5000)}"
+                        th:if="${c != medico.costo}"
+                        th:value="${c}"
+                        th:text="${c} + ' colones'">
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="localidad">Localidad</label>
+            <select id="localidad" th:field="*{localidad}" required>
+                <option value="">Seleccione una localidad</option>
+                <option th:each="loc : ${localidades}" th:value="${loc.id}" th:text="${loc.localidadNombre}"></option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="horario">Horario de Atención</label>
+            <input type="text" id="horario" th:field="*{horario}"
+                   th:readonly="${medico.horario != null and !#strings.isEmpty(medico.horario)}"
+                   required
+                   placeholder="Ej: 8-12;8-12,1-5;9-12;"
+                   pattern="^(([1-9]|1[0-2])-([1-9]|1[0-2])(,([1-9]|1[0-2])-([1-9]|1[0-2]))?;){1,7}$"
+                   title="Ingrese entre 1 y 7 días separados por ';'. Formato: 8-12 o 8-12,1-5. Horas válidas: 1-12">
+            <small class="form-text text-muted">
+                Ejemplos válidos:
+                "8-12;" (1 día),
+                "8-12,1-5; 9-12;8-12,1-5;9-12;8-12;10-11;9-12; (7 día) "
+            </small>
+        </div>
+
+
+        <div class="form-group">
+            <label for="frecuenciaCitas">Frecuencia de Citas (minutos)</label>
+            <input type="number" id="frecuenciaCitas" step="10" th:field="*{frecuenciaCitas}" required min="10" max="120">
+        </div>
+
+        <div class="form-group">
+            <label for="presentacion">Presentación</label>
+            <textarea id="presentacion" th:field="*{nota}" required minlength="10" maxlength="500"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Foto de Perfil</label>
+            <input type="file" name="archivoFoto" accept="image/*" />
+        </div>
+
+        <div class="form-group" th:if="${medico.foto != null}">
+            <label>Vista previa de la foto actual:</label>
+            <img th:src="@{'/medico-foto?id=' + ${medico.id}}"
+                 alt="Foto de perfil"
+                 width="150" height="150" style="border-radius: 50%; object-fit: cover;">
+        </div>
+
+        <button type="submit" class="submit-button">Guardar Cambios</button>
+    </form>
+</div>
+<footer th:replace="~{fragments/footer::footer}"></footer>
+</body>
+</html>
