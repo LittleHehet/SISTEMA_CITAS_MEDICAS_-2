@@ -42,7 +42,7 @@ function Header({ perfil, onLogout }) {
                 {!perfil && (
                     <>
                         <Link to="/BuscarCita">Busqueda</Link>
-                        <Link to="/Sign-in">Iniciar sesión</Link>
+                        <Link to="/Login">Iniciar sesión</Link>
                     </>
                 )}
             </nav>

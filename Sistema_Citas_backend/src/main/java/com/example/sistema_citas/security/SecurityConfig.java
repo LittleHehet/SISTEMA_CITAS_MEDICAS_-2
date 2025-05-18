@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -23,53 +24,67 @@ public class SecurityConfig {
 
     public SecurityConfig(CustomAuthenticationProvider customAuthenticationProvider,
                           CustomSuccessHandler customSuccessHandler,
-                          CustomFailureHandler customFailureHandler , JwtAuthFilter jwtAuthFilter) {
+                          CustomFailureHandler customFailureHandler,
+                          JwtAuthFilter jwtAuthFilter) {
         this.customAuthenticationProvider = customAuthenticationProvider;
         this.customSuccessHandler = customSuccessHandler;
         this.customFailureHandler = customFailureHandler;
         this.jwtAuthFilter = jwtAuthFilter;
     }
 
+
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
         http
                 .cors(cors -> cors.configurationSource(request -> {
                     var corsConfig = new org.springframework.web.cors.CorsConfiguration();
-                    corsConfig.setAllowedOrigins(List.of("http://localhost:5173")); // frontend React
+                    corsConfig.setAllowedOrigins(List.of("http://localhost:5173")); // dirección del frontend
                     corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                     corsConfig.setAllowedHeaders(List.of("*"));
                     corsConfig.setAllowCredentials(true);
                     return corsConfig;
                 }))
-
                 .csrf(csrf -> csrf.disable())
                 .authenticationProvider(customAuthenticationProvider)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/","/api/**" , "/api/about" ,  "/api/login/login",
-                                "/medico-foto/**", "/css/**", "/images/**",
-                                "/BuscarCita", "/ConfirmarCita/**", "/HorarioExtendido/**"
-                                // Permitir APIs REST
+                                "/",
+                                "/api/login/login",     // ✅ solo se permite esta para login
+                                "/api/about",
+                                "/medico-foto/**",
+                                "/css/**",
+                                "/images/**",
+                                "/BuscarCita",
+                                "/ConfirmarCita/**",
+                                "/HorarioExtendido/**"
                         ).permitAll()
 
                         .requestMatchers("/Approve/**").hasRole("ADMINISTRADOR")
                         .requestMatchers("/Medico-Perfil/**",
-                                "/GestionCitas/**", "/completarCita/**",
-                                "/cancelarCita/**", "/guardarNota/**",
-                                "/editarNota/**", "/actualizar/**"
+                                "/GestionCitas/**",
+                                "/completarCita/**",
+                                "/cancelarCita/**",
+                                "/guardarNota/**",
+                                "/editarNota/**",
+                                "/actualizar/**"
                         ).hasRole("MEDICO")
+
                         .requestMatchers("/historicoPaciente/**",
-                                "/BuscarCita", "/ConfirmarCita/**",
+                                "/BuscarCita",
+                                "/ConfirmarCita/**",
                                 "/HorarioExtendido/**"
                         ).hasRole("PACIENTE")
+
                         .requestMatchers("/verDetalleCita/**"
                         ).hasAnyRole("PACIENTE", "MEDICO")
+
                         .anyRequest().authenticated()
                 )
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-
-
 
         return http.build();
     }
@@ -81,25 +96,3 @@ public class SecurityConfig {
                 .build();
     }
 }
-
-
-
-//                .formLogin(form -> form
-//                        .loginPage("/Sign-in")
-//                        .loginProcessingUrl("/Sign-in/Sign-in")
-//                        .successHandler(customSuccessHandler)
-//                        .failureHandler(customFailureHandler)
-//                        .permitAll()
-//                )
-
-//                .logout(logout -> logout
-//                        .logoutUrl("/Salir")
-//                        .logoutSuccessUrl("/Sign-in?logout=true")
-//                        .invalidateHttpSession(true)
-//                        .deleteCookies("JSESSIONID")
-//                        .permitAll()
-//                )
-
-////                .csrf(csrf -> csrf.disable())
-////                .sessionManagement(session -> session
-////                        .invalidSessionUrl("/Sign-in")

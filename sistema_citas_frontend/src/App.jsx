@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Head from './components/Head';
 import Footer from './components/Footer';
@@ -9,12 +9,21 @@ import About from './components/About';
 function App() {
     const [perfil, setPerfil] = useState(null);
 
+    useEffect(() => {
+        const storedPerfil = localStorage.getItem('perfil');
+        if (storedPerfil) {
+            setPerfil(storedPerfil);
+        }
+    }, []);
+
     const handleLoginSuccess = (perfil) => {
         setPerfil(perfil);
+        localStorage.setItem('perfil', perfil);
     };
 
     const handleLogout = () => {
         localStorage.removeItem('token');
+        localStorage.removeItem('perfil');
         setPerfil(null);
     };
 
@@ -35,7 +44,6 @@ function App() {
                         }
                     />
                     <Route path="/About" element={<About />} />
-                    {/* Otras rutas aquí */}
                 </Routes>
             </main>
             <Footer />
