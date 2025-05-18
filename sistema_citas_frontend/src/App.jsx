@@ -5,6 +5,7 @@ import Footer from './components/Footer';
 import Login from './components/Login';
 import Header from './components/Header';
 import About from './components/About';
+import SignUp from './components/SignUp';
 
 function App() {
     const [perfil, setPerfil] = useState(null);
@@ -31,23 +32,17 @@ function App() {
         <Router>
             <Head />
             <Header perfil={perfil} onLogout={handleLogout} />
-            <main>
+            <main className="main-content">
                 <Routes>
-                    <Route
-                        path="/"
-                        element={
-                            !perfil ? (
-                                <Login onLoginSuccess={handleLoginSuccess} />
-                            ) : (
-                                <div>Contenido principal para perfil: {perfil}</div>
-                            )
-                        }
-                    />
+                    <Route path="/" element={!perfil ? <Login onLoginSuccess={handleLoginSuccess} /> : <div>Contenido principal para perfil: {perfil}</div>} />
                     <Route path="/About" element={<About />} />
+                    <Route path="/Sign-up" element={<SignUp />} />
+                    <Route path="/Login" element={<Login onLoginSuccess={handleLoginSuccess} />} />
                 </Routes>
             </main>
             <Footer />
         </Router>
+
     );
 }
 

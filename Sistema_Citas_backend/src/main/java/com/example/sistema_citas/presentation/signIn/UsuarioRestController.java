@@ -20,6 +20,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/login")
+@CrossOrigin(origins = "http://localhost:5173")
 public class UsuarioRestController {
     @Autowired
     private Service service;

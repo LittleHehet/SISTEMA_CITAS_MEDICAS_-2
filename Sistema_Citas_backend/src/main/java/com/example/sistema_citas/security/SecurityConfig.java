@@ -50,6 +50,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/",
+                                "/api/signup",
                                 "/api/login/login",     // ✅ solo se permite esta para login
                                 "/api/about",
                                 "/medico-foto/**",

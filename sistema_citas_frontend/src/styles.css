@@ -49,6 +49,7 @@ body {
     align-items: center;
     padding: 1rem 10%;
     background-color: var(--second-bg-color);
+    min-height: 80px; /* AÑADIDO: altura mínima */
 }
 
 
@@ -59,12 +60,12 @@ body {
 }
 
 .header-logo p{
-    color: var(--main-color);
-    font-weight: 600;
+    font-size: 1.8rem; /* antes era normal, ahora más grande */
+    font-weight: bold;
 }
 
 .header .logo {
-    width: 50px;
+    width: 60px;
     height: 50px;
     object-fit: cover;
 }
@@ -72,7 +73,8 @@ body {
 .phone-number {
     display: flex;
     align-items: center;
-    font-weight: 600;
+    font-size: 1.6rem;
+    font-weight: bold;
 }
 
 .phone-number i {
@@ -88,10 +90,14 @@ body {
 
 .navbar a{
     color: var(--text-color);
+    font-size: 1.6rem;  /* Esto hace más grandes los enlaces */
     font-weight: 600;
     transition: .3s ease;
     border-bottom: .2rem solid transparent;
     text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .navbar a:hover,
@@ -113,12 +119,20 @@ body {
     margin: 1rem 1rem 1rem 0;
     transition: 0.3s ease;
 }
+.perfil-contenedor {
+    display: flex;
+    align-items: center;
+    gap: 1rem; /* separa “Perfil” de “MÉDICO” */
+}
+
 .user-badge {
     color: var(--text-color);
-    font-weight: 600;
+    font-weight: bold;
     transition: .3s ease;
     text-transform: uppercase;
     border-bottom: .2rem solid transparent;
+    font-size: 1.5rem;
+    margin-left: 1rem;
 }
 
 .user-badge:hover {
@@ -180,8 +194,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
-    width: 100vw;
+    min-height: calc(100vh - 100px); /* para descontar el header */
     margin: 0 auto;
 }
 
@@ -196,6 +209,7 @@ body {
     text-align: center;
 }
 
+
 .sign-up-box {
     background-color: var(--main-color);
     border: 1px solid var(--primary-dark-color);
@@ -204,7 +218,19 @@ body {
     padding: 15px;
     width: 350px;
     text-align: left;
+    font-size: 1.6rem; /* 📏 más grande */
 }
+
+.sign-up-box label {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.sign-up-box input,
+.sign-up-box select {
+    font-size: 1.5rem;
+}
+
 
 .login-images {
     width: 100px;
@@ -224,6 +250,8 @@ input , select {
     width: 100%;
     border: 1px solid var(--second-bg-color);
     border-radius: 5px;
+    background-color: white;  /* ✅ <-- AÑADIDO */
+    color: black;             /* ✅ <-- texto legible */
 }
 
 select {
@@ -787,4 +815,44 @@ textarea {
     background-color: var(--main-color);
     color: var(--bg-color);
     box-shadow: 0 0 1.5rem var(--main-color);
+}
+
+/* Mejora de diseño principal */
+.main-content {
+    min-height: calc(100vh - 150px); /* Ajusta según tamaño de tu header y footer */
+    padding: 2rem 5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.perfil-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.perfil-link {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--text-color);
+    text-transform: uppercase;
+}
+
+.logout-button {
+    background-color: var(--primary-dark-color);
+    color: var(--bg-color);
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.5rem;
+    transition: 0.3s ease;
+}
+
+.logout-button:hover {
+    background-color: var(--main-color);
+    transform: scale(1.05);
 }
