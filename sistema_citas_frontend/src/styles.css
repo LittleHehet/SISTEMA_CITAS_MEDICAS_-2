@@ -181,6 +181,8 @@ body {
     align-items: center;
     justify-content: center;
     height: 100vh;
+    width: 100vw;
+    margin: 0 auto;
 }
 
 
@@ -526,50 +528,6 @@ textarea {
 /* Footer
 --------- */
 
-
-.footer {
-    background-color: var(--second-bg-color);
-    color: var(--main-color);
-    padding: 0.5rem 0;
-    text-align: center;
-}
-
-.footer-content {
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
-
-
-.social-media {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-}
-
-.social-media a {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    width: 3.5rem;
-    height: 3.5rem;
-    border: 0.2rem solid var(--main-color);
-    border-radius: 50%;
-    font-size: 1.6rem;
-    color: var(--main-color);
-    margin: 1rem 1rem 1rem 0;
-    transition: 0.3s ease;
-}
-
-.social-media a:hover {
-    transform: scale(1.1) translate(-0.5rem);
-    background-color: var(--main-color);
-    color: var(--bg-color);
-    box-shadow: 0 0 1.5rem var(--main-color);
-}
-
 /*==========================================================================================================Estructura de la Confirmación de la Cita*/
 
 /* Estilos para centrar los datos dentro de la página */
@@ -780,4 +738,53 @@ textarea {
     width: 100%;
     display: flex;
     justify-content: center;
+}
+
+
+
+/* Footer
+--------- */
+
+
+.footer {
+    background-color: var(--second-bg-color);
+    color: var(--main-color);
+    padding: 0.5rem 0;
+    text-align: center;
+}
+
+.footer-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+
+.social-media {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.social-media a {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    border: 0.2rem solid var(--main-color);
+    border-radius: 50%;
+    font-size: 1.6rem;
+    color: var(--main-color);
+    margin: 1rem 1rem 1rem 0;
+    transition: 0.3s ease;
+}
+
+.social-media a:hover {
+    transform: scale(1.1) translate(-0.5rem);
+    background-color: var(--main-color);
+    color: var(--bg-color);
+    box-shadow: 0 0 1.5rem var(--main-color);
 }
