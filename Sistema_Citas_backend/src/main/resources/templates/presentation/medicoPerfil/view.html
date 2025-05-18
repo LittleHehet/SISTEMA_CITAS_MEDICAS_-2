@@ -14,8 +14,25 @@
     <div th:if="${mensaje}" class="message success" th:text="${mensaje}"></div>
     <div th:if="${error}" class="message error" th:text="${error}"></div>
 
+
+
+
     <!-- Formulario para edición -->
     <form th:action="@{/actualizar}" method="post" enctype="multipart/form-data" th:object="${medico}">
+
+        <div class="form-group" th:if="${medico.foto != null}">
+            <label>Vista previa de la foto actual:</label>
+            <img th:src="@{'/medico-foto?id=' + ${medico.id}}"
+                 alt="Foto de perfil"
+                 width="150" height="150" style="border-radius: 50%; object-fit: cover;">
+        </div>
+
+
+        <div class="form-group">
+            <label>Foto de Perfil</label>
+            <input type="file" name="archivoFoto" accept="image/*" />
+        </div>
+
 
         <div class="form-group">
             <label for="id">ID (Cédula)</label>
@@ -62,21 +79,6 @@
             </select>
         </div>
 
-        <div class="form-group">
-            <label for="horario">Horario de Atención</label>
-            <input type="text" id="horario" th:field="*{horario}"
-                   th:readonly="${medico.horario != null and !#strings.isEmpty(medico.horario)}"
-                   required
-                   placeholder="Ej: 8-12;8-12,1-5;9-12;"
-                   pattern="^(([1-9]|1[0-2])-([1-9]|1[0-2])(,([1-9]|1[0-2])-([1-9]|1[0-2]))?;){1,7}$"
-                   title="Ingrese entre 1 y 7 días separados por ';'. Formato: 8-12 o 8-12,1-5. Horas válidas: 1-12">
-            <small class="form-text text-muted">
-                Ejemplos válidos:
-                "8-12;" (1 día),
-                "8-12,1-5; 9-12;8-12,1-5;9-12;8-12;10-11;9-12; (7 día) "
-            </small>
-        </div>
-
 
         <div class="form-group">
             <label for="frecuenciaCitas">Frecuencia de Citas (minutos)</label>
@@ -88,17 +90,30 @@
             <textarea id="presentacion" th:field="*{nota}" required minlength="10" maxlength="500"></textarea>
         </div>
 
-        <div class="form-group">
-            <label>Foto de Perfil</label>
-            <input type="file" name="archivoFoto" accept="image/*" />
+
+
+        <div class="form-group" th:each="i : ${#numbers.sequence(0,6)}">
+            <label th:text="${diasSemana[i]}"></label>
+            <div style="display: flex; gap: 1rem;">
+                <!-- Entrada para el horario de la mañana (1 a 12) -->
+                <input type="text"
+                       th:name="${'horarioManana' + i}"
+                       placeholder="Mañana ej: 8-12"
+                       pattern="^(1[0-2]|[1-9])-(1[0-2]|[1-9])$"
+                       title="Introduce un rango válido entre 1 y 12, por ejemplo 8-12">
+
+                <!-- Entrada para el horario de la tarde (13 a 24) -->
+                <input type="text"
+                       th:name="${'horarioTarde' + i}"
+                       placeholder="Tarde ej: 13-17"
+                       pattern="^(1[3-9]|2[0-4])-(1[3-9]|2[0-4])$"
+                       title="Introduce un rango válido entre 13 y 24, por ejemplo 13-17">
+            </div>
         </div>
 
-        <div class="form-group" th:if="${medico.foto != null}">
-            <label>Vista previa de la foto actual:</label>
-            <img th:src="@{'/medico-foto?id=' + ${medico.id}}"
-                 alt="Foto de perfil"
-                 width="150" height="150" style="border-radius: 50%; object-fit: cover;">
-        </div>
+
+
+
 
         <button type="submit" class="submit-button">Guardar Cambios</button>
     </form>

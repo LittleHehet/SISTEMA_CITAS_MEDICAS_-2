@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @org.springframework.stereotype.Controller("medico")
@@ -23,257 +24,157 @@ import java.util.*;
 public class Controller {
 
     @Autowired
-    private Service service; // Servicio existente para la lógica de negocio
+    private Service service;
 
     @Autowired
-    private EspecialidadRepository especialidadRepository; // Repositorio de especialidades
+    private EspecialidadRepository especialidadRepository;
 
     @Autowired
-    private LocalidadRepository localidadRepository; // Repositorio de localidades
+    private LocalidadRepository localidadRepository;
 
-    @GetMapping("/BuscarCita")
-    public String buscarMedicos(@RequestParam(name = "especialidad", required = false)
-                                    Especialidad especialidad,
-                                @RequestParam(name = "localidad", required = false)
-                                Localidad localidad,
-                                HttpSession session,
-                                HttpServletRequest request,
-                                Model model) {
 
-        if(session.getAttribute("usuario") == null) {
-            Optional<Usuario> usuario = service.findByCedula(0);
-            model.addAttribute("usuario", usuario.get());
-            session.setAttribute("usuario", usuario.get());
-            System.out.println("Iniciando session Como anomino");
-        }
-        else{
-            Usuario usuario = (Usuario) session.getAttribute("usuario");
-            model.addAttribute("usuario", usuario);
+    @GetMapping({"/", "/BuscarCita"})
+    public String buscarMedicos(
+            @RequestParam(name = "especialidad", required = false) Especialidad especialidad,
+            @RequestParam(name = "localidad", required = false) Localidad localidad,
+            HttpSession session, HttpServletRequest request, Model model) {
+
+        Usuario usuario = manejarSesionUsuario(session, model);
+
+        if (!usuario.getPerfil().equals("PACIENTE") && !usuario.getPerfil().equals("ANONIMO")) {
+            return "redirect:/error";
         }
 
-        // Guardar la URL completa con los parámetros en la sesión
-        String urlCompleta = request.getRequestURL().toString();
-        String queryString = request.getQueryString();
-        if (queryString != null) {
-            urlCompleta += "?" + queryString; // Agregar los parámetros de la consulta a la URL
-        }
-        session.setAttribute("prevUrl", urlCompleta);
-        System.out.println("Redirigiendo a: " + urlCompleta);
-        if(localidad != null) {
-            System.out.println("=============================Localidad: " + localidad.getLocalidadNombre());
-        }
-        if(especialidad != null) {
-            System.out.println("=============================Especialidad: " + especialidad.getEspecialidadNombre());
-        }
-        // Filtra los médicos por especialidad y localidad si se han seleccionado
-        model.addAttribute("especialidades", service.getAllEspecialidades());
-        model.addAttribute("localidades", service.getAllLocalidades());
-        //List<Dia> Semana = new ArrayList<>();
-        Cont_Citas cc = new Cont_Citas();
-        if (especialidad == null && localidad == null) {
-            model.addAttribute("medicos", service.findAllMedicosEyL());
-            List<Medico> lista = service.findAllMedicosEyL();
 
-//==============================================VIEJO FOR DE HORARIOS NO BORRAR POR AHORA==============================================================================
-//            for (Medico m : lista) {
-//                List<Dia> Semana = cc.EstimarSemanaHorario(m.getHorario(), m.getFrecuenciaCitas());
-//                for(Dia d : Semana){
-//                    d.setMedico(m);
-//                    //m.setDia(d);
-//                }
-//                model.addAttribute("semana", Semana);
-//            }
-//            Map<Medico, List<Dia>> medicosSemana = new HashMap<>();
-//
-//            for (Medico m : lista) {
-//                List<Dia> Semana = cc.EstimarSemanaHorario(m.getHorario(), m.getFrecuenciaCitas());
-//                for (Dia d : Semana) {
-//                    d.setMedico(m); // Asociamos el médico al día
-//                }
-//                medicosSemana.put(m, Semana); // Almacenamos la lista de días para cada médico
-//            }
-//============================================= LOCAL DATE DE ALEXIA NO BORRAR==================================================================
+        guardarUrlActual(request, session, especialidad, localidad);
+        cargarFiltros(model);
 
-            Map<Medico, List<Dia>> medicosSemana = new HashMap<>();
-            LocalDate today = LocalDate.now();
-            List<String> diasProximos = new ArrayList<>();
+        List<Medico> medicosFiltrados = filtrarMedicos(especialidad, localidad);
+        model.addAttribute("medicos", medicosFiltrados);
 
-// Del día siguiente al de hoy, por 3 días
-            for (int i = 1; i <= 3; i++) {
-                String diaNombre = today.plusDays(i).getDayOfWeek()
-                        .getDisplayName(TextStyle.FULL, new Locale("es", "ES"));
-                // Capitaliza primera letra
-                diaNombre = diaNombre.substring(0, 1).toUpperCase() + diaNombre.substring(1).toLowerCase();
-                diasProximos.add(diaNombre);
-            }
-
-            for (Medico m : lista) {
-                List<Dia> semanaCompleta = cc.EstimarSemanaHorario(m.getHorario(), m.getFrecuenciaCitas());
-                List<Dia> proximosDias = new ArrayList<>();
-
-                for (int i = 1; i <= 3; i++) {
-                    LocalDate fecha = today.plusDays(i);
-                    String diaNombre = fecha.getDayOfWeek()
-                            .getDisplayName(TextStyle.FULL, new Locale("es", "ES"));
-                    diaNombre = diaNombre.substring(0, 1).toUpperCase() + diaNombre.substring(1).toLowerCase();
-
-                    // Buscar el día correspondiente en la semana del médico
-                    for (Dia d : semanaCompleta) {
-                        if (d.getNombre().equals(diaNombre)) {
-                            d.setMedico(m);
-                            d.setFecha(fecha); // Aquí le asignamos la fecha real
-                            proximosDias.add(d);
-                            break;
-                        }
-                    }
-                }
-
-                medicosSemana.put(m, proximosDias);
-            }
-            model.addAttribute("medicosSemana", medicosSemana);
-//============================================= LOCAL DATE DE ALEXIA NO BORRAR==================================================================
-
-        } else {
-            if(especialidad != null && localidad == null){
-                model.addAttribute("medicos", service.findMedicobyEspecialidad(especialidad));
-                List<Medico> lista = service.findMedicobyEspecialidad(especialidad);
-
-//============================================= LOCAL DATE DE ALEXIA NO BORRAR==================================================================
-                Map<Medico, List<Dia>> medicosSemana = new HashMap<>();
-                LocalDate today = LocalDate.now();
-                List<String> diasProximos = new ArrayList<>();
-
-                // Del día siguiente al de hoy, por 3 días
-                for (int i = 1; i <= 3; i++) {
-                    String diaNombre = today.plusDays(i).getDayOfWeek()
-                            .getDisplayName(TextStyle.FULL, new Locale("es", "ES"));
-                    // Capitaliza primera letra
-                    diaNombre = diaNombre.substring(0, 1).toUpperCase() + diaNombre.substring(1).toLowerCase();
-                    diasProximos.add(diaNombre);
-                }
-
-                for (Medico m : lista) {
-                    List<Dia> semanaCompleta = cc.EstimarSemanaHorario(m.getHorario(), m.getFrecuenciaCitas());
-                    List<Dia> proximosDias = new ArrayList<>();
-
-                    for (int i = 1; i <= 3; i++) {
-                        LocalDate fecha = today.plusDays(i);
-                        String diaNombre = fecha.getDayOfWeek()
-                                .getDisplayName(TextStyle.FULL, new Locale("es", "ES"));
-                        diaNombre = diaNombre.substring(0, 1).toUpperCase() + diaNombre.substring(1).toLowerCase();
-
-                        // Buscar el día correspondiente en la semana del médico
-                        for (Dia d : semanaCompleta) {
-                            if (d.getNombre().equals(diaNombre)) {
-                                d.setMedico(m);
-                                d.setFecha(fecha); // Aquí le asignamos la fecha real
-                                proximosDias.add(d);
-                                break;
-                            }
-                        }
-                    }
-
-                    medicosSemana.put(m, proximosDias);
-                }
-                model.addAttribute("medicosSemana", medicosSemana);
-//=============================================================================================================================
-            }
-            else{
-                if(especialidad == null && localidad != null){
-                    model.addAttribute("medicos",service.findMedicobyLocalidad(localidad));
-                    List<Medico> lista = service.findMedicobyLocalidad(localidad);
-
-//============================================= LOCAL DATE DE ALEXIA NO BORRAR==================================================================
-                    Map<Medico, List<Dia>> medicosSemana = new HashMap<>();
-                    LocalDate today = LocalDate.now();
-                    List<String> diasProximos = new ArrayList<>();
-
-// Del día siguiente al de hoy, por 3 días
-                    for (int i = 1; i <= 3; i++) {
-                        String diaNombre = today.plusDays(i).getDayOfWeek()
-                                .getDisplayName(TextStyle.FULL, new Locale("es", "ES"));
-                        // Capitaliza primera letra
-                        diaNombre = diaNombre.substring(0, 1).toUpperCase() + diaNombre.substring(1).toLowerCase();
-                        diasProximos.add(diaNombre);
-                    }
-
-                    for (Medico m : lista) {
-                        List<Dia> semanaCompleta = cc.EstimarSemanaHorario(m.getHorario(), m.getFrecuenciaCitas());
-                        List<Dia> proximosDias = new ArrayList<>();
-
-                        for (int i = 1; i <= 3; i++) {
-                            LocalDate fecha = today.plusDays(i);
-                            String diaNombre = fecha.getDayOfWeek()
-                                    .getDisplayName(TextStyle.FULL, new Locale("es", "ES"));
-                            diaNombre = diaNombre.substring(0, 1).toUpperCase() + diaNombre.substring(1).toLowerCase();
-
-                            // Buscar el día correspondiente en la semana del médico
-                            for (Dia d : semanaCompleta) {
-                                if (d.getNombre().equals(diaNombre)) {
-                                    d.setMedico(m);
-                                    d.setFecha(fecha); // Aquí le asignamos la fecha real
-                                    proximosDias.add(d);
-                                    break;
-                                }
-                            }
-                        }
-
-                        medicosSemana.put(m, proximosDias);
-                    }
-                    model.addAttribute("medicosSemana", medicosSemana);
-//==================================================================================================================================================
-                }
-                else{
-                    model.addAttribute("medicos",service.findMedicobyLocalidadAndEspecialidad(especialidad,localidad));
-                    List<Medico> lista = service.findMedicobyLocalidadAndEspecialidad(especialidad,localidad);
-
- //============================================= LOCAL DATE DE ALEXIA NO BORRAR==================================================================
-                    Map<Medico, List<Dia>> medicosSemana = new HashMap<>();
-                    LocalDate today = LocalDate.now();
-                    List<String> diasProximos = new ArrayList<>();
-
-// Del día siguiente al de hoy, por 3 días
-                    for (int i = 1; i <= 3; i++) {
-                        String diaNombre = today.plusDays(i).getDayOfWeek()
-                                .getDisplayName(TextStyle.FULL, new Locale("es", "ES"));
-                        // Capitaliza primera letra
-                        diaNombre = diaNombre.substring(0, 1).toUpperCase() + diaNombre.substring(1).toLowerCase();
-                        diasProximos.add(diaNombre);
-                    }
-
-                    for (Medico m : lista) {
-                        List<Dia> semanaCompleta = cc.EstimarSemanaHorario(m.getHorario(), m.getFrecuenciaCitas());
-                        List<Dia> proximosDias = new ArrayList<>();
-
-                        for (int i = 1; i <= 3; i++) {
-                            LocalDate fecha = today.plusDays(i);
-                            String diaNombre = fecha.getDayOfWeek()
-                                    .getDisplayName(TextStyle.FULL, new Locale("es", "ES"));
-                            diaNombre = diaNombre.substring(0, 1).toUpperCase() + diaNombre.substring(1).toLowerCase();
-
-                            // Buscar el día correspondiente en la semana del médico
-                            for (Dia d : semanaCompleta) {
-                                if (d.getNombre().equals(diaNombre)) {
-                                    d.setMedico(m);
-                                    d.setFecha(fecha); // Aquí le asignamos la fecha real
-                                    proximosDias.add(d);
-                                    break;
-                                }
-                            }
-                        }
-
-                        medicosSemana.put(m, proximosDias);
-                    }
-                    model.addAttribute("medicosSemana", medicosSemana);
-//==================================================================================================================================================
-                }
-            }
-        }
-
-        return "presentation/BuscarCita/view"; // La vista que muestra los médicos
+        Map<Medico, List<Dia>> disponibilidad = calcularDisponibilidad(medicosFiltrados);
+        model.addAttribute("medicosSemana", disponibilidad);
+        return "presentation/BuscarCita/view";
     }
 
+    // Métodos auxiliares
+
+    private Usuario manejarSesionUsuario(HttpSession session, Model model) {
+        if (session.getAttribute("usuario") == null) {
+            Optional<Usuario> usuarioAnonimo = service.findByCedula(0);
+            Usuario usuario = usuarioAnonimo.get();
+            model.addAttribute("usuario", usuario);
+            session.setAttribute("usuario", usuario);
+            System.out.println("Iniciando sesión como anónimo");
+            return usuario;
+        }
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        model.addAttribute("usuario", usuario);
+        return usuario;
+    }
+
+    private void guardarUrlActual(HttpServletRequest request, HttpSession session,
+                                  Especialidad especialidad, Localidad localidad) {
+        String urlCompleta = request.getRequestURL().toString();
+        String queryString = request.getQueryString();
+
+        if (queryString != null) {
+            urlCompleta += "?" + queryString;
+        }
+
+        session.setAttribute("prevUrl", urlCompleta);
+        System.out.println("Redirigiendo a: " + urlCompleta);
+
+        if (localidad != null) {
+            System.out.println("Localidad: " + localidad.getLocalidadNombre());
+        }
+        if (especialidad != null) {
+            System.out.println("Especialidad: " + especialidad.getEspecialidadNombre());
+        }
+    }
+
+    private void cargarFiltros(Model model) {
+        model.addAttribute("especialidades", service.getAllEspecialidades());
+        model.addAttribute("localidades", service.getAllLocalidades());
+    }
+
+    private List<Medico> filtrarMedicos(Especialidad especialidad, Localidad localidad) {
+        if (especialidad == null && localidad == null) {
+            return service.findAllMedicosEyL();
+        } else if (especialidad != null && localidad == null) {
+            return service.findMedicobyEspecialidad(especialidad);
+        } else if (especialidad == null && localidad != null) {
+            return service.findMedicobyLocalidad(localidad);
+        } else {
+            return service.findMedicobyLocalidadAndEspecialidad(especialidad, localidad);
+        }
+    }
+
+
+    private Map<Medico, List<Dia>> calcularDisponibilidad(List<Medico> medicos) {
+        Cont_Citas cc = new Cont_Citas();
+        Map<Medico, List<Dia>> disponibilidad = new HashMap<>();
+        LocalDate hoy = LocalDate.now();
+
+        for (Medico medico : medicos) {
+            List<Dia> semanaCompleta = cc.EstimarSemanaHorario(medico.getHorario(), medico.getFrecuenciaCitas());
+            List<Dia> proximosDias = obtenerProximosDiasDisponibles(medico, semanaCompleta, hoy);
+            disponibilidad.put(medico, proximosDias);
+        }
+
+        return disponibilidad;
+    }
+
+    private List<Dia> obtenerProximosDiasDisponibles(Medico medico, List<Dia> semanaCompleta, LocalDate fechaBase) {
+        List<Dia> diasDisponibles = new ArrayList<>();
+
+        for (int i = 1; i <= 3; i++) {
+            LocalDate fecha = fechaBase.plusDays(i);
+            String nombreDia = obtenerNombreDia(fecha);
+
+            semanaCompleta.stream()
+                    .filter(d -> d.getNombre().equals(nombreDia))
+                    .findFirst()
+                    .ifPresent(diaOriginal -> {
+                        // Crear una copia del día para no modificar el original
+                        Dia diaDisponible = new Dia(diaOriginal.getNombre(), new ArrayList<>());
+                        diaDisponible.setMedico(medico);
+                        diaDisponible.setFecha(fecha);
+
+                        // Filtrar horarios disponibles
+                        List<CalcularHorario> horariosDisponibles = diaOriginal.getHorarios().stream()
+                                .filter(horario -> {
+                                    // Verificar si existe una cita activa para este horario
+                                    Cita citaExistente = service.findCitaByMedicoHorario(
+                                            medico.getId(),
+                                            horario.getHorainicio(),
+                                            horario.getHorafin(),
+                                            nombreDia,
+                                            fecha
+                                    );
+
+                                    // El horario está disponible si no hay cita o si está cancelada
+                                    return citaExistente == null || "cancelada".equalsIgnoreCase(citaExistente.getEstado());
+                                })
+                                .collect(Collectors.toList());
+
+                        diaDisponible.setHorarios(horariosDisponibles);
+
+                        // Solo agregar el día si tiene horarios disponibles
+                        if (!horariosDisponibles.isEmpty()) {
+                            diasDisponibles.add(diaDisponible);
+                        }
+                    });
+        }
+
+        return diasDisponibles;
+    }
+
+    private String obtenerNombreDia(LocalDate fecha) {
+        String nombreDia = fecha.getDayOfWeek()
+                .getDisplayName(TextStyle.FULL, new Locale("es", "ES"));
+        return nombreDia.substring(0, 1).toUpperCase() + nombreDia.substring(1).toLowerCase();
+    }
+
+
 }
-
-
-//Nota: no borrar de momento: update medicos SET estado = 'aprobado' Where medico_id = 3;

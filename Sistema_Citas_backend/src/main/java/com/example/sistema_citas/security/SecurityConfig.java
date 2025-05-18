@@ -1,5 +1,6 @@
 package com.example.sistema_citas.security;
 
+import jakarta.servlet.Filter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -8,27 +9,30 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.util.List;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
+    private final JwtAuthFilter jwtAuthFilter;
     private final CustomAuthenticationProvider customAuthenticationProvider;
     private final CustomSuccessHandler customSuccessHandler;
     private final CustomFailureHandler customFailureHandler;
 
     public SecurityConfig(CustomAuthenticationProvider customAuthenticationProvider,
                           CustomSuccessHandler customSuccessHandler,
-                          CustomFailureHandler customFailureHandler) {
+                          CustomFailureHandler customFailureHandler , JwtAuthFilter jwtAuthFilter) {
         this.customAuthenticationProvider = customAuthenticationProvider;
         this.customSuccessHandler = customSuccessHandler;
         this.customFailureHandler = customFailureHandler;
+        this.jwtAuthFilter = jwtAuthFilter;
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
         http
                 .cors(cors -> cors.configurationSource(request -> {
                     var corsConfig = new org.springframework.web.cors.CorsConfiguration();
@@ -38,14 +42,15 @@ public class SecurityConfig {
                     corsConfig.setAllowCredentials(true);
                     return corsConfig;
                 }))
-                .authenticationProvider(customAuthenticationProvider)
 
+                .csrf(csrf -> csrf.disable())
+                .authenticationProvider(customAuthenticationProvider)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/", "/Sign-up/**", "/About/**", "/Sign-in/**", "/Salir/**",
+                                "/","/api/**" , "/api/about" ,  "/api/login/login",
                                 "/medico-foto/**", "/css/**", "/images/**",
-                                "/BuscarCita", "/ConfirmarCita/**", "/HorarioExtendido/**",
-                                "/api/about", "/api/**" // Permitir APIs REST
+                                "/BuscarCita", "/ConfirmarCita/**", "/HorarioExtendido/**"
+                                // Permitir APIs REST
                         ).permitAll()
 
                         .requestMatchers("/Approve/**").hasRole("ADMINISTRADOR")
@@ -62,27 +67,9 @@ public class SecurityConfig {
                         ).hasAnyRole("PACIENTE", "MEDICO")
                         .anyRequest().authenticated()
                 )
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
-                .formLogin(form -> form
-                        .loginPage("/Sign-in")
-                        .loginProcessingUrl("/Sign-in/Sign-in")
-                        .successHandler(customSuccessHandler)
-                        .failureHandler(customFailureHandler)
-                        .permitAll()
-                )
 
-                .logout(logout -> logout
-                        .logoutUrl("/Salir")
-                        .logoutSuccessUrl("/Sign-in?logout=true")
-                        .invalidateHttpSession(true)
-                        .deleteCookies("JSESSIONID")
-                        .permitAll()
-                )
-
-                .csrf(csrf -> csrf.disable())
-                .sessionManagement(session -> session
-                        .invalidSessionUrl("/Sign-in")
-                );
 
         return http.build();
     }
@@ -94,3 +81,25 @@ public class SecurityConfig {
                 .build();
     }
 }
+
+
+
+//                .formLogin(form -> form
+//                        .loginPage("/Sign-in")
+//                        .loginProcessingUrl("/Sign-in/Sign-in")
+//                        .successHandler(customSuccessHandler)
+//                        .failureHandler(customFailureHandler)
+//                        .permitAll()
+//                )
+
+//                .logout(logout -> logout
+//                        .logoutUrl("/Salir")
+//                        .logoutSuccessUrl("/Sign-in?logout=true")
+//                        .invalidateHttpSession(true)
+//                        .deleteCookies("JSESSIONID")
+//                        .permitAll()
+//                )
+
+////                .csrf(csrf -> csrf.disable())
+////                .sessionManagement(session -> session
+////                        .invalidSessionUrl("/Sign-in")

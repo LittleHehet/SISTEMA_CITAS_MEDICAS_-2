@@ -6,10 +6,22 @@ function About() {
 
     useEffect(() => {
         fetch('http://localhost:8080/api/about')
-            .then(response => response.json())
-            .then(data => setInfo(data))
-            .catch(error => console.error('Error al cargar datos:', error));
+            .then(response => {
+                console.log('Respuesta del backend:', response);
+                if (!response.ok) {
+                    throw new Error('Error en la respuesta del servidor');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Datos recibidos:', data);
+                setInfo(data);
+            })
+            .catch(error => {
+                console.error('Error al cargar datos:', error);
+            });
     }, []);
+
 
     if (!info) return <p>Cargando información...</p>;
 

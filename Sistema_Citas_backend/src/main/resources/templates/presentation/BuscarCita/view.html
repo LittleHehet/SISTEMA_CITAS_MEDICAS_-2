@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
-<head th:replace="~{fragments/head :: head}"></head>
+<head th:replace="~{fragments/head :: head}"><title>Citas</title></head>
 
 <body>
 <header th:replace="~{fragments/header :: header}"></header>
@@ -9,7 +9,7 @@
     <!-- Formulario de búsqueda -->
     <div class="search-form">
         <h2>Buscar Médicos</h2>
-        <form action="/BuscarCita" method="GET">
+        <form   action="/BuscarCita" method="GET">
             <div class="input-group">
                 <label for="especialidad">Especialidad:</label>
                 <select name="especialidad" id="especialidad">
@@ -26,7 +26,7 @@
                 </select>
             </div>
 
-            <button type="submit" class="search-btn">Buscar</button>
+            <button type="submit" class="button">Buscar</button>
         </form>
     </div>
 
@@ -34,7 +34,6 @@
     <div class="medicos-list">
         <h3>Medicos disponibles:</h3>
         <th:block th:each="entry : ${medicosSemana}">
-            <!-- 'entry.key' es el medico y 'entry.value' es la lista de días (semana) -->
             <div class="medico-card">
                 <div th:if="${entry.key.foto != null}">
                     <img th:src="@{'/medico-foto?id=' + ${entry.key.id}}"
@@ -57,7 +56,7 @@
                     <div class="view-all-button">
                         <a th:href="'/HorarioExtendido?medicoId=' + ${entry.key.id}"
                            class="btn btn-secondary">
-                            <button>Ver horarios</button>
+                            <button class="button" >Ver horarios</button>
                         </a>
                     </div>
                     <div class="medico-buttons">
@@ -70,7 +69,7 @@
                                 <a th:href="'/ConfirmarCita?medicoId=' + ${entry.key.id} + '&dia=' + ${dia.Nombre} +
                                 '&fecha=' + ${#temporals.format(dia.fecha, 'yyyy-MM-dd')} +
                                 '&horaInicio=' + ${horario.horainicio} + '&horaFin=' + ${horario.horafin}" class="btn btn-primary">
-                                    <button th:text="'Horario: ' + ${horario.horainicio} + ' - ' + ${horario.horafin}"></button>
+                                    <button  class="button-busqueda" th:text="'Horario: ' + ${horario.horainicio} + ' - ' + ${horario.horafin}"></button>
                                 </a>
 
                             </th:block>

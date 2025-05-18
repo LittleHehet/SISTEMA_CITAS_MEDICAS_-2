@@ -10,6 +10,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -27,7 +28,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider{
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        String cedulaRaw = authentication.getName(); // cedula como String
+        String cedulaRaw = authentication.getName();
         String clave = authentication.getCredentials().toString();
 
         Integer cedula;
@@ -37,37 +38,20 @@ public class CustomAuthenticationProvider implements AuthenticationProvider{
             throw new BadCredentialsException("Cédula inválida");
         }
 
-        // Buscar el usuario por cédula
         Usuario usuario = service.findByCedula(cedula)
-                .orElseThrow(() -> new BadCredentialsException("Usuario no encontrado"));
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
 
-        // Validar contraseña
         if (!passwordEncoder.matches(clave, usuario.getClave())) {
-            throw new BadCredentialsException("Clave incorrecta");
+            throw new BadCredentialsException("Credenciales inválidas");
         }
-
-        // Validar si el usuario es médico y su estado
-        if ("MEDICO".equals(usuario.getPerfil())) {
-            Optional<Medico> optionalMedico = service.findMedicoByUsuario(usuario);
-            if (optionalMedico.isPresent()) {
-                Medico medico = optionalMedico.get();
-                System.out.println("Estado del médico: " + medico.getEstado());
-                if (!"aprobado".equalsIgnoreCase(medico.getEstado())) {
-                    System.out.println("¡Es un médico pendiente!");
-                    throw new BadCredentialsException("MEDICO_PENDIENTE");
-                }
-            } else {
-                System.out.println("No se encontró el médico relacionado");
-            }
-        }
-
 
         return new UsernamePasswordAuthenticationToken(
-                usuario.getCedula().toString(),
-                usuario.getClave(),
-                Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + usuario.getPerfil()))
+                cedulaRaw,
+                clave,
+                Collections.singletonList(new SimpleGrantedAuthority(usuario.getPerfil()))
         );
     }
+
 
     @Override
     public boolean supports(Class<?> authentication) {

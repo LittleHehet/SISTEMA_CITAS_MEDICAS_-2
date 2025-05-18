@@ -1,13 +1,19 @@
 package com.example.sistema_citas.service;
 
 import com.example.sistema_citas.data.*;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
 import com.example.sistema_citas.logic.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 
 @Transactional
 @org.springframework.stereotype.Service("service")
@@ -31,7 +37,7 @@ public class Service {
   private CitaRepository citaRepository;
 
   @Autowired
-  private org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
+  private PasswordEncoder passwordEncoder;
 
   /* Usario
   ------------------------------------------*/
@@ -41,37 +47,34 @@ public class Service {
       return usuarioRepository.findByCedula(cedula);
     }
 
-
-      // Método para encontrar un usuario por su cédula y clave
-      public Optional<Usuario> findByIdAndClave(Integer cedula, String clave) {
-        return usuarioRepository.findByIdAndClave(cedula, clave);
-      }
-
-      // Método para encontrar todos los usuarios de un perfil específico
-      public List<Usuario> findByPerfil(String perfil) {
+    // Método para encontrar todos los usuarios de un perfil específico
+    public List<Usuario> findByPerfil(String perfil) {
         return usuarioRepository.findByPerfil(perfil);
       }
 
-      // Método para encontrar todos los usuarios
-      public List<Usuario> findAll(){return usuarioRepository.findAll();}
-
-     public Optional<Usuario> findbyId(Integer id)
-     {
-       return usuarioRepository.findById(id);
-     }
-
-      // Método para guardar un nuevo usuario
-      public Usuario saveUsuario(Usuario usuario) {
-        usuario.setClave(passwordEncoder.encode(usuario.getClave()));
-        return usuarioRepository.save(usuario);
-      }
+    // Método para guardar un nuevo usuario
+    public Usuario saveUsuario(Usuario usuario) {
+      usuario.setClave(passwordEncoder.encode(usuario.getClave()));
+      return usuarioRepository.save(usuario);
+    }
 
 
-      // Método para login
-      public Optional<Usuario> login(Integer cedula, String clave) {
-        Optional<Usuario> usuario = usuarioRepository.findByIdAndClave(cedula, clave);
-        return usuario.isPresent() ? usuario : Optional.empty();
-      }
+  public UserDetails load(String cedula) throws UsernameNotFoundException {
+    Integer cedulaInt = Integer.parseInt(cedula);
+    Optional<Usuario> userOpt = usuarioRepository.findByCedula(cedulaInt);
+    if (userOpt.isEmpty()) {
+      System.out.println("Usuario no encontrado para cedula: " + cedula);
+      throw new UsernameNotFoundException("Usuario no encontrado: " + cedula);
+    }
+    Usuario user = userOpt.get();
+    System.out.println("Usuario encontrado: " + user.getNombre() + ", perfil: " + user.getPerfil());
+    return new org.springframework.security.core.userdetails.User(
+            String.valueOf(user.getCedula()),
+            user.getClave(),
+            Collections.singletonList(new SimpleGrantedAuthority(user.getPerfil()))
+    );
+  }
+
 
 
     /* Medico
@@ -81,18 +84,9 @@ public class Service {
       return medicoRepository.findById2(id);
     }
 
-    public void updateMedico(Medico medico) {
-      medicoRepository.save(medico);
-    }
-
-      public List<Medico> findAllMedicos() {
-        return medicoRepository.findAll();
-      }
-
-      public List<Medico> findAllMedicosEyL() {
-      //return medicoRepository.findAllMedicosConUsuariosEspecialidadYLocalidad();
+    public List<Medico> findAllMedicosEyL() {
       return medicoRepository.findAllMedicosConUsuariosEspecialidadYLocalidadYEstado();
-      }
+    }
 
   public void updateMedico(Medico medico, Foto nuevaFoto) {
     Optional<Medico> medicoExistenteOpt = medicoRepository.findById(medico.getId());
@@ -156,22 +150,11 @@ public class Service {
   }
 
 
-    /*---------foto-----------------*/
-    public Foto create(Foto image) {
+  /*---------foto-----------------*/
+  public Foto create(Foto image) {
       return fotoRepository.save(image);
     }
 
-  public List<Foto> viewAll() {
-    return (List<Foto>) fotoRepository.findAll();
-  }
-
-  public Foto viewById(long id) {
-    return fotoRepository.findById(id).get();
-  }
-
-
-  /*--------horarios --------------------*/
-  //public boolean isHorarioOcupado(Medico medico, String dia, int inicio, int fin);
 
 
   /*--------CITAS--------------------*/
@@ -180,9 +163,6 @@ public class Service {
     citaRepository.save(cita);
   }
 
-  public List<Cita> findAllCitas() {
-     return citaRepository.findAll();
-  }
 
   public List<Cita> findAllCitasbyUser(Integer id) {
     return citaRepository.findCitasByUsuarioOrdenadas(id);
@@ -202,13 +182,15 @@ public class Service {
     citaRepository.save(cita);
   }
 
-  public Cita findCitaByMedicoHorario(Integer medico_id,String horaInicio, String horaFin, String dia) {
-    return citaRepository.findCitaByMedicoAndHorario(medico_id,horaInicio,horaFin,dia);
+  public Cita findCitaByMedicoHorario(Integer medico_id,String horaInicio,
+                                      String horaFin, String  dia , LocalDate fechaHora) {
+    return citaRepository.findCitaByMedicoAndHorario(medico_id,horaInicio,horaFin,dia ,fechaHora );
   }
+
 
   public int cancelarCitasPasadas() {
     return citaRepository.cancelarCitasPasadas();
   }
 
 
-} //fin service
+}
