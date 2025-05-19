@@ -18,7 +18,7 @@ function Header({ perfil, onLogout }) {
 
             <nav className="navbar">
                 <Link to="/About">Acerca de</Link>
-                {perfil === 'PACIENTE' && (
+                {perfil === 'ROLE_PACIENTE' && (
                     <>
                         <Link to="/BuscarCita">Búsqueda</Link>
                         <Link to="/historicoPaciente">Historial</Link>
@@ -26,7 +26,7 @@ function Header({ perfil, onLogout }) {
                         <span className="user-badge">👤 Paciente</span>
                     </>
                 )}
-                {perfil === 'MEDICO' && (
+                {perfil === 'ROLE_MEDICO' && (
                     <>
                         <Link to="/GestionCitas">Citas</Link>
                         <div className="perfil-wrapper">
@@ -38,9 +38,9 @@ function Header({ perfil, onLogout }) {
                     </>
                 )}
 
-                {perfil === 'ADMINISTRADOR' && (
+                {perfil === 'ROLE_ADMINISTRADOR' && (
                     <>
-                        <Link to="/Approve">Administrar</Link>
+                        <Link to="/ApproveDoctors">Administrar</Link>
                         <button onClick={onLogout}>Salir</button>
                         <span className="user-badge">🛠️ Admin</span>
                     </>

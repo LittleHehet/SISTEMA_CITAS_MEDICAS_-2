@@ -7,6 +7,9 @@ import Header from './components/Header';
 import About from './components/About';
 import SignUp from './components/SignUp';
 import MedicoPerfil from './components/MedicoPerfil';
+import ApproveDoctors from './components/ApproveDoctors';
+
+
 
 
 function App() {
@@ -41,6 +44,8 @@ function App() {
                     <Route path="/Sign-up" element={<SignUp />} />
                     <Route path="/Login" element={<Login onLoginSuccess={handleLoginSuccess} />} />
                     <Route path="/Medico-Perfil" element={<MedicoPerfil />} />
+                    <Route path="/ApproveDoctors" element={<ApproveDoctors/>} />
+
                 </Routes>
             </main>
             <Footer />

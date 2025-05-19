@@ -51,10 +51,10 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/",
                                 "/api/signup",
-                                "/api/login/login",     // ✅ solo se permite esta para login
+                                "/api/login/login",
                                 "/api/about",
                                 "/api/medico-foto/**",
-                                "/api/medico/foto",         // ✅ permite acceso público a la foto del médico
+                                "/api/medico/foto",
                                 "/css/**",
                                 "/images/**",
                                 "/BuscarCita",
@@ -62,7 +62,7 @@ public class SecurityConfig {
                                 "/HorarioExtendido/**"
                         ).permitAll()
 
-                        .requestMatchers("/Approve/**").hasRole("ADMINISTRADOR")
+                        .requestMatchers("/api/Approve/", "/api/Approve/perfil", "/api/Approve/approve", "/api/Approve/**").hasRole("ADMINISTRADOR")
                         .requestMatchers("/Medico-Perfil/**",
                                 "/GestionCitas/**",
                                 "/completarCita/**",
@@ -84,7 +84,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // ✅ permite HttpSession
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
