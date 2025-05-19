@@ -1,0 +1,130 @@
+package com.example.sistema_citas.presentation.medicoPerfil;
+
+import com.example.sistema_citas.data.FotoRepository;
+import com.example.sistema_citas.logic.Foto;
+import com.example.sistema_citas.logic.Medico;
+import com.example.sistema_citas.service.Service;
+
+import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.Map;
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/api/medico")
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+public class MedicoPerfilRestController {
+
+    @Autowired
+    private Service service;
+
+    @Autowired
+    private FotoRepository fotoRepository;
+
+    @GetMapping("/perfil")
+    public ResponseEntity<?> obtenerPerfilDesdeToken(Authentication authentication) {
+        if (authentication == null || authentication.getName() == null) {
+            return ResponseEntity.status(401).body("No autenticado");
+        }
+
+        Integer cedula = Integer.parseInt(authentication.getName());
+
+        Optional<Medico> medicoOpt = service.findMedicobyCedula(cedula);
+        if (medicoOpt.isEmpty()) {
+            return ResponseEntity.status(404).body("Médico no encontrado");
+        }
+
+        Medico medico = medicoOpt.get();
+
+        return ResponseEntity.ok(Map.of(
+                "medico", medico,
+                "especialidades", service.getAllEspecialidades(),
+                "localidades", service.getAllLocalidades()
+        ));
+    }
+
+
+    @GetMapping("/foto")
+    public ResponseEntity<byte[]> obtenerFoto(@RequestParam("id") Integer idMedico) {
+        Optional<Medico> medicoOpt = service.findMedicoById(idMedico);
+        if (medicoOpt.isPresent()) {
+            Foto foto = medicoOpt.get().getFoto();
+            if (foto != null && foto.getImagen() != null) {
+                byte[] imagen = foto.getImagen();
+                String mimeType = "image/jpeg";
+                if (imagen[0] == (byte) 0x89 && imagen[1] == (byte) 0x50) {
+                    mimeType = "image/png";
+                }
+                return ResponseEntity.ok().contentType(MediaType.parseMediaType(mimeType)).body(imagen);
+            }
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping(value = "/actualizar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> actualizarPerfil(
+            @RequestParam("id") Integer id,
+            @RequestParam("costo") Integer costo,
+            @RequestParam("frecuenciaCitas") Integer frecuenciaCitas,
+            @RequestParam("nota") String nota,
+            @RequestParam("especialidadId") Integer especialidadId,
+            @RequestParam("localidadId") Integer localidadId,
+            @RequestParam(value = "archivoFoto", required = false) MultipartFile archivoFoto,
+            Authentication authentication
+    ) {
+        if (authentication == null || authentication.getName() == null) {
+            return ResponseEntity.status(401).body("No autenticado");
+        }
+
+        Integer cedula = Integer.parseInt(authentication.getName());
+
+        Optional<Medico> medicoOpt = service.findMedicobyCedula(cedula);
+        if (medicoOpt.isEmpty()) {
+            return ResponseEntity.badRequest().body("Médico no encontrado");
+        }
+
+        Medico medico = medicoOpt.get();
+
+        // Procesar foto si se envío
+        Foto fotoFinal = medico.getFoto();
+        if (archivoFoto != null && !archivoFoto.isEmpty()) {
+            try {
+                Foto nuevaFoto = new Foto();
+                nuevaFoto.setImagen(archivoFoto.getBytes());
+                fotoFinal = service.create(nuevaFoto); // ✅ crea y guarda en base de datos
+            } catch (IOException e) {
+                return ResponseEntity.internalServerError().body("Error al procesar la imagen");
+            }
+        }
+
+        // Actualizar campos permitidos
+        medico.setCosto(BigDecimal.valueOf(costo));
+        medico.setFrecuenciaCitas(frecuenciaCitas);
+        medico.setNota(nota);
+        medico.setFoto(fotoFinal);
+
+        // NUEVO: actualizar especialidad y localidad
+        service.getAllEspecialidades().stream()
+                .filter(e -> e.getId().equals(especialidadId))
+                .findFirst()
+                .ifPresent(medico::setEspecialidad);
+
+        service.getAllLocalidades().stream()
+                .filter(l -> l.getId().equals(localidadId))
+                .findFirst()
+                .ifPresent(medico::setLocalidad);
+
+        service.updateMedico(medico, fotoFinal);
+
+        return ResponseEntity.ok("Perfil actualizado correctamente");
+    }
+
+}

@@ -31,7 +31,7 @@ public class UsuarioRestController {
     private JwtUtil jwtUtil;
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest, HttpSession session) {
         System.out.println("Intento login: cedula=" + loginRequest.getCedula() + ", clave=" + loginRequest.getClave());
 
         Authentication authentication;
@@ -51,7 +51,19 @@ public class UsuarioRestController {
         String token = jwtUtil.generateToken(userDetails);
 
         Optional<Usuario> usuarioOpt = service.findByCedula(loginRequest.getCedula());
-        String perfil = usuarioOpt.map(Usuario::getPerfil).orElse("desconocido");
+        if (usuarioOpt.isEmpty()) {
+            return ResponseEntity.status(404).body("Usuario no encontrado");
+        }
+
+        Usuario usuario = usuarioOpt.get();
+        String perfil = usuario.getPerfil();
+
+        // ✅ Si el usuario es médico, guardar en sesión
+        if ("MEDICO".equals(perfil)) {
+            service.findMedicobyCedula(usuario.getCedula()).ifPresent(medico -> {
+                session.setAttribute("medico", medico);
+            });
+        }
 
         return ResponseEntity.ok(new LoginResponse(token, perfil));
     }

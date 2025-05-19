@@ -6,6 +6,8 @@ import Login from './components/Login';
 import Header from './components/Header';
 import About from './components/About';
 import SignUp from './components/SignUp';
+import MedicoPerfil from './components/MedicoPerfil';
+
 
 function App() {
     const [perfil, setPerfil] = useState(null);
@@ -38,6 +40,7 @@ function App() {
                     <Route path="/About" element={<About />} />
                     <Route path="/Sign-up" element={<SignUp />} />
                     <Route path="/Login" element={<Login onLoginSuccess={handleLoginSuccess} />} />
+                    <Route path="/Medico-Perfil" element={<MedicoPerfil />} />
                 </Routes>
             </main>
             <Footer />

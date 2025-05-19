@@ -367,6 +367,8 @@ button:hover {
 textarea {
     resize: none;
     height: 100px;
+    color: #000000; /* texto negro */
+    background-color: #ffffff; /* fondo blanco */
 }
 
 /* Botón de guardar */

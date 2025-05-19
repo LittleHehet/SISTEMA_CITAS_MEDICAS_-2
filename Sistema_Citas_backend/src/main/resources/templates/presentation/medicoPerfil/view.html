@@ -1,123 +1,123 @@
-<!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns="http://www.w3.org/1999/html">-->
 
-<head th:replace="~{fragments/head :: head}" >
-</head>
+<!--<head th:replace="~{fragments/head :: head}" >-->
+<!--</head>-->
 
-<body>
-<header th:replace="~{fragments/header :: header}"></header>
+<!--<body>-->
+<!--<header th:replace="~{fragments/header :: header}"></header>-->
 
-<div class="container">
-    <h2 class="title">Actualizar Información del Médico</h2>
+<!--<div class="container">-->
+<!--    <h2 class="title">Actualizar Información del Médico</h2>-->
 
-    <!-- Mensajes de éxito o error -->
-    <div th:if="${mensaje}" class="message success" th:text="${mensaje}"></div>
-    <div th:if="${error}" class="message error" th:text="${error}"></div>
-
-
-
-
-    <!-- Formulario para edición -->
-    <form th:action="@{/actualizar}" method="post" enctype="multipart/form-data" th:object="${medico}">
-
-        <div class="form-group" th:if="${medico.foto != null}">
-            <label>Vista previa de la foto actual:</label>
-            <img th:src="@{'/medico-foto?id=' + ${medico.id}}"
-                 alt="Foto de perfil"
-                 width="150" height="150" style="border-radius: 50%; object-fit: cover;">
-        </div>
-
-
-        <div class="form-group">
-            <label>Foto de Perfil</label>
-            <input type="file" name="archivoFoto" accept="image/*" />
-        </div>
-
-
-        <div class="form-group">
-            <label for="id">ID (Cédula)</label>
-            <input type="number" id="id" th:value="${medico.usuarios.cedula}" readonly>
-            <input type="hidden" th:field="*{id}" />
-        </div>
-
-        <div class="form-group">
-            <label for="nombre">Nombre</label>
-            <input type="text" id="nombre" th:field="*{usuarios.nombre}" readonly>
-        </div>
-
-        <div class="form-group">
-            <label for="apellido">Apellido</label>
-            <input type="text" id="apellido" th:field="*{usuarios.apellido}" readonly>
-        </div>
-
-        <div class="form-group">
-            <label for="especialidad">Especialidad</label>
-            <select id="especialidad" th:field="*{especialidad}" required>
-                <option value="">Seleccione una especialidad</option>
-                <option th:each="esp : ${especialidades}" th:value="${esp.id}" th:text="${esp.especialidadNombre}"></option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="costo">Costo de Consulta (colones)</label>
-            <select id="costo" th:field="*{costo}" required>
-                <option value="">Seleccione un costo</option>
-                <option th:value="${medico.costo}" th:text="${medico.costo} + ' colones'" selected="selected"></option>
-                <option th:each="c : ${#numbers.sequence(5000, 50000, 5000)}"
-                        th:if="${c != medico.costo}"
-                        th:value="${c}"
-                        th:text="${c} + ' colones'">
-                </option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="localidad">Localidad</label>
-            <select id="localidad" th:field="*{localidad}" required>
-                <option value="">Seleccione una localidad</option>
-                <option th:each="loc : ${localidades}" th:value="${loc.id}" th:text="${loc.localidadNombre}"></option>
-            </select>
-        </div>
-
-
-        <div class="form-group">
-            <label for="frecuenciaCitas">Frecuencia de Citas (minutos)</label>
-            <input type="number" id="frecuenciaCitas" step="10" th:field="*{frecuenciaCitas}" required min="10" max="120">
-        </div>
-
-        <div class="form-group">
-            <label for="presentacion">Presentación</label>
-            <textarea id="presentacion" th:field="*{nota}" required minlength="10" maxlength="500"></textarea>
-        </div>
-
-
-
-        <div class="form-group" th:each="i : ${#numbers.sequence(0,6)}">
-            <label th:text="${diasSemana[i]}"></label>
-            <div style="display: flex; gap: 1rem;">
-                <!-- Entrada para el horario de la mañana (1 a 12) -->
-                <input type="text"
-                       th:name="${'horarioManana' + i}"
-                       placeholder="Mañana ej: 8-12"
-                       pattern="^(1[0-2]|[1-9])-(1[0-2]|[1-9])$"
-                       title="Introduce un rango válido entre 1 y 12, por ejemplo 8-12">
-
-                <!-- Entrada para el horario de la tarde (13 a 24) -->
-                <input type="text"
-                       th:name="${'horarioTarde' + i}"
-                       placeholder="Tarde ej: 13-17"
-                       pattern="^(1[3-9]|2[0-4])-(1[3-9]|2[0-4])$"
-                       title="Introduce un rango válido entre 13 y 24, por ejemplo 13-17">
-            </div>
-        </div>
+<!--    &lt;!&ndash; Mensajes de éxito o error &ndash;&gt;-->
+<!--    <div th:if="${mensaje}" class="message success" th:text="${mensaje}"></div>-->
+<!--    <div th:if="${error}" class="message error" th:text="${error}"></div>-->
 
 
 
 
+<!--    &lt;!&ndash; Formulario para edición &ndash;&gt;-->
+<!--    <form th:action="@{/actualizar}" method="post" enctype="multipart/form-data" th:object="${medico}">-->
 
-        <button type="submit" class="submit-button">Guardar Cambios</button>
-    </form>
-</div>
-<footer th:replace="~{fragments/footer::footer}"></footer>
-</body>
-</html>
+<!--        <div class="form-group" th:if="${medico.foto != null}">-->
+<!--            <label>Vista previa de la foto actual:</label>-->
+<!--            <img th:src="@{'/medico-foto?id=' + ${medico.id}}"-->
+<!--                 alt="Foto de perfil"-->
+<!--                 width="150" height="150" style="border-radius: 50%; object-fit: cover;">-->
+<!--        </div>-->
+
+
+<!--        <div class="form-group">-->
+<!--            <label>Foto de Perfil</label>-->
+<!--            <input type="file" name="archivoFoto" accept="image/*" />-->
+<!--        </div>-->
+
+
+<!--        <div class="form-group">-->
+<!--            <label for="id">ID (Cédula)</label>-->
+<!--            <input type="number" id="id" th:value="${medico.usuarios.cedula}" readonly>-->
+<!--            <input type="hidden" th:field="*{id}" />-->
+<!--        </div>-->
+
+<!--        <div class="form-group">-->
+<!--            <label for="nombre">Nombre</label>-->
+<!--            <input type="text" id="nombre" th:field="*{usuarios.nombre}" readonly>-->
+<!--        </div>-->
+
+<!--        <div class="form-group">-->
+<!--            <label for="apellido">Apellido</label>-->
+<!--            <input type="text" id="apellido" th:field="*{usuarios.apellido}" readonly>-->
+<!--        </div>-->
+
+<!--        <div class="form-group">-->
+<!--            <label for="especialidad">Especialidad</label>-->
+<!--            <select id="especialidad" th:field="*{especialidad}" required>-->
+<!--                <option value="">Seleccione una especialidad</option>-->
+<!--                <option th:each="esp : ${especialidades}" th:value="${esp.id}" th:text="${esp.especialidadNombre}"></option>-->
+<!--            </select>-->
+<!--        </div>-->
+
+<!--        <div class="form-group">-->
+<!--            <label for="costo">Costo de Consulta (colones)</label>-->
+<!--            <select id="costo" th:field="*{costo}" required>-->
+<!--                <option value="">Seleccione un costo</option>-->
+<!--                <option th:value="${medico.costo}" th:text="${medico.costo} + ' colones'" selected="selected"></option>-->
+<!--                <option th:each="c : ${#numbers.sequence(5000, 50000, 5000)}"-->
+<!--                        th:if="${c != medico.costo}"-->
+<!--                        th:value="${c}"-->
+<!--                        th:text="${c} + ' colones'">-->
+<!--                </option>-->
+<!--            </select>-->
+<!--        </div>-->
+
+<!--        <div class="form-group">-->
+<!--            <label for="localidad">Localidad</label>-->
+<!--            <select id="localidad" th:field="*{localidad}" required>-->
+<!--                <option value="">Seleccione una localidad</option>-->
+<!--                <option th:each="loc : ${localidades}" th:value="${loc.id}" th:text="${loc.localidadNombre}"></option>-->
+<!--            </select>-->
+<!--        </div>-->
+
+
+<!--        <div class="form-group">-->
+<!--            <label for="frecuenciaCitas">Frecuencia de Citas (minutos)</label>-->
+<!--            <input type="number" id="frecuenciaCitas" step="10" th:field="*{frecuenciaCitas}" required min="10" max="120">-->
+<!--        </div>-->
+
+<!--        <div class="form-group">-->
+<!--            <label for="presentacion">Presentación</label>-->
+<!--            <textarea id="presentacion" th:field="*{nota}" required minlength="10" maxlength="500"></textarea>-->
+<!--        </div>-->
+
+
+
+<!--        <div class="form-group" th:each="i : ${#numbers.sequence(0,6)}">-->
+<!--            <label th:text="${diasSemana[i]}"></label>-->
+<!--            <div style="display: flex; gap: 1rem;">-->
+<!--                &lt;!&ndash; Entrada para el horario de la mañana (1 a 12) &ndash;&gt;-->
+<!--                <input type="text"-->
+<!--                       th:name="${'horarioManana' + i}"-->
+<!--                       placeholder="Mañana ej: 8-12"-->
+<!--                       pattern="^(1[0-2]|[1-9])-(1[0-2]|[1-9])$"-->
+<!--                       title="Introduce un rango válido entre 1 y 12, por ejemplo 8-12">-->
+
+<!--                &lt;!&ndash; Entrada para el horario de la tarde (13 a 24) &ndash;&gt;-->
+<!--                <input type="text"-->
+<!--                       th:name="${'horarioTarde' + i}"-->
+<!--                       placeholder="Tarde ej: 13-17"-->
+<!--                       pattern="^(1[3-9]|2[0-4])-(1[3-9]|2[0-4])$"-->
+<!--                       title="Introduce un rango válido entre 13 y 24, por ejemplo 13-17">-->
+<!--            </div>-->
+<!--        </div>-->
+
+
+
+
+
+<!--        <button type="submit" class="submit-button">Guardar Cambios</button>-->
+<!--    </form>-->
+<!--</div>-->
+<!--<footer th:replace="~{fragments/footer::footer}"></footer>-->
+<!--</body>-->
+<!--</html>-->

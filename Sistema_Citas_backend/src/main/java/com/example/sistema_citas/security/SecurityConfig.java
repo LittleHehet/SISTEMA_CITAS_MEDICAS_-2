@@ -53,7 +53,8 @@ public class SecurityConfig {
                                 "/api/signup",
                                 "/api/login/login",     // ✅ solo se permite esta para login
                                 "/api/about",
-                                "/medico-foto/**",
+                                "/api/medico-foto/**",
+                                "/api/medico/foto",         // ✅ permite acceso público a la foto del médico
                                 "/css/**",
                                 "/images/**",
                                 "/BuscarCita",
@@ -83,7 +84,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // ✅ permite HttpSession
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
