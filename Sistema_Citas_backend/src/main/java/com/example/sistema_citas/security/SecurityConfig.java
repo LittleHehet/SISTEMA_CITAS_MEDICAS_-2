@@ -59,7 +59,11 @@ public class SecurityConfig {
                                 "/images/**",
                                 "/BuscarCita",
                                 "/ConfirmarCita/**",
-                                "/HorarioExtendido/**"
+                                "/HorarioExtendido/**",
+                                "/api/historicoPaciente",
+                                "/api/historicoPaciente/perfil",
+                                "/api/historicoPaciente/**" ,
+                                "/api/historicoPaciente/historico"
                         ).permitAll()
 
                         .requestMatchers("/api/Approve/", "/api/Approve/perfil", "/api/Approve/approve", "/api/Approve/**").hasRole("ADMINISTRADOR")
@@ -72,7 +76,10 @@ public class SecurityConfig {
                                 "api//actualizar/**"
                         ).hasRole("MEDICO")
 
-                        .requestMatchers("/historicoPaciente/**",
+                        .requestMatchers( "/api/historicoPaciente",
+                                "/api/historicoPaciente/perfil",
+                                "/api/historicoPaciente/**" ,
+                                "/api/historicoPaciente/historico",
                                 "/BuscarCita",
                                 "/ConfirmarCita/**",
                                 "/HorarioExtendido/**"

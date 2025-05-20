@@ -19,12 +19,12 @@ function Header({ perfil, onLogout }) {
             <nav className="navbar">
                 <Link to="/About">Acerca de</Link>
                 {perfil === 'ROLE_PACIENTE' && (
-                    <div className="perfil-wrapper">
-                        <Link to="/BuscarCita" className="perfil-link">Búsqueda</Link>
-                        <Link to="/historicoPaciente" className="perfil-link">Historial</Link>
-                        <span className="user-badge">👤 PACIENTE</span>
-                        <button className="logout-button" onClick={onLogout}>Salir</button>
-                    </div>
+                    <>
+                        <Link to="/BuscarCita">Búsqueda</Link>
+                        <Link to="/historicoPaciente">Historial</Link>
+                        <button onClick={onLogout}>Salir</button>
+                        <span className="user-badge">👤 Paciente</span>
+                    </>
                 )}
                 {perfil === 'ROLE_MEDICO' && (
                     <>
