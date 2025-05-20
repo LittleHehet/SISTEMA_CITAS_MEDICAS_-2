@@ -30,7 +30,7 @@ CREATE TABLE usuarios(
     nombre 		VARCHAR(30)  NOT NULL,
     apellido 	VARCHAR(30)  NOT NULL,
     clave 		VARCHAR(100) NOT NULL,
-    perfil   	ENUM('PACIENTE', 'MEDICO', 'ADMINISTRADOR', 'ANONIMO') NOT NULL,
+    perfil   	ENUM('ROLE_PACIENTE', 'ROLE_MEDICO', 'ROLE_ADMINISTRADOR', 'ROLE_ANONIMO') NOT NULL,
     CONSTRAINT usuarios_pk PRIMARY KEY(usuarios_id),
 	CONSTRAINT cedula_unique UNIQUE (cedula) 
 );
@@ -122,13 +122,13 @@ INSERT INTO especialidad (especialidad_nombre) VALUES
 
 
 INSERT INTO usuarios (cedula, nombre, apellido, clave, perfil) VALUES
-(402580003, 'Kendra', 'Artavia', 'hola', 'PACIENTE'),
-(402580319, 'Alexia', 'Alvarado','hola' , 'MEDICO'),
-(118070563, 'William', 'Rodriguez', 'hola', 'MEDICO'),
-(111111111, 'Administrador', 'Administrador', 'hola', 'ADMINISTRADOR'),
-(000000000, 'Anonimo', 'Anonimo', 'hola', 'ANONIMO'),
-(1, 'Paciente', 'Paciente','hola' , 'PACIENTE'),
-(2, 'Medico', 'Medico','hola' , 'MEDICO');
+(402580003, 'Kendra', 'Artavia', '$2b$12$a0NvQ8Gin2hFGcRm4TTlquNpeMwuYXDiw5RzJBPwwsDrLdHvGQnI.', 'ROLE_PACIENTE'),
+(402580319, 'Alexia', 'Alvarado','$2b$12$a0NvQ8Gin2hFGcRm4TTlquNpeMwuYXDiw5RzJBPwwsDrLdHvGQnI.' , 'ROLE_MEDICO'),
+(118070563, 'William', 'Rodriguez', '$2b$12$a0NvQ8Gin2hFGcRm4TTlquNpeMwuYXDiw5RzJBPwwsDrLdHvGQnI.', 'ROLE_MEDICO'),
+(111111111, 'Administrador', 'Administrador', '$2b$12$a0NvQ8Gin2hFGcRm4TTlquNpeMwuYXDiw5RzJBPwwsDrLdHvGQnI.', 'ROLE_ADMINISTRADOR'),
+(000000000, 'Anonimo', 'Anonimo', '$2b$12$a0NvQ8Gin2hFGcRm4TTlquNpeMwuYXDiw5RzJBPwwsDrLdHvGQnI.', 'ROLE_ANONIMO'),
+(100000000, 'Paciente', 'Paciente','$2b$12$a0NvQ8Gin2hFGcRm4TTlquNpeMwuYXDiw5RzJBPwwsDrLdHvGQnI.' , 'ROLE_PACIENTE'),
+(200000000, 'Medico', 'Medico','$2b$12$a0NvQ8Gin2hFGcRm4TTlquNpeMwuYXDiw5RzJBPwwsDrLdHvGQnI.' , 'ROLE_MEDICO');
 
 -- Insertar médicos
 INSERT INTO medicos (medico_id, especialidad, costo, localidad, horario, frecuencia_citas, nota , estado ) 
