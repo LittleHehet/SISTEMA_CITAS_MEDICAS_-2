@@ -45,7 +45,6 @@ function App() {
                     <Route path="/Login" element={<Login onLoginSuccess={handleLoginSuccess} />} />
                     <Route path="/Medico-Perfil" element={<MedicoPerfil />} />
                     <Route path="/ApproveDoctors" element={<ApproveDoctors/>} />
-
                 </Routes>
             </main>
             <Footer />

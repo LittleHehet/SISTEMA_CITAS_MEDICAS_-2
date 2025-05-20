@@ -271,6 +271,8 @@ button {
     justify-content: center;
     border: 0.1rem solid var(--text-color);
     transition: 0.3s ease;
+    font-size: 1.4rem;
+    font-weight: bold;
 }
 
 button:hover {
@@ -857,4 +859,21 @@ textarea {
 .logout-button:hover {
     background-color: var(--main-color);
     transform: scale(1.05);
+}
+
+.register-link {
+    margin-top: 1.5rem;
+    font-size: 1.6rem;
+    text-align: center;
+    color: var(--text-color); /* o prueba con #003366 directamente */
+}
+
+.register-link a {
+    color: var(--primary-dark-color); /* o azul oscuro */
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.register-link a:hover {
+    color: var(--main-color); /* color más claro al pasar el mouse */
 }
