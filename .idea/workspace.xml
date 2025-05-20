@@ -4,15 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="57a7ca52-0f35-487f-88a4-68b2a28e2d5f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/security/AuthEntryPoint.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/security/JwtAuthFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/util/JwtUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sistema_citas_frontend/src/components/SingIn.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BaseKendra.sql" beforeDir="false" afterPath="$PROJECT_DIR$/BaseKendra.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/security/PasswordEncoderConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/security/PasswordEncoderConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/service/Service.java" beforeDir="false" afterPath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/service/Service.java" afterDir="false" />
-    </list>
+    <list default="true" id="57a7ca52-0f35-487f-88a4-68b2a28e2d5f" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -33,9 +25,9 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 8
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
   <component name="ProjectId" id="2xFAcQe9KXLGLelCd82Sv8SVCGy" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -45,7 +37,7 @@
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "Kendra",
+    "git-widget-placeholder": "william",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "E:/Universidad/2025/Ciclo I/Programación IV/Proyecto II/SISTEMA_CITAS_MEDICAS_-2/Sistema_Citas_backend/src/main/java/com/example/sistema_citas",
     "node.js.detected.package.eslint": "true",

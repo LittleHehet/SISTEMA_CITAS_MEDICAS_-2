@@ -57,7 +57,8 @@ public class SecurityConfig {
                                 "/api/medico/foto",
                                 "/css/**",
                                 "/images/**",
-                                "/BuscarCita",
+                                "/api/BuscarCita",
+                                "/api/BuscarCita/busqueda",
                                 "/ConfirmarCita/**",
                                 "/HorarioExtendido/**"
                         ).permitAll()

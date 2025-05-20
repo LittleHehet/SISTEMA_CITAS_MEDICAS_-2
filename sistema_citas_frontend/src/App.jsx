@@ -8,6 +8,7 @@ import About from './components/About';
 import SignUp from './components/SignUp';
 import MedicoPerfil from './components/MedicoPerfil';
 import ApproveDoctors from './components/ApproveDoctors';
+import BuscarCita from './components/BuscarCita';
 
 
 
@@ -45,6 +46,7 @@ function App() {
                     <Route path="/Login" element={<Login onLoginSuccess={handleLoginSuccess} />} />
                     <Route path="/Medico-Perfil" element={<MedicoPerfil />} />
                     <Route path="/ApproveDoctors" element={<ApproveDoctors/>} />
+                    <Route path="/BuscarCita" element={<BuscarCita />} />
 
                 </Routes>
             </main>
