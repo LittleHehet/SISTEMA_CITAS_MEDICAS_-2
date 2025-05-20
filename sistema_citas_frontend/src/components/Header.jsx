@@ -19,12 +19,12 @@ function Header({ perfil, onLogout }) {
             <nav className="navbar">
                 <Link to="/About">Acerca de</Link>
                 {perfil === 'ROLE_PACIENTE' && (
-                    <>
-                        <Link to="/BuscarCita">Búsqueda</Link>
-                        <Link to="/historicoPaciente">Historial</Link>
-                        <button onClick={onLogout}>Salir</button>
-                        <span className="user-badge">👤 Paciente</span>
-                    </>
+                    <div className="perfil-wrapper">
+                        <Link to="/BuscarCita" className="perfil-link">Búsqueda</Link>
+                        <Link to="/historicoPaciente" className="perfil-link">Historial</Link>
+                        <span className="user-badge">👤 PACIENTE</span>
+                        <button className="logout-button" onClick={onLogout}>Salir</button>
+                    </div>
                 )}
                 {perfil === 'ROLE_MEDICO' && (
                     <>
@@ -41,15 +41,18 @@ function Header({ perfil, onLogout }) {
                 {perfil === 'ROLE_ADMINISTRADOR' && (
                     <>
                         <Link to="/ApproveDoctors">Administrar</Link>
-                        <button onClick={onLogout}>Salir</button>
-                        <span className="user-badge">🛠️ Admin</span>
+                        <div className="perfil-wrapper">
+                            <Link to="/Admin-Perfil" className="perfil-link">Perfil</Link>
+                            <span className="user-badge">🛠️ ADMIN</span>
+                            <button className="logout-button" onClick={onLogout}>Salir</button>
+                        </div>
                     </>
                 )}
+
                 {!perfil && (
                     <>
                         <Link to="/BuscarCita">Busqueda</Link>
                         <Link to="/Login">Iniciar sesión</Link>
-                        <Link to="/Sign-up">Registrarse</Link>
                     </>
                 )}
             </nav>

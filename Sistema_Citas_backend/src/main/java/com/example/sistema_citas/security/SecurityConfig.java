@@ -60,20 +60,27 @@ public class SecurityConfig {
                                 "/api/BuscarCita",
                                 "/api/BuscarCita/busqueda",
                                 "/ConfirmarCita/**",
-                                "/HorarioExtendido/**"
+                                "/HorarioExtendido/**",
+                                "/api/historicoPaciente",
+                                "/api/historicoPaciente/perfil",
+                                "/api/historicoPaciente/**" ,
+                                "/api/historicoPaciente/historico"
                         ).permitAll()
 
                         .requestMatchers("/api/Approve/", "/api/Approve/perfil", "/api/Approve/approve", "/api/Approve/**").hasRole("ADMINISTRADOR")
                         .requestMatchers("/Medico-Perfil/**",
-                                "/GestionCitas/**",
-                                "/completarCita/**",
-                                "/cancelarCita/**",
-                                "/guardarNota/**",
-                                "/editarNota/**",
-                                "/actualizar/**"
+                                "/api/GestionCitas/**",
+                                "/api/completarCita/**",
+                                "/api/cancelarCita/**",
+                                "/api/guardarNota/**",
+                                "/api/editarNota/**",
+                                "api//actualizar/**"
                         ).hasRole("MEDICO")
 
-                        .requestMatchers("/historicoPaciente/**",
+                        .requestMatchers( "/api/historicoPaciente",
+                                "/api/historicoPaciente/perfil",
+                                "/api/historicoPaciente/**" ,
+                                "/api/historicoPaciente/historico",
                                 "/BuscarCita",
                                 "/ConfirmarCita/**",
                                 "/HorarioExtendido/**"

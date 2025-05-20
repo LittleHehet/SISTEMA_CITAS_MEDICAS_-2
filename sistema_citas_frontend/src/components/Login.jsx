@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom'; // al inicio del archivo
 import '../styles.css';
 import axios from 'axios';
 
@@ -54,7 +55,11 @@ function Login({ onLoginSuccess }) {
                 </form>
                 {error && <div className="message error">{error}</div>}
             </div>
-        </div>
+            <div className="register-link">
+                <p>¿No tienes una cuenta?</p>
+                <Link to="/Sign-up">Regístrate aquí</Link>
+            </div>
+        </div> // fin de login-box
     );
 
 }

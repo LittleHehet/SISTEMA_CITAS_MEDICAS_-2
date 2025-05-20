@@ -44,6 +44,11 @@ public class MedicoPerfilRestController {
 
         Medico medico = medicoOpt.get();
 
+        // IMPORTANTE: asegurarse de que medico.getUsuarios() NO sea null
+        if (medico.getUsuarios() == null) {
+            return ResponseEntity.status(403).body("El perfil aún no ha sido aprobado por el administrador.");
+        }
+
         return ResponseEntity.ok(Map.of(
                 "medico", medico,
                 "especialidades", service.getAllEspecialidades(),
@@ -77,6 +82,7 @@ public class MedicoPerfilRestController {
             @RequestParam("nota") String nota,
             @RequestParam("especialidadId") Integer especialidadId,
             @RequestParam("localidadId") Integer localidadId,
+            @RequestParam("horario") String horario,
             @RequestParam(value = "archivoFoto", required = false) MultipartFile archivoFoto,
             Authentication authentication
     ) {
@@ -92,6 +98,25 @@ public class MedicoPerfilRestController {
         }
 
         Medico medico = medicoOpt.get();
+
+        // Validar formato de horario
+        // Validar que haya 7 días separados por punto y coma
+        System.out.println("📌 DEBUG - Horario recibido: [" + horario + "]");
+
+        String[] dias = horario.split(";");
+
+        if (dias.length != 7) {
+            return ResponseEntity.badRequest().body("El horario debe tener 7 días separados por punto y coma (;)");
+        }
+
+// Validar el formato de cada día individualmente
+        for (String dia : dias) {
+            // Acepta: "8-12,13-17", "8-12,", ",13-17", ","
+            if (!dia.matches("^(([0-9]{1,2}-[0-9]{1,2})?,([0-9]{1,2}-[0-9]{1,2})?)?$")) {
+                return ResponseEntity.badRequest().body("Formato de horario incorrecto en uno de los días: " + dia);
+            }
+        }
+
 
         // Procesar foto si se envío
         Foto fotoFinal = medico.getFoto();
@@ -110,6 +135,7 @@ public class MedicoPerfilRestController {
         medico.setFrecuenciaCitas(frecuenciaCitas);
         medico.setNota(nota);
         medico.setFoto(fotoFinal);
+        medico.setHorario(horario);
 
         // NUEVO: actualizar especialidad y localidad
         service.getAllEspecialidades().stream()

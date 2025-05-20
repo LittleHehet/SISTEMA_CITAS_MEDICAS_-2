@@ -1,24 +1,24 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/head :: head}">
-  <title>Editar Nota</title>
-</head>
-<body>
-<header th:replace="~{fragments/header :: header}"></header>
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head th:replace="~{fragments/head :: head}">-->
+<!--  <title>Editar Nota</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--<header th:replace="~{fragments/header :: header}"></header>-->
 
-<div class="container">
-  <h1>Editar Nota para la Cita</h1>
+<!--<div class="container">-->
+<!--  <h1>Editar Nota para la Cita</h1>-->
 
-  <form th:action="@{/guardarNota}" method="post">
-    <input type="hidden" name="id" th:value="${cita.id}"/>
+<!--  <form th:action="@{/guardarNota}" method="post">-->
+<!--    <input type="hidden" name="id" th:value="${cita.id}"/>-->
 
-    <label for="nota">Nota:</label>
-    <textarea name="nota" id="nota" rows="6" style="width: 100%;" th:text="${cita.nota}"></textarea>
+<!--    <label for="nota">Nota:</label>-->
+<!--    <textarea name="nota" id="nota" rows="6" style="width: 100%;" th:text="${cita.nota}"></textarea>-->
 
-    <button type="submit" class="submit-button">Guardar Nota</button>
-  </form>
-</div>
+<!--    <button type="submit" class="submit-button">Guardar Nota</button>-->
+<!--  </form>-->
+<!--</div>-->
 
-<footer th:replace="~{fragments/footer :: footer}"></footer>
-</body>
-</html>
+<!--<footer th:replace="~{fragments/footer :: footer}"></footer>-->
+<!--</body>-->
+<!--</html>-->
