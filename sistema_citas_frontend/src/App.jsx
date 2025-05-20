@@ -8,8 +8,8 @@ import About from './components/About';
 import SignUp from './components/SignUp';
 import MedicoPerfil from './components/MedicoPerfil';
 import ApproveDoctors from './components/ApproveDoctors';
-
-
+import GestionCitas from './components/GestionCitas';
+import EditarNota from './components/EditarNota';
 
 
 function App() {
@@ -45,6 +45,8 @@ function App() {
                     <Route path="/Login" element={<Login onLoginSuccess={handleLoginSuccess} />} />
                     <Route path="/Medico-Perfil" element={<MedicoPerfil />} />
                     <Route path="/ApproveDoctors" element={<ApproveDoctors/>} />
+                    <Route path="/EditarNota" element={<EditarNota/>} />
+                    <Route path="/GestionCitas" element={<GestionCitas/>} />
                 </Routes>
             </main>
             <Footer />
