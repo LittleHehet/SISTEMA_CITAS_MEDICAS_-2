@@ -27,17 +27,26 @@ public class UsuarioSignUpRestController {
         }
 
         try {
+            // Corregir perfil al formato correcto
+            String perfilOriginal = nuevoUsuario.getPerfil();
+            if (perfilOriginal == null) perfilOriginal = "";
+            String perfilNormalizado = perfilOriginal.toUpperCase().startsWith("ROLE_")
+                    ? perfilOriginal.toUpperCase()
+                    : "ROLE_" + perfilOriginal.toUpperCase();
+
+            nuevoUsuario.setPerfil(perfilNormalizado);
+
             // Guardar usuario
             service.saveUsuario(nuevoUsuario);
 
-            // Si el perfil es médico, crear médico también
+            // Si es médico, crear el médico asociado
             if ("ROLE_MEDICO".equalsIgnoreCase(nuevoUsuario.getPerfil())) {
                 service.saveMedicoByCedula(cedula);
             }
 
             return ResponseEntity.ok("Usuario registrado exitosamente");
         } catch (Exception e) {
-            e.printStackTrace(); // ✅ Agregado
+            e.printStackTrace();
             return ResponseEntity.internalServerError().body("Error al registrar el usuario");
         }
 

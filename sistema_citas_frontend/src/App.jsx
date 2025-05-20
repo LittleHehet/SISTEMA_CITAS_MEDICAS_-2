@@ -42,6 +42,7 @@ function App() {
                     <Route path="/About" element={<About />} />
                     <Route path="/Sign-up" element={<SignUp />} />
                     <Route path="/Login" element={<Login onLoginSuccess={handleLoginSuccess} />} />
+<<<<<<< HEAD
                     {/*Las páginas de las redirection son BuscarCitas*/}
                     <Route
                         path="/Medico-Perfil"
@@ -55,6 +56,10 @@ function App() {
                         path="/HistoricoPaciente"
                         element={perfil === 'ROLE_PACIENTE' ? <HistoricoPaciente /> : <Navigate to="/Login" />}
                     />
+=======
+                    <Route path="/Medico-Perfil" element={<MedicoPerfil />} />
+                    <Route path="/ApproveDoctors" element={<ApproveDoctors/>} />
+>>>>>>> Alexia
                 </Routes>
             </main>
             <Footer />
