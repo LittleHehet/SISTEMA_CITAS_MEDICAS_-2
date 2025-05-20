@@ -110,12 +110,12 @@ public class MedicoPerfilRestController {
         }
 
 // Validar el formato de cada día individualmente
-        for (String dia : dias) {
-            // Acepta: "8-12,13-17", "8-12,", ",13-17", ","
-            if (!dia.matches("^(([0-9]{1,2}-[0-9]{1,2})?,([0-9]{1,2}-[0-9]{1,2})?)?$")) {
-                return ResponseEntity.badRequest().body("Formato de horario incorrecto en uno de los días: " + dia);
-            }
-        }
+//        for (String dia : dias) {
+//            // Acepta: "8-12,13-17", "8-12,", ",13-17", ","
+//            if (!dia.matches("^(([0-9]{1,2}-[0-9]{1,2})?,([0-9]{1,2}-[0-9]{1,2})?)?$")) {
+//                return ResponseEntity.badRequest().body("Formato de horario incorrecto en uno de los días: " + dia);
+//            }
+//        }
 
 
         // Procesar foto si se envío

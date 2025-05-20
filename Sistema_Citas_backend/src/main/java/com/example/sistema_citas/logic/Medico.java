@@ -97,7 +97,7 @@ public class Medico {
         this.id = id;
     }
 
-    public Usuario getUsuario() {
+    public Usuario getUsuarios() {
         return usuario;
     }
 

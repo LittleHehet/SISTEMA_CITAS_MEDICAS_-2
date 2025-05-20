@@ -97,7 +97,7 @@ function MedicoPerfil() {
             if (manana && tarde) return `${manana},${tarde}`;
             if (manana) return `${manana},`;
             if (tarde) return `,${tarde}`;
-            return ","; // Día sin horario, pero con coma para cumplir con el formato
+            //return ","; // Día sin horario, pero con coma para cumplir con el formato
         }).join(';');
 
         formData.append('horario', horarioFinal);

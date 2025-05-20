@@ -49,6 +49,7 @@ function App() {
                     <Route path="/Sign-up" element={<SignUp />} />
                     <Route path="/Login" element={<Login onLoginSuccess={handleLoginSuccess} />} />
                     <Route path="*" element={<Navigate to="/Login" />} />
+                    <Route path="/BuscarCita" element={<BuscarCita />} />
                     <Route
                         path="/Medico-Perfil"
                         element={perfil === 'ROLE_MEDICO' ? <MedicoPerfil /> : <Navigate to="/Login" />}
@@ -68,9 +69,7 @@ function App() {
                     <Route
                         path="/HistoricoPaciente"
                         element={perfil === 'ROLE_PACIENTE' ? <HistoricoPaciente /> : <Navigate to="/Login" />}></Route>
-                    <Route path="/Medico-Perfil" element={<MedicoPerfil />} />
-                    <Route path="/ApproveDoctors" element={<ApproveDoctors/>} />
-                    <Route path="/BuscarCita" element={<BuscarCita />} />
+
 
                 </Routes>
             </main>

@@ -89,7 +89,7 @@ public class BuscarCitaRestController {
         System.out.println("ID: " + medico.getId());
 
         System.out.println("Usuario: " +
-                (medico.getUsuario() != null ? medico.getUsuario().getNombre() + " " + medico.getUsuario().getApellido() : "null"));
+                (medico.getUsuarios() != null ? medico.getUsuarios().getNombre() + " " + medico.getUsuarios().getApellido() : "null"));
 
         System.out.println("Especialidad: " +
                 (medico.getEspecialidad() != null ? medico.getEspecialidad().getEspecialidadNombre() : "null"));
@@ -99,8 +99,8 @@ public class BuscarCitaRestController {
 
         return new MedicoDTO(
                 medico.getId(),
-                medico.getUsuario().getNombre(),
-                medico.getUsuario().getApellido(),
+                medico.getUsuarios().getNombre(),
+                medico.getUsuarios().getApellido(),
                 medico.getEspecialidad() != null ? medico.getEspecialidad().getEspecialidadNombre() : null,
                 medico.getLocalidad() != null ? medico.getLocalidad().getLocalidadNombre() : null,
                 medico.getCosto(),
