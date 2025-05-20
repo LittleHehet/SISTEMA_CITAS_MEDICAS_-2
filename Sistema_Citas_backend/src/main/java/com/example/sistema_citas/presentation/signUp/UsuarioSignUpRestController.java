@@ -31,7 +31,7 @@ public class UsuarioSignUpRestController {
             service.saveUsuario(nuevoUsuario);
 
             // Si el perfil es médico, crear médico también
-            if ("MEDICO".equalsIgnoreCase(nuevoUsuario.getPerfil())) {
+            if ("ROLE_MEDICO".equalsIgnoreCase(nuevoUsuario.getPerfil())) {
                 service.saveMedicoByCedula(cedula);
             }
 

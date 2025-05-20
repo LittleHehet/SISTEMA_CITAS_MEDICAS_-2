@@ -1,83 +1,83 @@
-<!DOCTYPE html>
-<html lang="en">
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
 
-<head th:replace="~{fragments/head :: head}">
-   <title>Historico</title>
-</head>
-<body>
-<header th:replace="~{fragments/header :: header}"></header>
-
-
-<div class="historic">
-    <h1>Paciente - <span th:text="${usuario.nombre + ' ' + usuario.apellido}"></span> - Historial de Citas</h1>
-
-    <div class="filter">
-        <form method="GET" action="/historicoPaciente">
-        <label for="filter-status">Estado:</label>
-            <select id="filter-status" name="estado">
-                <option value="all">Todos</option>
-                <option value="pendiente">Pendiente</option>
-                <option value="completada">Atendida</option>
-            </select>
-
-        <label for="filter-doctor">Doctor:</label>
-            <select id="filter-doctor" name="medicoId">
-                <option value="0">Todos</option>
-                <option th:each="medico : ${medicos}"
-                        th:value="${medico.id}"
-                        th:text="${medico.nombre + ' ' + medico.apellido}">
-                </option>
-            </select>
-        <button type="submit" class="search-btn">Buscar</button>
-        </form>
-    </div>
-
-    <table class="table">
-        <thead>
-        <tr class="table-header">
-            <th></th>
-            <th>Doctor</th>
-            <th>Fecha</th>
-            <th>Hora de inicio </th>
-            <th>Hora de fin </th>
-            <th>Estado</th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="cita : ${citas}">
-            <td>
-                <div th:if="${cita.medico.foto != null}">
-                    <img th:src="@{'/medico-foto?id=' + ${cita.medico.id}}"
-                         alt="Foto de perfil"
-                         width="50" height="50" style="border-radius: 50%; object-fit: cover;">
-                </div>
-                <div th:if="${cita.medico.foto == null}">
-                    <span>No Foto</span> <!-- In case there's no photo, you can show a placeholder -->
-                </div>
-            </td>
-            <td th:text="${cita.medico.nombre + ' ' + cita.medico.apellido}"></td>
-            <td th:text="${#temporals.format(cita.fechaHora, 'dd/MM/yyyy')}"></td>
-
-            <td th:text="${cita.horainicio}"></td>
-            <td th:text="${cita.horafinal}"></td>
-            <td th:text="${cita.estado}"></td>
-            <td>
-                <div th:if="${cita.estado == 'completada' || cita.estado == 'cancelada'}">
-                    <!-- Usar un enlace para redirigir a la página de detalles -->
-                    <a th:href="@{/verDetalleCita(id=${cita.id})}" class="submit-button">Ver</a>
-                </div>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+<!--<head th:replace="~{fragments/head :: head}">-->
+<!--   <title>Historico</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--<header th:replace="~{fragments/header :: header}"></header>-->
 
 
+<!--<div class="historic">-->
+<!--    <h1>Paciente - <span th:text="${usuario.nombre + ' ' + usuario.apellido}"></span> - Historial de Citas</h1>-->
 
-</div>
+<!--    <div class="filter">-->
+<!--        <form method="GET" action="/historicoPaciente">-->
+<!--        <label for="filter-status">Estado:</label>-->
+<!--            <select id="filter-status" name="estado">-->
+<!--                <option value="all">Todos</option>-->
+<!--                <option value="pendiente">Pendiente</option>-->
+<!--                <option value="completada">Atendida</option>-->
+<!--            </select>-->
+
+<!--        <label for="filter-doctor">Doctor:</label>-->
+<!--            <select id="filter-doctor" name="medicoId">-->
+<!--                <option value="0">Todos</option>-->
+<!--                <option th:each="medico : ${medicos}"-->
+<!--                        th:value="${medico.id}"-->
+<!--                        th:text="${medico.nombre + ' ' + medico.apellido}">-->
+<!--                </option>-->
+<!--            </select>-->
+<!--        <button type="submit" class="search-btn">Buscar</button>-->
+<!--        </form>-->
+<!--    </div>-->
+
+<!--    <table class="table">-->
+<!--        <thead>-->
+<!--        <tr class="table-header">-->
+<!--            <th></th>-->
+<!--            <th>Doctor</th>-->
+<!--            <th>Fecha</th>-->
+<!--            <th>Hora de inicio </th>-->
+<!--            <th>Hora de fin </th>-->
+<!--            <th>Estado</th>-->
+<!--            <th></th>-->
+<!--        </tr>-->
+<!--        </thead>-->
+<!--        <tbody>-->
+<!--        <tr th:each="cita : ${citas}">-->
+<!--            <td>-->
+<!--                <div th:if="${cita.medico.foto != null}">-->
+<!--                    <img th:src="@{'/medico-foto?id=' + ${cita.medico.id}}"-->
+<!--                         alt="Foto de perfil"-->
+<!--                         width="50" height="50" style="border-radius: 50%; object-fit: cover;">-->
+<!--                </div>-->
+<!--                <div th:if="${cita.medico.foto == null}">-->
+<!--                    <span>No Foto</span> &lt;!&ndash; In case there's no photo, you can show a placeholder &ndash;&gt;-->
+<!--                </div>-->
+<!--            </td>-->
+<!--            <td th:text="${cita.medico.nombre + ' ' + cita.medico.apellido}"></td>-->
+<!--            <td th:text="${#temporals.format(cita.fechaHora, 'dd/MM/yyyy')}"></td>-->
+
+<!--            <td th:text="${cita.horainicio}"></td>-->
+<!--            <td th:text="${cita.horafinal}"></td>-->
+<!--            <td th:text="${cita.estado}"></td>-->
+<!--            <td>-->
+<!--                <div th:if="${cita.estado == 'completada' || cita.estado == 'cancelada'}">-->
+<!--                    &lt;!&ndash; Usar un enlace para redirigir a la página de detalles &ndash;&gt;-->
+<!--                    <a th:href="@{/verDetalleCita(id=${cita.id})}" class="submit-button">Ver</a>-->
+<!--                </div>-->
+<!--            </td>-->
+<!--        </tr>-->
+<!--        </tbody>-->
+<!--    </table>-->
 
 
 
-</body>
-<footer th:replace="~{fragments/footer::footer}"></footer>
-</html>
+<!--</div>-->
+
+
+
+<!--</body>-->
+<!--<footer th:replace="~{fragments/footer::footer}"></footer>-->
+<!--</html>-->

@@ -21,7 +21,7 @@ function Header({ perfil, onLogout }) {
                 {perfil === 'ROLE_PACIENTE' && (
                     <>
                         <Link to="/BuscarCita">Búsqueda</Link>
-                        <Link to="/historicoPaciente">Historial</Link>
+                        <Link to="/HistoricoPaciente">Historial</Link>
                         <button onClick={onLogout}>Salir</button>
                         <span className="user-badge">👤 Paciente</span>
                     </>

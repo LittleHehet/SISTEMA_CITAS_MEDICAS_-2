@@ -130,8 +130,9 @@ function SignUp() {
                         onChange={handleChange}
                         required
                     >
-                        <option value="PACIENTE">Paciente</option>
-                        <option value="MEDICO">Médico</option>
+
+                        <option value="ROLE_PACIENTE">Paciente</option>
+                        <option value="ROLE_MEDICO">Médico</option>
                     </select>
 
                     <button type="submit">Registrarse</button>
