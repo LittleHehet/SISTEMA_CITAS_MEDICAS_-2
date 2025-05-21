@@ -109,7 +109,7 @@ public class MedicoPerfilRestController {
             return ResponseEntity.badRequest().body("El horario debe tener 7 días separados por punto y coma (;)");
         }
 
-// Validar el formato de cada día individualmente
+        // Validar el formato de cada día individualmente
         for (String dia : dias) {
             // Acepta: "8-12,13-17", "8-12,", ",13-17", ","
              //¿Qué permite esta nueva expresión? "8-12" "8-12,13-17" "8-12," ",13-17" "," "" (vacío)
