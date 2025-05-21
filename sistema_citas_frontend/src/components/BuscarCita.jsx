@@ -111,7 +111,7 @@ function BuscarCita() {
                                 alt="Foto"
                                 width="50"
                                 height="50"
-                                style={{ borderRadius: '50%', objectFit: 'cover' }}
+                                style={{borderRadius: '50%', objectFit: 'cover'}}
                             />
                         ) : <span>No Foto</span>}
 
@@ -120,6 +120,14 @@ function BuscarCita() {
                         <p>Provincia: {medico.localidadNombre || 'No definida'}</p>
 
                         <div className="horarios">
+                            {/* ✅ Botón primero */}
+                            <div className="view-all-button">
+                                <a href={`/HorarioExtendido?medicoId=${medico.id}`}>
+                                    <button className="button">Ver todos los horarios</button>
+                                </a>
+                            </div>
+
+                            {/* 🕒 Lista de horarios disponibles por día */}
                             {medico.disponibilidad.map(dia => (
                                 <div key={dia.fecha}>
                                     <p>Día: {dia.nombre} - {new Date(dia.fecha).toLocaleDateString('es-ES')}</p>
@@ -135,11 +143,6 @@ function BuscarCita() {
                                     ))}
                                 </div>
                             ))}
-                            <div className="view-all-button">
-                                <a href={`/HorarioExtendido?medicoId=${medico.id}`}>
-                                    <button className="button">Ver todos los horarios</button>
-                                </a>
-                            </div>
                         </div>
                     </div>
                 ))}

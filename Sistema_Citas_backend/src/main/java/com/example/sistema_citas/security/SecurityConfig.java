@@ -60,7 +60,7 @@ public class SecurityConfig {
                                 "/api/BuscarCita",
                                 "/api/BuscarCita/busqueda",
                                 "/ConfirmarCita/**",
-                                "/HorarioExtendido/**",
+                                "/api/HorarioExtendido/**",
                                 "/api/historicoPaciente",
                                 "/api/historicoPaciente/perfil",
                                 "/api/historicoPaciente/**" ,

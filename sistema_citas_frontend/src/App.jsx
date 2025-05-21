@@ -13,6 +13,7 @@ import HistoricoPaciente from './components/HistoricoPaciente';
 import GestionCitas from './components/GestionCitas';
 import EditarNota from './components/EditarNota';
 import BuscarCita from './components/BuscarCita';
+import HorarioExtendido from './components/HorarioExtendido';
 
 
 
@@ -50,6 +51,7 @@ function App() {
                     <Route path="/Login" element={<Login onLoginSuccess={handleLoginSuccess} />} />
                     <Route path="*" element={<Navigate to="/Login" />} />
                     <Route path="/BuscarCita" element={<BuscarCita />} />
+                    <Route path="/HorarioExtendido" element={<HorarioExtendido />} />
                     <Route
                         path="/Medico-Perfil"
                         element={perfil === 'ROLE_MEDICO' ? <MedicoPerfil /> : <Navigate to="/Login" />}
