@@ -105,15 +105,17 @@ function BuscarCita() {
                 <h3>Médicos disponibles:</h3>
                 {medicos.map(medico => (
                     <div className="medico-card" key={medico.id}>
-                        {medico.foto ? (
-                            <img
-                                src={`http://localhost:8080/api/medico/foto?id=${medico.id}`}
-                                alt="Foto"
-                                width="50"
-                                height="50"
-                                style={{borderRadius: '50%', objectFit: 'cover'}}
-                            />
-                        ) : <span>No Foto</span>}
+                        <img
+                            src={`http://localhost:8080/api/medico/foto?id=${medico.id}`}
+                            alt="Foto del médico"
+                            width="70"
+                            height="70"
+                            style={{borderRadius: '50%', objectFit: 'cover', marginBottom: '10px'}}
+                            onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.replaceWith(document.createTextNode("No hay foto"));
+                            }}
+                        />
 
                         <p>Nombre: {medico.nombre} {medico.apellido}</p>
                         <p>Especialidad: {medico.especialidadNombre || 'No definida'}</p>
