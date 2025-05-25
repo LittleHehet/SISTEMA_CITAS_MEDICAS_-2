@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../styles.css';
 
@@ -9,13 +10,11 @@ function BuscarCita() {
     const [filtros, setFiltros] = useState({ especialidadId: '', localidadId: '' });
     const [error, setError] = useState('');
     const [mensaje, setMensaje] = useState('');
+    const navigate = useNavigate();
 
     useEffect(() => {
         cargarBusquedaInicial();
     }, []);
-    useEffect(() => {
-        console.log("Médicos recibidos:", medicos);
-    }, [medicos]);
 
     const cargarBusquedaInicial = async () => {
         const token = localStorage.getItem('token');
@@ -70,6 +69,19 @@ function BuscarCita() {
         }
     };
 
+    // Función para validar token antes de navegar
+    const validarYRedirigir = (url) => {
+        const token = localStorage.getItem('token');
+        console.log("Token en validarYRedirigir:", token);
+        if (!token) {
+            alert("Debes iniciar sesión para continuar");
+            navigate("/login");
+            return false;
+        }
+        navigate(url);
+        return true;
+    };
+
     return (
         <div className="container">
             <h2 className="title">Buscar Médicos</h2>
@@ -122,27 +134,28 @@ function BuscarCita() {
                         <p>Provincia: {medico.localidadNombre || 'No definida'}</p>
 
                         <div className="horarios">
-                            {/* ✅ Botón primero */}
                             <div className="view-all-button">
                                 <a href={`/HorarioExtendido?medicoId=${medico.id}`}>
                                     <button className="button">Ver todos los horarios</button>
                                 </a>
                             </div>
 
-                            {/* 🕒 Lista de horarios disponibles por día */}
                             {medico.disponibilidad.map(dia => (
                                 <div key={dia.fecha}>
                                     <p>Día: {dia.nombre} - {new Date(dia.fecha).toLocaleDateString('es-ES')}</p>
-                                    {dia.horarios.map((horario, i) => (
-                                        <a
-                                            key={i}
-                                            href={`/ConfirmarCita?medicoId=${medico.id}&dia=${dia.nombre}&fecha=${dia.fecha}&horaInicio=${horario.horainicio}&horaFin=${horario.horafin}`}
-                                        >
-                                            <button className="button-busqueda">
+                                    {dia.horarios.map((horario, i) => {
+                                        const url = `/confirmarCita/vistaPrevia?medicoId=${medico.id}&dia=${encodeURIComponent(dia.nombre)}&fecha=${dia.fecha}&horaInicio=${horario.horainicio}&horaFin=${horario.horafin}`;
+
+                                        return (
+                                            <button
+                                                key={i}
+                                                className="button-busqueda"
+                                                onClick={() => validarYRedirigir(`/confirmarCita/vistaPrevia?medicoId=${medico.id}&dia=${encodeURIComponent(dia.nombre)}&fecha=${dia.fecha}&horaInicio=${horario.horainicio}&horaFin=${horario.horafin}`)}
+                                            >
                                                 Horario: {horario.horainicio} - {horario.horafin}
                                             </button>
-                                        </a>
-                                    ))}
+                                        );
+                                    })}
                                 </div>
                             ))}
                         </div>
