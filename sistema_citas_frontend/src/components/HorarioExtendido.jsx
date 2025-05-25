@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import '../styles.css';
 
@@ -28,6 +28,7 @@ function HorarioExtendido() {
             withCredentials: true
         })
             .then(res => {
+                console.log("Respuesta HorarioExtendido:", res.data);
                 setMedico(res.data.medico);
                 setSemanaCompleta(res.data.semanaCompleta);
             })
@@ -36,6 +37,29 @@ function HorarioExtendido() {
                 console.error(err);
             });
     }, [medicoId]);
+    useEffect(() => {
+        if (medico) {
+            console.log("Estado medico actualizado:", medico);
+        }
+    }, [medico]);
+
+    // Función para redirigir a ConfirmarCita con parámetros
+    const handleSeleccionHorario = (diaNombre, fecha, horaInicio, horaFin) => {
+        if (!medico || !medico.id) {
+            console.error("No hay medico cargado para redirigir");
+            return;
+        }
+
+        const query = new URLSearchParams({
+            medicoId: medico.id,
+            dia: diaNombre,
+            fecha: fecha,
+            horaInicio: horaInicio,
+            horaFin: horaFin
+        }).toString();
+
+        navigate(`/ConfirmarCita?${query}`);
+    };
 
     if (error) return <div className="error">{error}</div>;
     if (!medico) return <div>Cargando información del médico...</div>;
@@ -57,7 +81,11 @@ function HorarioExtendido() {
                     <div key={i} className="dia-column">
                         <p>Día: {dia.nombre} - {new Date(dia.fecha).toLocaleDateString('es-ES')}</p>
                         {dia.horarios.map((horario, j) => (
-                            <button key={j} className="button-busqueda">
+                            <button
+                                key={j}
+                                className="button-busqueda"
+                                onClick={() => handleSeleccionHorario(dia.nombre, dia.fecha, horario.horainicio, horario.horafin)}
+                            >
                                 Horario: {horario.horainicio} - {horario.horafin}
                             </button>
                         ))}

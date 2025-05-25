@@ -14,6 +14,9 @@ import GestionCitas from './components/GestionCitas';
 import EditarNota from './components/EditarNota';
 import BuscarCita from './components/BuscarCita';
 import HorarioExtendido from './components/HorarioExtendido';
+import ConfirmarCita from './components/ConfirmarCita';
+import ConfirmacionExitosa from './components/ConfirmacionExitosa';
+import ConfirmacionFallida from './components/ConfirmacionFallida';
 
 
 
@@ -52,6 +55,9 @@ function App() {
                     <Route path="*" element={<Navigate to="/Login" />} />
                     <Route path="/BuscarCita" element={<BuscarCita />} />
                     <Route path="/HorarioExtendido" element={<HorarioExtendido />} />
+                    <Route path="/ConfirmacionExitosa" element={<ConfirmacionExitosa />} />
+                    <Route path="/ConfirmacionFallida" element={<ConfirmacionFallida />} />
+                    <Route path="/ConfirmarCita" element={<ConfirmarCita />} />
                     <Route
                         path="/Medico-Perfil"
                         element={perfil === 'ROLE_MEDICO' ? <MedicoPerfil /> : <Navigate to="/Login" />}

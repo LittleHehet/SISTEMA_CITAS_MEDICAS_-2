@@ -59,7 +59,6 @@ public class SecurityConfig {
                                 "/images/**",
                                 "/api/BuscarCita",
                                 "/api/BuscarCita/busqueda",
-                                "/ConfirmarCita/**",
                                 "/api/HorarioExtendido/**",
                                 "/api/historicoPaciente",
                                 "/api/historicoPaciente/perfil",
@@ -82,7 +81,7 @@ public class SecurityConfig {
                                 "/api/historicoPaciente/**" ,
                                 "/api/historicoPaciente/historico",
                                 "/BuscarCita",
-                                "/ConfirmarCita/**",
+                                "/api/ConfirmarCita/**",
                                 "/HorarioExtendido/**"
                         ).hasRole("PACIENTE")
 
