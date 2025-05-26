@@ -1,5 +1,5 @@
 import { Helmet } from "react-helmet";
-
+import favicon from '../assets/doctor-patient.png';
 function Head() {
     return (
         <Helmet>
@@ -15,7 +15,7 @@ function Head() {
             <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
 
             {/* Favicon */}
-            <link rel="icon" href="../assets/doctor-patient.png" type="image/png" />
+            <link rel="icon" href="/doctor-patient.png" type="image/png" />
 
             <title>Citas Medicas</title>
         </Helmet>

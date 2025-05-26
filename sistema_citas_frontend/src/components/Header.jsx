@@ -42,7 +42,6 @@ function Header({ perfil, onLogout }) {
                     <>
                         <Link to="/ApproveDoctors">Administrar</Link>
                         <div className="perfil-wrapper">
-                            <Link to="/Admin-Perfil" className="perfil-link">Perfil</Link>
                             <span className="user-badge">🛠️ ADMIN</span>
                             <button className="logout-button" onClick={onLogout}>Salir</button>
                         </div>
