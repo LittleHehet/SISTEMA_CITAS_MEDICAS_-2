@@ -27,7 +27,15 @@ function ConfirmarCita() {
         setHoraFin(horaFinParam);
 
         const token = localStorage.getItem('token');
+        const perfil = localStorage.getItem('perfil');
         const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
+        if (!token || perfil !== 'ROLE_PACIENTE') {
+            navigate('/Login', {
+                state: { mensaje: 'Para confirmar una cita debes iniciar sesión como paciente.' }
+            });
+            return;
+        }
 
         axios.get(`http://localhost:8080/api/ConfirmarCita`, {
             params: { medicoId, dia: diaParam, fecha: fechaParam, horaInicio: horaInicioParam, horaFin: horaFinParam },
@@ -84,16 +92,20 @@ function ConfirmarCita() {
         <div className="containerConfirmarCita">
             <h1 className="titleConfirmarCita">Información del Médico Seleccionado</h1>
 
+            <img
+                src={`http://localhost:8080/api/medico/foto?id=${medico.id}`}
+                alt="Foto del médico"
+                width="70"
+                height="70"
+                style={{ borderRadius: '50%', objectFit: 'cover', marginBottom: '10px' }}
+                onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.replaceWith(document.createTextNode("No hay foto"));
+                }}
+            />
+
+
             <div className="form-groupConfirmarCita">
-                {medico.foto ? (
-                    <img
-                        src={`http://localhost:8080/api/medico/foto?id=${medico.id}`}
-                        alt="Foto de perfil"
-                        width="50"
-                        height="50"
-                        style={{ borderRadius: '50%', objectFit: 'cover' }}
-                    />
-                ) : <span>No Foto</span>}
 
                 <label>Nombre Completo:</label>
                 <p>{medico.usuarios.nombre} {medico.usuarios.apellido}</p>

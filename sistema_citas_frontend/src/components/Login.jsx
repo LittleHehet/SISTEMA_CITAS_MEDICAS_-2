@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom'; // al inicio del archivo
+import { Link , useLocation } from 'react-router-dom';
 import '../styles.css';
 import axios from 'axios';
 
@@ -7,6 +7,15 @@ function Login({ onLoginSuccess }) {
     const [cedula, setCedula] = useState('');
     const [clave, setClave] = useState('');
     const [error, setError] = useState('');
+    const location = useLocation();
+    const [mensajeRedireccion, setMensajeRedireccion] = useState('');
+
+    useEffect(() => {
+        if (location.state?.mensaje) {
+            setMensajeRedireccion(location.state.mensaje);
+        }
+    }, [location.state]);
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -19,16 +28,25 @@ function Login({ onLoginSuccess }) {
 
             // Guardar el token JWT
             localStorage.setItem('token', response.data.token);
+            localStorage.setItem('perfil', response.data.perfil);
             onLoginSuccess(response.data.perfil); // opcional: pasar el rol
         } catch (err) {
             setError('Credenciales inválidas');
         }
+
     };
 
+
     return (
+
         <div className="login">
             <div className="login-box">
                 <h1>Iniciar sesión</h1>
+
+                {mensajeRedireccion && (
+                    <div className="message error">{mensajeRedireccion}</div>
+                )}
+
                 <form onSubmit={handleSubmit}>
                     <input
                         type="text"

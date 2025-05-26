@@ -1,8 +1,25 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/doctor-patient.png';
 
 function Header({ perfil, onLogout }) {
+
+    const navigate = useNavigate();
+
+    const handleLogoutClick = () => {
+        // Limpiar sesión
+        localStorage.removeItem('token');
+        localStorage.removeItem('perfil');
+        onLogout(); // notifica al componente App para actualizar el estado
+
+        // Redirigir al login
+        navigate('/Login', {
+            replace: true, // evita volver con el botón "Atrás"
+            state: { mensaje: 'Sesión cerrada correctamente.' },
+        });
+    };
+
+
     return (
         <header className="header">
             <div className="header-logo">
@@ -23,7 +40,7 @@ function Header({ perfil, onLogout }) {
                         <Link to="/BuscarCita" className="perfil-link">Búsqueda</Link>
                         <Link to="/historicoPaciente" className="perfil-link">Historial</Link>
                         <span className="user-badge">👤 PACIENTE</span>
-                        <button className="logout-button" onClick={onLogout}>Salir</button>
+                        <button className="logout-button" onClick={handleLogoutClick}>Salir</button>
                     </div>
                 )}
                 {perfil === 'ROLE_MEDICO' && (
@@ -32,7 +49,7 @@ function Header({ perfil, onLogout }) {
                         <div className="perfil-wrapper">
                             <Link to="/Medico-Perfil" className="perfil-link">Perfil</Link>
                             <span className="user-badge">🩺 MÉDICO</span>
-                            <button className="logout-button" onClick={onLogout}>Salir</button>
+                            <button className="logout-button" onClick={handleLogoutClick}>Salir</button>
                         </div>
 
                     </>
@@ -43,7 +60,7 @@ function Header({ perfil, onLogout }) {
                         <Link to="/ApproveDoctors">Administrar</Link>
                         <div className="perfil-wrapper">
                             <span className="user-badge">🛠️ ADMIN</span>
-                            <button className="logout-button" onClick={onLogout}>Salir</button>
+                            <button className="logout-button" onClick={handleLogoutClick}>Salir</button>
                         </div>
                     </>
                 )}

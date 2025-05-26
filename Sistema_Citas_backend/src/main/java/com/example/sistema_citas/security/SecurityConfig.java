@@ -66,7 +66,12 @@ public class SecurityConfig {
                                 "/api/historicoPaciente/historico"
                         ).permitAll()
 
-                        .requestMatchers("/api/Approve/", "/api/Approve/perfil", "/api/Approve/approve", "/api/Approve/**").hasRole("ADMINISTRADOR")
+                        .requestMatchers("/api/Approve/",
+                                "/api/Approve/perfil",
+                                "/api/Approve/approve",
+                                "/api/Approve/**"
+                        ).hasRole("ADMINISTRADOR")
+
                         .requestMatchers("/Medico-Perfil/**",
                                 "/api/GestionCitas/**",
                                 "/api/completarCita/**",
@@ -82,7 +87,7 @@ public class SecurityConfig {
                                 "/api/historicoPaciente/historico",
                                 "/BuscarCita",
                                 "/api/ConfirmarCita/**",
-                                "/HorarioExtendido/**"
+                                "/api/HorarioExtendido/**"
                         ).hasRole("PACIENTE")
 
                         .requestMatchers("/verDetalleCita/**"

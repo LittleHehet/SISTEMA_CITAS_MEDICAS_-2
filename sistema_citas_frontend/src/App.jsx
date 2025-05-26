@@ -17,7 +17,7 @@ import HorarioExtendido from './components/HorarioExtendido';
 import ConfirmarCita from './components/ConfirmarCita';
 import ConfirmacionExitosa from './components/ConfirmacionExitosa';
 import ConfirmacionFallida from './components/ConfirmacionFallida';
-
+import ErrorPage from './components/ErrorPage';
 
 
 
@@ -48,38 +48,57 @@ function App() {
             <Header perfil={perfil} onLogout={handleLogout} />
             <main className="main-content">
                 <Routes>
-                    {/*<Route path="/" element={!perfil ? <Login onLoginSuccess={handleLoginSuccess} /> : <div>Contenido principal para perfil: {perfil}</div>} />*/}
+                    {/* Rutas comunes */}
                     <Route path="/About" element={<About />} />
                     <Route path="/Sign-up" element={<SignUp />} />
                     <Route path="/Login" element={<Login onLoginSuccess={handleLoginSuccess} />} />
-                    <Route path="*" element={<Navigate to="/Login" />} />
                     <Route path="/BuscarCita" element={<BuscarCita />} />
                     <Route path="/HorarioExtendido" element={<HorarioExtendido />} />
-                    <Route path="/ConfirmacionExitosa" element={<ConfirmacionExitosa />} />
-                    <Route path="/ConfirmacionFallida" element={<ConfirmacionFallida />} />
-                    <Route path="/ConfirmarCita" element={<ConfirmarCita />} />
+                    <Route path="/ErrorPage" element={<ErrorPage />} />
+                    {/* Rutas protegidas para pacientes */}
                     <Route
-                        path="/Medico-Perfil"
-                        element={perfil === 'ROLE_MEDICO' ? <MedicoPerfil /> : <Navigate to="/Login" />}
+                        path="/ConfirmacionExitosa"
+                        element={perfil === 'ROLE_PACIENTE' ? <ConfirmacionExitosa /> : <Navigate to="/ErrorPage" />}
                     />
                     <Route
-                        path="/GestionCitas"
-                        element={perfil === 'ROLE_MEDICO' ? <GestionCitas /> : <Navigate to="/Login" />}
+                        path="/ConfirmacionFallida"
+                        element={perfil === 'ROLE_PACIENTE' ? <ConfirmacionFallida /> : <Navigate to="/ErrorPage" />}
                     />
                     <Route
-                        path="/EditarNota"
-                        element={perfil === 'ROLE_MEDICO' ? <EditarNota /> : <Navigate to="/Login" />}
-                    />
-                    <Route
-                        path="/ApproveDoctors"
-                        element={perfil === 'ROLE_ADMINISTRADOR' ? <ApproveDoctors /> : <Navigate to="/Login" />}
+                        path="/ConfirmarCita"
+                        element={
+                            (perfil === 'ROLE_PACIENTE' || !perfil) ? <ConfirmarCita /> : <Navigate to="/ErrorPage" />
+                        }
                     />
                     <Route
                         path="/HistoricoPaciente"
-                        element={perfil === 'ROLE_PACIENTE' ? <HistoricoPaciente /> : <Navigate to="/Login" />}></Route>
+                        element={perfil === 'ROLE_PACIENTE' ? <HistoricoPaciente /> : <Navigate to="/ErrorPage" />}
+                    />
 
+                    {/* Rutas protegidas para médicos */}
+                    <Route
+                        path="/GestionCitas"
+                        element={perfil === 'ROLE_MEDICO' ? <GestionCitas /> : <Navigate to="/ErrorPage" />}
+                    />
+                    <Route
+                        path="/Medico-Perfil"
+                        element={perfil === 'ROLE_MEDICO' ? <MedicoPerfil /> : <Navigate to="/ErrorPage" />}
+                    />
+                    <Route
+                        path="/EditarNota"
+                        element={perfil === 'ROLE_MEDICO' ? <EditarNota /> : <Navigate to="/ErrorPage" />}
+                    />
 
+                    {/* Rutas protegidas para administradores */}
+                    <Route
+                        path="/ApproveDoctors"
+                        element={perfil === 'ROLE_ADMINISTRADOR' ? <ApproveDoctors /> : <Navigate to="/ErrorPage" />}
+                    />
+
+                    {/* Página de error para rutas no definidas */}
+                    <Route path="*" element={<Navigate to="/ErrorPage" />} />
                 </Routes>
+
             </main>
             <Footer />
         </Router>
