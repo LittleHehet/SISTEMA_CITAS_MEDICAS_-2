@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const HistoricoPaciente = () => {
+    const navigate = useNavigate();
     const [usuario, setUsuario] = useState({});
     const [citas, setCitas] = useState([]);
     const [medicos, setMedicos] = useState([]);
@@ -150,9 +152,8 @@ const HistoricoPaciente = () => {
                         <td>{cita.horafinal}</td>
                         <td>{cita.estado}</td>
                         <td>
-                            {(cita.estado === 'completada' || cita.estado === 'cancelada') && (
-                                <a href={`/verDetalleCita?id=${cita.id}`} className="submit-button">Ver</a>
-                            )}
+                            <button className="submit-button" onClick={() => navigate(`/verDetalleCita?id=${cita.id}`)}>Ver</button>
+
                         </td>
                     </tr>
                 ))}

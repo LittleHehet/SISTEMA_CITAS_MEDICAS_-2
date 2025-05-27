@@ -104,7 +104,8 @@ public class BuscarCitaRestController {
                 medico.getEspecialidad() != null ? medico.getEspecialidad().getEspecialidadNombre() : null,
                 medico.getLocalidad() != null ? medico.getLocalidad().getLocalidadNombre() : null,
                 medico.getCosto(),
-                disponibilidadDTO
+                disponibilidadDTO,
+                medico.getEstado()
         );
 
     }

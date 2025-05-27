@@ -10,13 +10,18 @@ function Header({ perfil, onLogout }) {
         // Limpiar sesión
         localStorage.removeItem('token');
         localStorage.removeItem('perfil');
+        localStorage.removeItem('perfilCompleto');
+
         onLogout(); // notifica al componente App para actualizar el estado
 
         // Redirigir al login
-        navigate('/Login', {
-            replace: true, // evita volver con el botón "Atrás"
-            state: { mensaje: 'Sesión cerrada correctamente.' },
-        });
+        setTimeout(() => {
+            navigate('/Login', {
+                replace: true,
+                state: { mensaje: 'Sesión cerrada correctamente.' },
+            });
+        }, 0); // pequeño retraso
+
     };
 
 
@@ -45,15 +50,17 @@ function Header({ perfil, onLogout }) {
                 )}
                 {perfil === 'ROLE_MEDICO' && (
                     <>
-                        <Link to="/GestionCitas">Citas</Link>
+                        {localStorage.getItem('perfilCompleto') === 'true' && (
+                            <Link to="/GestionCitas">Citas</Link>
+                        )}
                         <div className="perfil-wrapper">
                             <Link to="/Medico-Perfil" className="perfil-link">Perfil</Link>
                             <span className="user-badge">🩺 MÉDICO</span>
                             <button className="logout-button" onClick={handleLogoutClick}>Salir</button>
                         </div>
-
                     </>
                 )}
+
 
                 {perfil === 'ROLE_ADMINISTRADOR' && (
                     <>
