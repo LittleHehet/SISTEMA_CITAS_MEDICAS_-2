@@ -85,17 +85,19 @@ function ConfirmarCita() {
             <h1 className="titleConfirmarCita">Información del Médico Seleccionado</h1>
 
             <div className="form-groupConfirmarCita">
-                {medico.foto ? (
-                    <img
-                        src={`http://localhost:8080/api/medico/foto?id=${medico.id}`}
-                        alt="Foto de perfil"
-                        width="50"
-                        height="50"
-                        style={{ borderRadius: '50%', objectFit: 'cover' }}
-                    />
-                ) : <span>No Foto</span>}
+                <img
+                    src={`http://localhost:8080/api/medico/foto?id=${medico.id}`}
+                    alt="Foto del médico"
+                    width="70"
+                    height="70"
+                    style={{borderRadius: '50%', objectFit: 'cover', marginBottom: '10px'}}
+                    onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.replaceWith(document.createTextNode("No hay foto"));
+                    }}
+                />
 
-                <label>Nombre Completo:</label>
+                <label><p>Nombre Completo:</p></label>
                 <p>{medico.usuarios.nombre} {medico.usuarios.apellido}</p>
             </div>
 

@@ -37,11 +37,6 @@ function HorarioExtendido() {
                 console.error(err);
             });
     }, [medicoId]);
-    useEffect(() => {
-        if (medico) {
-            console.log("Estado medico actualizado:", medico);
-        }
-    }, [medico]);
 
     // Función para redirigir a ConfirmarCita con parámetros
     const handleSeleccionHorario = (diaNombre, fecha, horaInicio, horaFin) => {
@@ -71,6 +66,17 @@ function HorarioExtendido() {
             </div>
 
             <div className="medico-info">
+                <img
+                    src={`http://localhost:8080/api/medico/foto?id=${medico.id}`}
+                    alt="Foto del médico"
+                    width="70"
+                    height="70"
+                    style={{borderRadius: '50%', objectFit: 'cover', marginBottom: '10px'}}
+                    onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.replaceWith(document.createTextNode("No hay foto"));
+                    }}
+                />
                 <p><strong>Nombre del Médico:</strong> {medico.nombre} {medico.apellido}</p>
                 <p><strong>Especialidad:</strong> {medico.especialidad}</p>
                 <p><strong>Localidad:</strong> {medico.localidad}</p>

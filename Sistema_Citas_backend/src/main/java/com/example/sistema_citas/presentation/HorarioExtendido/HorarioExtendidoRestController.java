@@ -30,6 +30,7 @@ public class HorarioExtendidoRestController {
 
         // Datos del médico
         Map<String, Object> medicoMap = new HashMap<>();
+        medicoMap.put("id", medico.getId());
         medicoMap.put("nombre", medico.getUsuarios().getNombre());
         medicoMap.put("apellido", medico.getUsuarios().getApellido());
         medicoMap.put("especialidad", medico.getEspecialidad() != null ? medico.getEspecialidad().getEspecialidadNombre() : null);
