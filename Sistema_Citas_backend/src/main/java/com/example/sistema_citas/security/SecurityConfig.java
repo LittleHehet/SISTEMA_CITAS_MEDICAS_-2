@@ -77,26 +77,25 @@ public class SecurityConfig {
                                 "/Medico-Perfil/**",
                                 "/api/GestionCitas/**",
                                 "/api/gestion/usuarios",
-                                "/api/gestion/citas",
                                 "/api/gestion/completar",
                                 "/api/gestion/cancelar",
-                                "/api/gestion/cita",
+                                "/api/gestion/citas",
                                 "/api/gestion/nota"
                         ).hasRole("MEDICO")
 
                         .requestMatchers(
-                                "/api/gestion/cita",
-                                "/api/gestion/nota",
                                 "/api/historicoPaciente",
                                 "/api/historicoPaciente/perfil",
                                 "/api/historicoPaciente/**" ,
                                 "/api/historicoPaciente/historico",
-                                "/BuscarCita",
                                 "/api/ConfirmarCita/**",
                                 "/api/HorarioExtendido/**"
                         ).hasRole("PACIENTE")
 
-                        .requestMatchers("/verDetalleCita/**"
+                        .requestMatchers(
+                                "/api/gestion/cita",
+                                "/api/gestion/citas"
+
                         ).hasAnyRole("PACIENTE", "MEDICO")
 
                         .anyRequest().authenticated()

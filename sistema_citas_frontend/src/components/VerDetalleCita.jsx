@@ -10,29 +10,22 @@ function VerDetalleCita() {
     const navigate = useNavigate();
 
     const id = params.get('id');
-
-    // Estado para editar nota solo si es medico
     const [notaEdit, setNotaEdit] = useState('');
     const [isMedico, setIsMedico] = useState(false);
+    const [perfilStr, setPerfilStr] = useState('');
 
     useEffect(() => {
         const token = localStorage.getItem('token');
+        const perfil = localStorage.getItem('perfil');
+        setPerfilStr(perfil);
+        // Establecer isMedico según el perfil almacenado
+        setIsMedico(perfilStr === 'ROLE_MEDICO');
+
         if (!token) {
             setError('No autenticado');
             setLoading(false);
             return;
         }
-
-        // Aquí decodifica el token para obtener rol o llama a un endpoint para obtener info del usuario
-        // Ejemplo simple si tu token es JWT:
-        try {
-            const base64Payload = token.split('.')[1];
-            const payload = JSON.parse(atob(base64Payload));
-            setIsMedico(payload.role === 'MEDICO'); // Ajusta según el nombre de la propiedad de rol
-        } catch {
-            setIsMedico(false);
-        }
-
         if (!id) {
             setError('ID de cita no proporcionado');
             setLoading(false);
@@ -49,9 +42,9 @@ function VerDetalleCita() {
                 setLoading(false);
             })
             .catch(err => {
+                console.error('Error cargando los detalles de la cita:', err.response || err);
                 setError('Error cargando los detalles de la cita');
                 setLoading(false);
-                console.error(err);
             });
     }, [id]);
 
@@ -81,7 +74,7 @@ function VerDetalleCita() {
             <table className="table">
                 <tbody>
                 <tr>
-                    <th>Medico</th>
+                    <th>Médico</th>
                     <td>{cita.medicoNombre} {cita.medicoApellido}</td>
                 </tr>
                 <tr>
@@ -109,12 +102,12 @@ function VerDetalleCita() {
                     <td>
                         {isMedico ? (
                             <>
-                  <textarea
-                      value={notaEdit}
-                      onChange={e => setNotaEdit(e.target.value)}
-                      rows={4}
-                      cols={40}
-                  />
+                                    <textarea
+                                        value={notaEdit}
+                                        onChange={e => setNotaEdit(e.target.value)}
+                                        rows={4}
+                                        cols={40}
+                                    />
                                 <br />
                                 <button className="submit-button" onClick={handleGuardarNota}>Guardar Nota</button>
                             </>
@@ -126,9 +119,23 @@ function VerDetalleCita() {
                 </tbody>
             </table>
 
-            <button className="submit-button" onClick={() => navigate('/GestionCitas')}>
-                Volver a Gestión de Citas
+            <button
+                className="submit-button"
+                onClick={() => {
+                    if (perfilStr === 'ROLE_MEDICO') {
+                        navigate('/GestionCitas');
+                    } else if (perfilStr === 'ROLE_PACIENTE') {
+                        navigate('/historicoPaciente');
+                    } else {
+                        navigate('/');
+                    }
+                }}
+            >
+                Volver
             </button>
+
+
+
         </div>
     );
 }

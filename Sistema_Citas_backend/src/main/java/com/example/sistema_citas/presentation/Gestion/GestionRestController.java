@@ -5,6 +5,7 @@ import com.example.sistema_citas.service.Service;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -116,14 +117,18 @@ public class GestionRestController {
         }
     }
 
-
     @PostMapping("/nota")
-    public void guardarNota(@RequestParam Integer id, @RequestParam String nota) {
+    public ResponseEntity<Void> guardarNota(@RequestParam Integer id, @RequestParam String nota) {
         Optional<Cita> citaOptional = service.findCitaById(id);
         if (citaOptional.isPresent()) {
             Cita cita = citaOptional.get();
             cita.setNota(nota);
             service.saveCita(cita);
+            return ResponseEntity.ok().build();  // Respuesta con 200 OK y cuerpo vacío
+        } else {
+            return ResponseEntity.notFound().build(); // Si no existe, 404
         }
     }
+
+
 }
