@@ -57,35 +57,45 @@ public class SecurityConfig {
                                 "/api/medico/foto",
                                 "/css/**",
                                 "/images/**",
-                                "/BuscarCita",
-                                "/ConfirmarCita/**",
-                                "/HorarioExtendido/**",
+                                "/api/BuscarCita",
+                                "/api/BuscarCita/busqueda",
+                                "/api/HorarioExtendido/**",
                                 "/api/historicoPaciente",
                                 "/api/historicoPaciente/perfil",
                                 "/api/historicoPaciente/**" ,
                                 "/api/historicoPaciente/historico"
                         ).permitAll()
 
-                        .requestMatchers("/api/Approve/", "/api/Approve/perfil", "/api/Approve/approve", "/api/Approve/**").hasRole("ADMINISTRADOR")
-                        .requestMatchers("/Medico-Perfil/**",
+                        .requestMatchers(
+                                "/api/Approve/",
+                                "/api/Approve/perfil",
+                                "/api/Approve/approve",
+                                "/api/Approve/**"
+                        ).hasRole("ADMINISTRADOR")
+
+                        .requestMatchers(
+                                "/Medico-Perfil/**",
                                 "/api/GestionCitas/**",
-                                "/api/completarCita/**",
-                                "/api/cancelarCita/**",
-                                "/api/guardarNota/**",
-                                "/api/editarNota/**",
-                                "api//actualizar/**"
+                                "/api/gestion/usuarios",
+                                "/api/gestion/completar",
+                                "/api/gestion/cancelar",
+                                "/api/gestion/citas",
+                                "/api/gestion/nota"
                         ).hasRole("MEDICO")
 
-                        .requestMatchers( "/api/historicoPaciente",
+                        .requestMatchers(
+                                "/api/historicoPaciente",
                                 "/api/historicoPaciente/perfil",
                                 "/api/historicoPaciente/**" ,
                                 "/api/historicoPaciente/historico",
-                                "/BuscarCita",
-                                "/ConfirmarCita/**",
-                                "/HorarioExtendido/**"
+                                "/api/ConfirmarCita/**",
+                                "/api/HorarioExtendido/**"
                         ).hasRole("PACIENTE")
 
-                        .requestMatchers("/verDetalleCita/**"
+                        .requestMatchers(
+                                "/api/gestion/cita",
+                                "/api/gestion/citas"
+
                         ).hasAnyRole("PACIENTE", "MEDICO")
 
                         .anyRequest().authenticated()

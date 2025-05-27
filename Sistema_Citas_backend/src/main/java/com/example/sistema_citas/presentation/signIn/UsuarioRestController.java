@@ -1,5 +1,6 @@
 package com.example.sistema_citas.presentation.signIn;
 
+import com.example.sistema_citas.logic.Medico;
 import org.springframework.security.core.Authentication;
 import com.example.sistema_citas.logic.LoginRequest;
 import com.example.sistema_citas.logic.LoginResponse;
@@ -31,7 +32,7 @@ public class UsuarioRestController {
     private JwtUtil jwtUtil;
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest, HttpSession session) {
+    public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
         System.out.println("Intento login: cedula=" + loginRequest.getCedula() + ", clave=" + loginRequest.getClave());
 
         Authentication authentication;
@@ -58,22 +59,36 @@ public class UsuarioRestController {
         Usuario usuario = usuarioOpt.get();
         String perfil = usuario.getPerfil();
 
-        // ✅ Si el usuario es médico, guardar en sesión
-        if ("MEDICO".equals(perfil)) {
-            service.findMedicobyCedula(usuario.getCedula()).ifPresent(medico -> {
-                session.setAttribute("medico", medico);
-            });
+        LoginResponse loginResponse = new LoginResponse(token, perfil);
+
+
+        if ("ROLE_MEDICO".equals(perfil)) {
+            Optional<Medico> medicoOpt = service.findMedicobyCedula(usuario.getCedula());
+            if (medicoOpt.isPresent()) {
+                Medico medico = medicoOpt.get();
+                System.out.println("Medico estado=" + medico.getEstado());
+                boolean perfilCompleto = !perfilIncompleto(medico);
+                loginResponse.setMedicoEstado(medico.getEstado());
+                loginResponse.setMedicoId(medico.getId());
+                loginResponse.setPerfilCompleto(perfilCompleto);
+            }
         }
 
-        return ResponseEntity.ok(new LoginResponse(token, perfil));
+        return ResponseEntity.ok(loginResponse);
     }
 
+    private boolean perfilIncompleto(Medico medico) {
+        return medico.getEspecialidad() == null || medico.getCosto() == null ||
+                medico.getLocalidad() == null || medico.getHorario() == null ||
+                medico.getHorario().isBlank() || medico.getFrecuenciaCitas() == null ||
+                medico.getFoto() == null || medico.getFoto().getImagen() == null ||
+                medico.getNota() == null || medico.getNota().isBlank();
+    }
 
 
     // Cierre de sesión
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(HttpSession session) {
-        session.invalidate();
+    public ResponseEntity<?> logout() {
         return ResponseEntity.ok("Sesión cerrada correctamente");
     }
 

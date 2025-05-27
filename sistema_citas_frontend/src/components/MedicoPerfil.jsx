@@ -82,6 +82,14 @@ function MedicoPerfil() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        const hayHorario = horarios.some(h => h.manana.trim() || h.tarde.trim());
+        if (!hayHorario) {
+            setError('Debes ingresar al menos un horario en la semana.');
+            setMensaje('');
+            return;
+        }
+
         const formData = new FormData();
         formData.append('id', medico.id);
         formData.append('costo', medico.costo);
@@ -97,7 +105,7 @@ function MedicoPerfil() {
             if (manana && tarde) return `${manana},${tarde}`;
             if (manana) return `${manana},`;
             if (tarde) return `,${tarde}`;
-            return ","; // Día sin horario, pero con coma para cumplir con el formato
+            //return ","; // Día sin horario, pero con coma para cumplir con el formato
         }).join(';');
 
         formData.append('horario', horarioFinal);

@@ -102,11 +102,25 @@ public class MedicoPerfilRestController {
         // Validar formato de horario
         // Validar que haya 7 días separados por punto y coma
         System.out.println("📌 DEBUG - Horario recibido: [" + horario + "]");
+        //horario = "8-11,13-14;8-11,13-14;8-11,13-14;8-11,13-14;8-9,13-14; ; ;";
 
+//        String[] dias = horario.split(";");
+//
+//        if (dias.length != 7) {
+//            return ResponseEntity.badRequest().body("El horario debe tener 7 días separados por punto y coma (;)");
+//        }
         String[] dias = horario.split(";");
 
-        if (dias.length != 7) {
-            return ResponseEntity.badRequest().body("El horario debe tener 7 días separados por punto y coma (;)");
+// Si vienen menos de 7, se completa con strings vacíos
+        if (dias.length < 7) {
+            String[] diasCompletos = new String[7];
+            System.arraycopy(dias, 0, diasCompletos, 0, dias.length);
+            for (int i = dias.length; i < 7; i++) {
+                diasCompletos[i] = ""; // rellena los días faltantes
+            }
+            dias = diasCompletos;
+        } else if (dias.length > 7) {
+            return ResponseEntity.badRequest().body("El horario tiene más de 7 días. Verifique el formato.");
         }
 
         // Validar el formato de cada día individualmente

@@ -1,14 +1,16 @@
 package com.example.sistema_citas.presentation.Gestion;
 
-import com.example.sistema_citas.logic.Cita;
-import com.example.sistema_citas.logic.Medico;
-import com.example.sistema_citas.logic.Usuario;
+import com.example.sistema_citas.logic.*;
 import com.example.sistema_citas.service.Service;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,9 +24,9 @@ public class GestionRestController {
     private Service service;
 
     @GetMapping("/citas")
-    public List<Cita> obtenerCitasFiltradas(@RequestParam(value = "usuarioId", required = false) Integer usuarioId,
-                                            @RequestParam(value = "estado", required = false) String estado,
-                                            HttpSession session) {
+    public List<CitaDTO> obtenerCitasFiltradas(@RequestParam(value = "usuarioId", required = false) Integer usuarioId,
+                                               @RequestParam(value = "estado", required = false) String estado,
+                                               HttpSession session) {
 
         service.cancelarCitasPasadas();
         Medico medico = (Medico) session.getAttribute("medico");
@@ -59,13 +61,16 @@ public class GestionRestController {
                     .collect(Collectors.toList());
         }
 
-        return citas;
+        // Convertir a DTOs antes de devolver
+        return citas.stream()
+                .map(CitaDTO::new)
+                .collect(Collectors.toList());
     }
 
-    @GetMapping("/usuarios")
-    public List<Usuario> obtenerUsuariosDeCitas(HttpSession session) {
-        Medico medico = (Medico) session.getAttribute("medico");
 
+    @GetMapping("/usuarios")
+    public List<UsuarioConEstadoDTO> obtenerUsuariosDeCitas(HttpSession session) {
+        Medico medico = (Medico) session.getAttribute("medico");
         if (medico == null) {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             try {
@@ -86,8 +91,11 @@ public class GestionRestController {
         return citas.stream()
                 .map(Cita::getUsuario)
                 .distinct()
+                .map(UsuarioConEstadoDTO::new)
                 .collect(Collectors.toList());
     }
+
+
 
     @PostMapping("/completar")
     public void completarCita(@RequestParam Integer id) {
@@ -100,17 +108,27 @@ public class GestionRestController {
     }
 
     @GetMapping("/cita")
-    public Optional<Cita> obtenerCita(@RequestParam Integer id) {
-        return service.findCitaById(id);
+    public CitaDTO obtenerCita(@RequestParam Integer id) {
+        Optional<Cita> citaOpt = service.findCitaById(id);
+        if (citaOpt.isPresent()) {
+            return new CitaDTO(citaOpt.get());
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cita no encontrada");
+        }
     }
 
     @PostMapping("/nota")
-    public void guardarNota(@RequestParam Integer id, @RequestParam String nota) {
+    public ResponseEntity<Void> guardarNota(@RequestParam Integer id, @RequestParam String nota) {
         Optional<Cita> citaOptional = service.findCitaById(id);
         if (citaOptional.isPresent()) {
             Cita cita = citaOptional.get();
             cita.setNota(nota);
             service.saveCita(cita);
+            return ResponseEntity.ok().build();  // Respuesta con 200 OK y cuerpo vacío
+        } else {
+            return ResponseEntity.notFound().build(); // Si no existe, 404
         }
     }
+
+
 }

@@ -14,6 +14,13 @@ public class UsuarioConEstadoDTO {
 
     }
 
+    public UsuarioConEstadoDTO(Usuario usuario) {
+        this.cedula = usuario.getCedula();
+        this.nombre = usuario.getNombre();
+        this.apellido = usuario.getApellido();
+        this.estado = ""; // Aquí puedes asignar un estado si tienes la info, sino dejar vacío
+    }
+
     public UsuarioConEstadoDTO(Integer cedula, String nombre, String apellido, String estado) {
         this.cedula = cedula;
         this.nombre = nombre;

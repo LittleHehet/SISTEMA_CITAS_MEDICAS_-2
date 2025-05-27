@@ -12,9 +12,18 @@ import ApproveDoctors from './components/ApproveDoctors';
 import HistoricoPaciente from './components/HistoricoPaciente';
 import GestionCitas from './components/GestionCitas';
 import EditarNota from './components/EditarNota';
+import BuscarCita from './components/BuscarCita';
+import HorarioExtendido from './components/HorarioExtendido';
+import ConfirmarCita from './components/ConfirmarCita';
+import ConfirmacionExitosa from './components/ConfirmacionExitosa';
+import ConfirmacionFallida from './components/ConfirmacionFallida';
+import ErrorPage from './components/ErrorPage';
+import ProtectedRoute from './components/ProtectedRoute';
+import VerDetalleCita from "./components/VerDetalleCita.jsx";
+
 
 function App() {
-    const [perfil, setPerfil] = useState(null);
+    const [perfil, setPerfil] =  useState(localStorage.getItem('perfil'));
 
     useEffect(() => {
         const storedPerfil = localStorage.getItem('perfil');
@@ -31,6 +40,8 @@ function App() {
     const handleLogout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('perfil');
+        localStorage.removeItem('perfilCompleto');
+
         setPerfil(null);
     };
 
@@ -40,31 +51,92 @@ function App() {
             <Header perfil={perfil} onLogout={handleLogout} />
             <main className="main-content">
                 <Routes>
-                    {/*<Route path="/" element={!perfil ? <Login onLoginSuccess={handleLoginSuccess} /> : <div>Contenido principal para perfil: {perfil}</div>} />*/}
+                    {/* Rutas comunes */}
+                    <Route path="/" element={<Navigate to="/BuscarCita" />} />
                     <Route path="/About" element={<About />} />
                     <Route path="/Sign-up" element={<SignUp />} />
                     <Route path="/Login" element={<Login onLoginSuccess={handleLoginSuccess} />} />
-                    <Route path="*" element={<Navigate to="/Login" />} />
+                    <Route path="/BuscarCita" element={<BuscarCita />} />
+                    <Route path="/HorarioExtendido" element={<HorarioExtendido />} />
+                    <Route path="/VerDetalleCita" element={<VerDetalleCita />} />
+                    <Route path="/ErrorPage" element={<ErrorPage />} />
+
+
+                    {/* Rutas protegidas para PACIENTES */}
                     <Route
-                        path="/Medico-Perfil"
-                        element={perfil === 'ROLE_MEDICO' ? <MedicoPerfil /> : <Navigate to="/Login" />}
+                        path="/ConfirmacionExitosa"
+                        element={
+                            <ProtectedRoute perfil={perfil} allowedRoles={['ROLE_PACIENTE']}>
+                                <ConfirmacionExitosa />
+                            </ProtectedRoute>
+                        }
                     />
                     <Route
-                        path="/GestionCitas"
-                        element={perfil === 'ROLE_MEDICO' ? <GestionCitas /> : <Navigate to="/Login" />}
+                        path="/ConfirmacionFallida"
+                        element={
+                            <ProtectedRoute perfil={perfil} allowedRoles={['ROLE_PACIENTE']}>
+                                <ConfirmacionFallida />
+                            </ProtectedRoute>
+                        }
                     />
                     <Route
-                        path="/EditarNota"
-                        element={perfil === 'ROLE_MEDICO' ? <EditarNota /> : <Navigate to="/Login" />}
-                    />
-                    <Route
-                        path="/ApproveDoctors"
-                        element={perfil === 'ROLE_ADMINISTRADOR' ? <ApproveDoctors /> : <Navigate to="/Login" />}
+                        path="/ConfirmarCita"
+                        element={
+                            <ProtectedRoute perfil={perfil} allowedRoles={['ROLE_PACIENTE', null]}>
+                                <ConfirmarCita />
+                            </ProtectedRoute>
+                        }
                     />
                     <Route
                         path="/HistoricoPaciente"
-                        element={perfil === 'ROLE_PACIENTE' ? <HistoricoPaciente /> : <Navigate to="/Login" />}></Route>
+                        element={
+                            <ProtectedRoute perfil={perfil} allowedRoles={['ROLE_PACIENTE']}>
+                                <HistoricoPaciente />
+                            </ProtectedRoute>
+                        }
+                    />
+
+                    {/* Rutas protegidas para MÉDICOS */}
+                    <Route
+                        path="/GestionCitas"
+                        element={
+                            <ProtectedRoute perfil={perfil} allowedRoles={['ROLE_MEDICO']}>
+                                <GestionCitas />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/Medico-Perfil"
+                        element={
+                            <ProtectedRoute perfil={perfil} allowedRoles={['ROLE_MEDICO']}>
+                                <MedicoPerfil />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/EditarNota"
+                        element={
+                            <ProtectedRoute perfil={perfil} allowedRoles={['ROLE_MEDICO']}>
+                                <EditarNota />
+                            </ProtectedRoute>
+                        }
+                    />
+
+                    {/* Rutas protegidas para ADMINISTRADORES */}
+                    <Route
+                        path="/ApproveDoctors"
+                        element={
+                            <ProtectedRoute perfil={perfil} allowedRoles={['ROLE_ADMINISTRADOR']}>
+                                <ApproveDoctors />
+                            </ProtectedRoute>
+                        }
+                    />
+
+                    {/* Ruta no encontrada */}
+                    <Route path="*" element={<Navigate to="/ErrorPage" />} />
                 </Routes>
+
+
             </main>
             <Footer />
         </Router>
@@ -75,4 +147,4 @@ function App() {
 export default App;
 
 // npm install
-// npm run dev
+// npm run dev
