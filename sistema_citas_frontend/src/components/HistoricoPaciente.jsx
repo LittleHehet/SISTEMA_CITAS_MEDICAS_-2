@@ -26,6 +26,7 @@ const HistoricoPaciente = () => {
 
     useEffect(() => {
         obtenerPerfil();
+        obtenerMedicos();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -70,7 +71,7 @@ const HistoricoPaciente = () => {
             });
 
             setCitas(response.data.citas);
-            setMedicos(response.data.medicos);
+            //setMedicos(response.data.medicos);
         } catch (error) {
             console.error("Error al obtener las citas:", error);
             setError('Error al obtener las citas. Intente nuevamente.');
@@ -88,6 +89,19 @@ const HistoricoPaciente = () => {
         e.preventDefault();
         obtenerCitas();
     };
+
+    const obtenerMedicos = async () => {
+        const config = getAuthHeaders();
+        if (!config) return;
+
+        try {
+            const response = await axios.get('http://localhost:8080/api/historicoPaciente/medicosDelPaciente', config);
+            setMedicos(response.data);
+        } catch (error) {
+            console.error("Error al obtener médicos:", error);
+        }
+    };
+
 
     return (
         <div className="historic">
@@ -134,17 +148,17 @@ const HistoricoPaciente = () => {
                 {citas.map((cita) => (
                     <tr key={cita.id}>
                         <td>
-                            {cita.medico.foto ? (
-                                <img
-                                    src={`http://localhost:8080/medico-foto?id=${cita.medico.id}`}
-                                    alt="Foto de perfil"
-                                    width="50"
-                                    height="50"
-                                    style={{ borderRadius: '50%', objectFit: 'cover' }}
-                                />
-                            ) : (
-                                <span>No Foto</span>
-                            )}
+                            <img
+                                src={`http://localhost:8080/api/medico/foto?id=${cita.medico.id}`}
+                                alt="Foto del médico"
+                                width="50"
+                                height="50"
+                                style={{ borderRadius: '50%', objectFit: 'cover' }}
+                                onError={(e) => {
+                                    e.target.onerror = null;
+                                    e.target.src = 'https://via.placeholder.com/50x50?text=No+Foto';
+                                }}
+                            />
                         </td>
                         <td>{cita.medico.nombre} {cita.medico.apellido}</td>
                         <td>{new Date(cita.fechaHora).toLocaleDateString()}</td>

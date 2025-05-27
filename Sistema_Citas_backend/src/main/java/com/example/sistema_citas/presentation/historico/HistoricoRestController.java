@@ -97,6 +97,30 @@ public class HistoricoRestController {
         return ResponseEntity.ok(respuesta);
     }
 
+    @GetMapping("/medicosDelPaciente")
+    public ResponseEntity<?> obtenerTodosLosMedicosDelPaciente(Authentication authentication) {
+        if (authentication == null || authentication.getName() == null) {
+            return ResponseEntity.status(401).body("No autenticado");
+        }
+
+        Integer cedula = Integer.parseInt(authentication.getName());
+        Optional<Usuario> optUsuario = service.findByCedula(cedula);
+        if (optUsuario.isEmpty()) {
+            return ResponseEntity.status(404).body("Usuario no encontrado");
+        }
+
+        Usuario usuario = optUsuario.get();
+        List<Cita> citas = service.findAllCitasbyUser(usuario.getId());
+        List<Medico> medicos = citas.stream()
+                .map(Cita::getMedico)
+                .distinct()
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(medicos);
+    }
+
+
+
 
 
 
