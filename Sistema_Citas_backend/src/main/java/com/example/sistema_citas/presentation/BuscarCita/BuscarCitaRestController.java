@@ -114,7 +114,7 @@ public class BuscarCitaRestController {
         List<Dia> diasDisponibles = new ArrayList<>();
 
         for (int i = 1; i <= 3; i++) {
-            LocalDate fecha = fechaBase.plusDays(i);
+            LocalDate fecha = fechaBase.plusDays(i+1);
             String nombreDia = obtenerNombreDia(fecha);
 
             semanaCompleta.stream()
