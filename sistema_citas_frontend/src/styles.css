@@ -328,7 +328,10 @@ button:hover {
     padding: 1rem;
     margin-bottom: 1rem;
     border-left: 5px solid var(--success-border-color);
-    border-radius: 5px;
+    border-left: 4px solid #28a745;
+    border-radius: 4px;
+    font-size: 16px; /* <-- Cambiar esto */
+    width: fit-content;
 }
 
 .message.error {
