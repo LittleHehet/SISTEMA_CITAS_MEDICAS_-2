@@ -18,11 +18,12 @@ import ConfirmarCita from './components/ConfirmarCita';
 import ConfirmacionExitosa from './components/ConfirmacionExitosa';
 import ConfirmacionFallida from './components/ConfirmacionFallida';
 import ErrorPage from './components/ErrorPage';
-
+import ProtectedRoute from './components/ProtectedRoute';
+import VerDetalleCita from "./components/VerDetalleCita.jsx";
 
 
 function App() {
-    const [perfil, setPerfil] = useState(null);
+    const [perfil, setPerfil] =  useState(localStorage.getItem('perfil'));
 
     useEffect(() => {
         const storedPerfil = localStorage.getItem('perfil');
@@ -39,6 +40,8 @@ function App() {
     const handleLogout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('perfil');
+        localStorage.removeItem('perfilCompleto');
+
         setPerfil(null);
     };
 
@@ -49,55 +52,90 @@ function App() {
             <main className="main-content">
                 <Routes>
                     {/* Rutas comunes */}
+                    <Route path="/" element={<Navigate to="/BuscarCita" />} />
                     <Route path="/About" element={<About />} />
                     <Route path="/Sign-up" element={<SignUp />} />
                     <Route path="/Login" element={<Login onLoginSuccess={handleLoginSuccess} />} />
                     <Route path="/BuscarCita" element={<BuscarCita />} />
                     <Route path="/HorarioExtendido" element={<HorarioExtendido />} />
+                    <Route path="/VerDetalleCita" element={<VerDetalleCita />} />
                     <Route path="/ErrorPage" element={<ErrorPage />} />
-                    {/* Rutas protegidas para pacientes */}
+
+
+                    {/* Rutas protegidas para PACIENTES */}
                     <Route
                         path="/ConfirmacionExitosa"
-                        element={perfil === 'ROLE_PACIENTE' ? <ConfirmacionExitosa /> : <Navigate to="/ErrorPage" />}
+                        element={
+                            <ProtectedRoute perfil={perfil} allowedRoles={['ROLE_PACIENTE']}>
+                                <ConfirmacionExitosa />
+                            </ProtectedRoute>
+                        }
                     />
                     <Route
                         path="/ConfirmacionFallida"
-                        element={perfil === 'ROLE_PACIENTE' ? <ConfirmacionFallida /> : <Navigate to="/ErrorPage" />}
+                        element={
+                            <ProtectedRoute perfil={perfil} allowedRoles={['ROLE_PACIENTE']}>
+                                <ConfirmacionFallida />
+                            </ProtectedRoute>
+                        }
                     />
                     <Route
                         path="/ConfirmarCita"
                         element={
-                            (perfil === 'ROLE_PACIENTE' || !perfil) ? <ConfirmarCita /> : <Navigate to="/ErrorPage" />
+                            <ProtectedRoute perfil={perfil} allowedRoles={['ROLE_PACIENTE', null]}>
+                                <ConfirmarCita />
+                            </ProtectedRoute>
                         }
                     />
                     <Route
                         path="/HistoricoPaciente"
-                        element={perfil === 'ROLE_PACIENTE' ? <HistoricoPaciente /> : <Navigate to="/ErrorPage" />}
+                        element={
+                            <ProtectedRoute perfil={perfil} allowedRoles={['ROLE_PACIENTE']}>
+                                <HistoricoPaciente />
+                            </ProtectedRoute>
+                        }
                     />
 
-                    {/* Rutas protegidas para médicos */}
+                    {/* Rutas protegidas para MÉDICOS */}
                     <Route
                         path="/GestionCitas"
-                        element={perfil === 'ROLE_MEDICO' ? <GestionCitas /> : <Navigate to="/ErrorPage" />}
+                        element={
+                            <ProtectedRoute perfil={perfil} allowedRoles={['ROLE_MEDICO']}>
+                                <GestionCitas />
+                            </ProtectedRoute>
+                        }
                     />
                     <Route
                         path="/Medico-Perfil"
-                        element={perfil === 'ROLE_MEDICO' ? <MedicoPerfil /> : <Navigate to="/ErrorPage" />}
+                        element={
+                            <ProtectedRoute perfil={perfil} allowedRoles={['ROLE_MEDICO']}>
+                                <MedicoPerfil />
+                            </ProtectedRoute>
+                        }
                     />
                     <Route
                         path="/EditarNota"
-                        element={perfil === 'ROLE_MEDICO' ? <EditarNota /> : <Navigate to="/ErrorPage" />}
+                        element={
+                            <ProtectedRoute perfil={perfil} allowedRoles={['ROLE_MEDICO']}>
+                                <EditarNota />
+                            </ProtectedRoute>
+                        }
                     />
 
-                    {/* Rutas protegidas para administradores */}
+                    {/* Rutas protegidas para ADMINISTRADORES */}
                     <Route
                         path="/ApproveDoctors"
-                        element={perfil === 'ROLE_ADMINISTRADOR' ? <ApproveDoctors /> : <Navigate to="/ErrorPage" />}
+                        element={
+                            <ProtectedRoute perfil={perfil} allowedRoles={['ROLE_ADMINISTRADOR']}>
+                                <ApproveDoctors />
+                            </ProtectedRoute>
+                        }
                     />
 
-                    {/* Página de error para rutas no definidas */}
+                    {/* Ruta no encontrada */}
                     <Route path="*" element={<Navigate to="/ErrorPage" />} />
                 </Routes>
+
 
             </main>
             <Footer />

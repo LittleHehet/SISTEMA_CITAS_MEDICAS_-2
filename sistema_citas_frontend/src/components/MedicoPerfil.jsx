@@ -82,6 +82,14 @@ function MedicoPerfil() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        const hayHorario = horarios.some(h => h.manana.trim() || h.tarde.trim());
+        if (!hayHorario) {
+            setError('Debes ingresar al menos un horario en la semana.');
+            setMensaje('');
+            return;
+        }
+
         const formData = new FormData();
         formData.append('id', medico.id);
         formData.append('costo', medico.costo);

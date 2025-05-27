@@ -21,21 +21,22 @@ function ConfirmarCita() {
         const horaInicioParam = params.get('horaInicio');
         const horaFinParam = params.get('horaFin');
 
-        setDia(diaParam);
-        setFecha(fechaParam);
-        setHoraInicio(horaInicioParam);
-        setHoraFin(horaFinParam);
-
         const token = localStorage.getItem('token');
         const perfil = localStorage.getItem('perfil');
-        const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
         if (!token || perfil !== 'ROLE_PACIENTE') {
             navigate('/Login', {
                 state: { mensaje: 'Para confirmar una cita debes iniciar sesión como paciente.' }
             });
-            return;
+            return; // 👈 Detiene el useEffect aquí
         }
+
+        setDia(diaParam);
+        setFecha(fechaParam);
+        setHoraInicio(horaInicioParam);
+        setHoraFin(horaFinParam);
+
+        const headers = { Authorization: `Bearer ${token}` };
 
         axios.get(`http://localhost:8080/api/ConfirmarCita`, {
             params: { medicoId, dia: diaParam, fecha: fechaParam, horaInicio: horaInicioParam, horaFin: horaFinParam },
@@ -49,7 +50,9 @@ function ConfirmarCita() {
                 setError('No se pudo cargar la información del médico.');
                 console.error(err);
             });
-    }, [location.search]);
+
+    }, [location.search, navigate]);
+
 
     const handleConfirmar = async (e) => {
         e.preventDefault();

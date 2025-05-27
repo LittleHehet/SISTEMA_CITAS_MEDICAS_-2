@@ -7,6 +7,7 @@ public class MedicoDTO {
     private Integer id;
     private String nombre;            // nombre del usuario asociado
     private String apellido;          // apellido del usuario asociado
+    private  String estado;
     private String especialidadNombre;
     private String localidadNombre;
     private BigDecimal costo;
@@ -15,7 +16,7 @@ public class MedicoDTO {
     public MedicoDTO() {}
 
     public MedicoDTO(Integer id, String nombre, String apellido, String especialidadNombre,
-                     String localidadNombre, BigDecimal costo, List<DiaDTO> disponibilidad) {
+                     String localidadNombre, BigDecimal costo, List<DiaDTO> disponibilidad , String estado) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -23,7 +24,11 @@ public class MedicoDTO {
         this.localidadNombre = localidadNombre;
         this.costo = costo;
         this.disponibilidad = disponibilidad;
+        this.estado = estado;
     }
+
+    public String getEstado() {return estado;}
+    public void setEstado(String estado) {this.estado = estado;}
 
     public Integer getId() {
         return id;
