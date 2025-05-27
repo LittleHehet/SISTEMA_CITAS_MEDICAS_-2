@@ -21,13 +21,22 @@ function ConfirmarCita() {
         const horaInicioParam = params.get('horaInicio');
         const horaFinParam = params.get('horaFin');
 
+        const token = localStorage.getItem('token');
+        const perfil = localStorage.getItem('perfil');
+
+        if (!token || perfil !== 'ROLE_PACIENTE') {
+            navigate('/Login', {
+                state: { mensaje: 'Para confirmar una cita debes iniciar sesión como paciente.' }
+            });
+            return; // 👈 Detiene el useEffect aquí
+        }
+
         setDia(diaParam);
         setFecha(fechaParam);
         setHoraInicio(horaInicioParam);
         setHoraFin(horaFinParam);
 
-        const token = localStorage.getItem('token');
-        const headers = token ? { Authorization: `Bearer ${token}` } : {};
+        const headers = { Authorization: `Bearer ${token}` };
 
         axios.get(`http://localhost:8080/api/ConfirmarCita`, {
             params: { medicoId, dia: diaParam, fecha: fechaParam, horaInicio: horaInicioParam, horaFin: horaFinParam },
@@ -41,7 +50,9 @@ function ConfirmarCita() {
                 setError('No se pudo cargar la información del médico.');
                 console.error(err);
             });
-    }, [location.search]);
+
+    }, [location.search, navigate]);
+
 
     const handleConfirmar = async (e) => {
         e.preventDefault();
@@ -84,20 +95,22 @@ function ConfirmarCita() {
         <div className="containerConfirmarCita">
             <h1 className="titleConfirmarCita">Información del Médico Seleccionado</h1>
 
-            <div className="form-groupConfirmarCita">
-                <img
-                    src={`http://localhost:8080/api/medico/foto?id=${medico.id}`}
-                    alt="Foto del médico"
-                    width="70"
-                    height="70"
-                    style={{borderRadius: '50%', objectFit: 'cover', marginBottom: '10px'}}
-                    onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.replaceWith(document.createTextNode("No hay foto"));
-                    }}
-                />
+            <img
+                src={`http://localhost:8080/api/medico/foto?id=${medico.id}`}
+                alt="Foto del médico"
+                width="70"
+                height="70"
+                style={{ borderRadius: '50%', objectFit: 'cover', marginBottom: '10px' }}
+                onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.replaceWith(document.createTextNode("No hay foto"));
+                }}
+            />
 
-                <label><p>Nombre Completo:</p></label>
+
+            <div className="form-groupConfirmarCita">
+
+                <label>Nombre Completo:</label>
                 <p>{medico.usuarios.nombre} {medico.usuarios.apellido}</p>
             </div>
 
