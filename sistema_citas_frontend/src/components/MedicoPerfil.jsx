@@ -132,7 +132,7 @@ function MedicoPerfil() {
         if (!medico) return <div>Cargando...</div>;
         const diasSemana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
         return (
-            <div className="container">
+            <div className="medico-update-container">
                 <h2 className="title">Actualizar Información del Médico</h2>
                 {mensaje && <div className="message success">{mensaje}</div>}
                 {error && <div className="message error">{error}</div>}

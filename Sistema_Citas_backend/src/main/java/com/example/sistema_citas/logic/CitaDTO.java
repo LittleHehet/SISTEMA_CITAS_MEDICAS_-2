@@ -13,6 +13,7 @@ public class CitaDTO {
     private String usuarioApellido;
     private String medicoNombre;
     private String medicoApellido;
+    private String nota;
     public CitaDTO(Cita cita) {
         this.id = cita.getId();
         this.horainicio = cita.getHorainicio();
@@ -24,6 +25,7 @@ public class CitaDTO {
         this.usuarioApellido = cita.getUsuario().getApellido();
         this.medicoNombre = cita.getMedico().getNombre();
         this.medicoApellido = cita.getMedico().getApellido();
+        this.nota = cita.getNota();
     }
 
     public String getMedicoNombre() {
@@ -100,6 +102,13 @@ public class CitaDTO {
 
     public void setUsuarioApellido(String usuarioApellido) {
         this.usuarioApellido = usuarioApellido;
+    }
+
+    public String getNota() {
+        return nota;
+    }
+    public void setNota(String nota) {
+        this.nota = nota;
     }
 
 }

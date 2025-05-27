@@ -130,5 +130,20 @@ public class GestionRestController {
         }
     }
 
+    @PostMapping("/notaYCompletar")
+    public ResponseEntity<Void> guardarNotaYCompletar(@RequestParam Integer id, @RequestParam String nota) {
+        Optional<Cita> citaOptional = service.findCitaById(id);
+        if (citaOptional.isPresent()) {
+            Cita cita = citaOptional.get();
+            cita.setNota(nota);
+            cita.setEstado("completada");
+            service.saveCita(cita);
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
 
 }

@@ -113,7 +113,13 @@ function GestionCitas() {
                             <td>
                                 {c.estado === 'pendiente' ? (
                                     <>
-                                        <button className="submit-button" onClick={() => handleAccion(c.id, 'completar')}>Completar</button>
+                                        <button
+                                            className="submit-button"
+                                            onClick={() => navigate(`/VerDetalleCita?id=${c.id}`)}
+                                        >
+                                            Completar
+                                        </button>
+
                                         <button className="submit-button" onClick={() => handleAccion(c.id, 'cancelar')}>Cancelar</button>
                                     </>
                                 ) : (

@@ -18,8 +18,7 @@ function VerDetalleCita() {
         const token = localStorage.getItem('token');
         const perfil = localStorage.getItem('perfil');
         setPerfilStr(perfil);
-        // Establecer isMedico según el perfil almacenado
-        setIsMedico(perfilStr === 'ROLE_MEDICO');
+        setIsMedico(perfil === 'ROLE_MEDICO');
 
         if (!token) {
             setError('No autenticado');
@@ -100,22 +99,40 @@ function VerDetalleCita() {
                 <tr>
                     <th>Nota</th>
                     <td>
-                        {isMedico ? (
+                        {isMedico && cita.estado === 'pendiente' ? (
                             <>
-                                    <textarea
-                                        value={notaEdit}
-                                        onChange={e => setNotaEdit(e.target.value)}
-                                        rows={4}
-                                        cols={40}
-                                    />
+        <textarea
+            value={notaEdit}
+            onChange={e => setNotaEdit(e.target.value)}
+            rows={4}
+            cols={40}
+        />
                                 <br />
-                                <button className="submit-button" onClick={handleGuardarNota}>Guardar Nota</button>
+                                <button
+                                    className="submit-button"
+                                    onClick={() => {
+                                        const token = localStorage.getItem('token');
+                                        axios.post(`http://localhost:8080/api/gestion/notaYCompletar`, null, {
+                                            params: { id, nota: notaEdit },
+                                            headers: { Authorization: `Bearer ${token}` },
+                                            withCredentials: true,
+                                        }).then(() => {
+                                            navigate('/GestionCitas');
+                                        }).catch(err => {
+                                            alert('Error guardando nota');
+                                            console.error(err);
+                                        });
+                                    }}
+                                >
+                                    Guardar y Completar
+                                </button>
                             </>
                         ) : (
                             cita.nota || '-'
                         )}
                     </td>
                 </tr>
+
                 </tbody>
             </table>
 
