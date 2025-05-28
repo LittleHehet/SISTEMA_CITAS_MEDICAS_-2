@@ -75,10 +75,18 @@ function GestionCitas() {
                     </select>
 
                     <label htmlFor="usuarioId">Usuario:</label>
+                    {/*<select id="usuarioId" name="usuarioId" defaultValue={usuarioId}>*/}
+                    {/*    <option value="0">Todos</option>*/}
+                    {/*    {usuarios.map(u => (*/}
+                    {/*        <option key={u.cedula} value={u.id}>{u.nombre} {u.apellido}</option>*/}
+                    {/*    ))}*/}
+                    {/*</select>*/}
                     <select id="usuarioId" name="usuarioId" defaultValue={usuarioId}>
                         <option value="0">Todos</option>
                         {usuarios.map(u => (
-                            <option key={u.cedula} value={u.cedula}>{u.nombre} {u.apellido}</option>
+                            <option key={u.id} value={u.id}>
+                                {u.nombre} {u.apellido}
+                            </option>
                         ))}
                     </select>
 
