@@ -24,18 +24,26 @@ import VerDetalleCita from "./components/VerDetalleCita.jsx";
 
 function App() {
     const [perfil, setPerfil] =  useState(localStorage.getItem('perfil'));
+    const [perfilCompleto, setPerfilCompleto] = useState(() => localStorage.getItem('perfilCompleto') === 'true');
+
 
     useEffect(() => {
         const storedPerfil = localStorage.getItem('perfil');
+        const storedPerfilCompleto = localStorage.getItem('perfilCompleto');
         if (storedPerfil) {
             setPerfil(storedPerfil);
         }
+        setPerfilCompleto(storedPerfilCompleto === 'true');
     }, []);
 
-    const handleLoginSuccess = (perfil) => {
+
+    const handleLoginSuccess = (perfil, perfilCompletoBackend) => {
         setPerfil(perfil);
+        setPerfilCompleto(perfilCompletoBackend === true);
         localStorage.setItem('perfil', perfil);
+        localStorage.setItem('perfilCompleto', perfilCompletoBackend === true ? 'true' : 'false');
     };
+
 
     const handleLogout = () => {
         localStorage.removeItem('token');
@@ -48,7 +56,7 @@ function App() {
     return (
         <Router>
             <Head />
-            <Header perfil={perfil} onLogout={handleLogout} />
+            <Header perfil={perfil} perfilCompleto={perfilCompleto} onLogout={handleLogout} />
             <main className="main-content">
                 <Routes>
                     {/* Rutas comunes */}
@@ -109,7 +117,12 @@ function App() {
                         path="/Medico-Perfil"
                         element={
                             <ProtectedRoute perfil={perfil} allowedRoles={['ROLE_MEDICO']}>
-                                <MedicoPerfil />
+                                <MedicoPerfil
+                                    onPerfilCompletoChange={(nuevoValor) => {
+                                        setPerfilCompleto(nuevoValor);
+                                        localStorage.setItem('perfilCompleto', nuevoValor);
+                                    }}
+                                />
                             </ProtectedRoute>
                         }
                     />
