@@ -6,6 +6,7 @@ public class CalcularHorario {
     private String horainicio;
     private String horafin;
     private Medico medico;
+    private boolean reservado;
     public CalcularHorario() {}
     public CalcularHorario(int inicio, int fin) {
         this.inicio = inicio;
@@ -13,6 +14,7 @@ public class CalcularHorario {
         horainicio = convertMinutesHour(inicio);
         horafin = convertMinutesHour(fin);
         medico = new Medico();
+        reservado = false;
     }
     //metodo para crear horainicio y horafinal
     public String convertMinutesHour(int minutes)
@@ -44,4 +46,6 @@ public class CalcularHorario {
     public void setHorainicio(String horainicio) {this.horainicio = horainicio;}
     public String getHorafin() {return horafin;}
     public void setHorafin(String horafin) {this.horafin = horafin;}
+    public boolean isReservado() { return reservado; }
+    public void setReservado(boolean reservado) { this.reservado = reservado; }
 }

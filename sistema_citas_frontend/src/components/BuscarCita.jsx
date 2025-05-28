@@ -133,16 +133,28 @@ function BuscarCita() {
                             {medico.disponibilidad.map(dia => (
                                 <div key={dia.fecha}>
                                     <p>Día: {dia.nombre} - {new Date(dia.fecha).toLocaleDateString('es-ES')}</p>
-                                    {dia.horarios.map((horario, i) => (
-                                        <a
-                                            key={i}
-                                            href={`/ConfirmarCita?medicoId=${medico.id}&dia=${dia.nombre}&fecha=${dia.fecha}&horaInicio=${horario.horainicio}&horaFin=${horario.horafin}`}
-                                        >
-                                            <button className="button-busqueda">
-                                                Horario: {horario.horainicio} - {horario.horafin}
-                                            </button>
-                                        </a>
-                                    ))}
+                                    {dia.horarios.map((horario, i) => {
+                                        const reservado = horario.reservado; // Este debe venir del backend
+
+                                        return (
+                                            <a
+                                                key={i}
+                                                href={`/ConfirmarCita?medicoId=${medico.id}&dia=${dia.nombre}&fecha=${dia.fecha}&horaInicio=${horario.horainicio}&horaFin=${horario.horafin}`}
+                                                style={{pointerEvents: reservado ? 'none' : 'auto'}}
+                                            >
+                                                <button
+                                                    className="button-busqueda"
+                                                    style={{
+                                                        backgroundColor: reservado ? 'red' : '#4CAF50',
+                                                        cursor: reservado ? 'not-allowed' : 'pointer'
+                                                    }}
+                                                    title={reservado ? 'Horario reservado' : 'Seleccionar horario'}
+                                                >
+                                                    Horario: {horario.horainicio} - {horario.horafin}
+                                                </button>
+                                            </a>
+                                        );
+                                    })}
                                 </div>
                             ))}
                         </div>

@@ -979,3 +979,9 @@ textarea {
 .medico-info strong {
     color: #007bff;
 }
+
+/*para poner en color rojo los horarios reservados*/
+.button-busqueda.reservado {
+    background-color: red;
+    color: white;
+}

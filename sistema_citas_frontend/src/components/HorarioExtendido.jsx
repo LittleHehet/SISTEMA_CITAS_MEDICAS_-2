@@ -91,6 +91,12 @@ function HorarioExtendido() {
                                 key={j}
                                 className="button-busqueda"
                                 onClick={() => handleSeleccionHorario(dia.nombre, dia.fecha, horario.horainicio, horario.horafin)}
+                                style={{
+                                    backgroundColor: horario.reservado ? 'red' : '#4CAF50',
+                                    cursor: horario.reservado ? 'not-allowed' : 'pointer'
+                                }}
+                                disabled={horario.reservado}
+                                title={horario.reservado ? 'Horario reservado' : 'Seleccionar horario'}
                             >
                                 Horario: {horario.horainicio} - {horario.horafin}
                             </button>

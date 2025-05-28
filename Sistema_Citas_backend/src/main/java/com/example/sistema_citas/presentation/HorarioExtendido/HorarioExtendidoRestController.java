@@ -42,13 +42,24 @@ public class HorarioExtendidoRestController {
         List<Dia> proximosDias = obtenerDiasDisponibles(medico, semanaCompleta, LocalDate.now());
 
         // Transformar a estructura para el frontend
+//        List<Map<String, Object>> dias = proximosDias.stream().map(dia -> {
+//            Map<String, Object> diaMap = new HashMap<>();
+//            diaMap.put("nombre", dia.getNombre());
+//            diaMap.put("fecha", dia.getFecha());
+//            diaMap.put("horarios", dia.getHorarios().stream().map(h -> Map.of(
+//                    "horainicio", h.getHorainicio(),
+//                    "horafin", h.getHorafin()
+//            )).collect(Collectors.toList()));
+//            return diaMap;
+//        }).collect(Collectors.toList());
         List<Map<String, Object>> dias = proximosDias.stream().map(dia -> {
             Map<String, Object> diaMap = new HashMap<>();
             diaMap.put("nombre", dia.getNombre());
             diaMap.put("fecha", dia.getFecha());
             diaMap.put("horarios", dia.getHorarios().stream().map(h -> Map.of(
                     "horainicio", h.getHorainicio(),
-                    "horafin", h.getHorafin()
+                    "horafin", h.getHorafin(),
+                    "reservado", h.isReservado()    // <-- Aquí
             )).collect(Collectors.toList()));
             return diaMap;
         }).collect(Collectors.toList());
@@ -81,8 +92,20 @@ public class HorarioExtendidoRestController {
                         diaDisponible.setMedico(medico);
                         diaDisponible.setFecha(fecha);
 
+//                        List<CalcularHorario> horariosDisponibles = diaOriginal.getHorarios().stream()
+//                                .filter(horario -> {
+//                                    Cita cita = service.findCitaByMedicoHorario(
+//                                            medico.getId(),
+//                                            horario.getHorainicio(),
+//                                            horario.getHorafin(),
+//                                            nombreDia,
+//                                            fecha
+//                                    );
+//                                    return cita == null || "cancelada".equalsIgnoreCase(cita.getEstado());
+//                                })
+//                                .collect(Collectors.toList());
                         List<CalcularHorario> horariosDisponibles = diaOriginal.getHorarios().stream()
-                                .filter(horario -> {
+                                .map(horario -> {
                                     Cita cita = service.findCitaByMedicoHorario(
                                             medico.getId(),
                                             horario.getHorainicio(),
@@ -90,7 +113,10 @@ public class HorarioExtendidoRestController {
                                             nombreDia,
                                             fecha
                                     );
-                                    return cita == null || "cancelada".equalsIgnoreCase(cita.getEstado());
+                                    // Agregar el flag reservado según exista cita no cancelada
+                                    boolean reservado = cita != null && !"cancelada".equalsIgnoreCase(cita.getEstado());
+                                    horario.setReservado(reservado); // <-- Necesitas este setter en CalcularHorario
+                                    return horario;
                                 })
                                 .collect(Collectors.toList());
 

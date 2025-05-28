@@ -16,6 +16,7 @@ function ConfirmarCita() {
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const medicoId = params.get('medicoId');
+        console.log("medicoId en ConfirmarCita.jsx:", medicoId);
         const diaParam = params.get('dia');
         const fechaParam = params.get('fecha');
         const horaInicioParam = params.get('horaInicio');
@@ -42,6 +43,7 @@ function ConfirmarCita() {
                 console.error(err);
             });
     }, [location.search]);
+
 
     const handleConfirmar = async (e) => {
         e.preventDefault();
