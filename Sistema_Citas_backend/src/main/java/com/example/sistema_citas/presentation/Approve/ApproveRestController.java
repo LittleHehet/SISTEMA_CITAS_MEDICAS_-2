@@ -74,8 +74,10 @@ public class ApproveRestController {
                         usuario.getCedula(),
                         usuario.getNombre(),
                         usuario.getApellido(),
-                        medico.getEstado()
+                        medico.getEstado(),
+                        usuario.getId()
                 ));
+
             } else {
                 System.out.println("No se encontró un médico con la cédula: " + usuario.getCedula());
             }

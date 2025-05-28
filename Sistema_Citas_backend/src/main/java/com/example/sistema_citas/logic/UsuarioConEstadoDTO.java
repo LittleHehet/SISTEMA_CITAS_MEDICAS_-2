@@ -5,13 +5,14 @@ public class UsuarioConEstadoDTO {
     private String nombre;
     private String apellido;
     private String estado; // Pendiente, aprobado, etc.
+    private Integer id;
 
     public UsuarioConEstadoDTO() {
         this.cedula = 0;
         this.nombre = "";
         this.apellido =  "";
         this.estado =  "";
-
+        this.id= 0;
     }
 
     public UsuarioConEstadoDTO(Usuario usuario) {
@@ -19,14 +20,15 @@ public class UsuarioConEstadoDTO {
         this.nombre = usuario.getNombre();
         this.apellido = usuario.getApellido();
         this.estado = ""; // Aquí puedes asignar un estado si tienes la info, sino dejar vacío
+        this.id = usuario.getId();
     }
 
-    public UsuarioConEstadoDTO(Integer cedula, String nombre, String apellido, String estado) {
+    public UsuarioConEstadoDTO(Integer cedula, String nombre, String apellido, String estado,Integer id) {
         this.cedula = cedula;
         this.nombre = nombre;
         this.apellido = apellido;
         this.estado = estado;
-
+        this.id = 0;
     }
 
     public Integer getCedula() {return cedula;}
@@ -37,5 +39,7 @@ public class UsuarioConEstadoDTO {
     public void setApellido(String apellido) {this.apellido = apellido;}
     public String getEstado() {return estado;}
     public void setEstado(String estado) {this.estado = estado;}
+    public Integer getId() {return id;}
+    public void setId(Integer id) {this.id = id;}
 
 }
