@@ -671,7 +671,6 @@ textarea {
 .filter label {
     font-weight: bold;
     margin-right: 5px;
-    font-size: 1.6rem;
 }
 
 .filter select {
@@ -863,6 +862,7 @@ textarea {
 
 .social-media a {
     display: inline-flex;
+    justify-content: center;
     align-items: center;
     justify-content: center;
     width: 40px;
@@ -1034,6 +1034,12 @@ textarea {
 
 .medico-info strong {
     color: #007bff;
+}
+
+/*para poner en color rojo los horarios reservados*/
+.button-busqueda.reservado {
+    background-color: red;
+    color: white;
 }
 
 .error-access-container {

@@ -7,12 +7,18 @@ import java.util.List;
 public class CalcularHorarioDTO {
     private String horainicio;
     private String horafin;
+    private boolean reservado;
 
     public CalcularHorarioDTO() {}
 
     public CalcularHorarioDTO(String horainicio, String horafin) {
         this.horainicio = horainicio;
         this.horafin = horafin;
+    }
+    public CalcularHorarioDTO(String horainicio, String horafin,boolean reservado) {
+        this.horainicio = horainicio;
+        this.horafin = horafin;
+        this.reservado = reservado;
     }
 
     public String getHorainicio() {
@@ -29,6 +35,14 @@ public class CalcularHorarioDTO {
 
     public void setHorafin(String horafin) {
         this.horafin = horafin;
+    }
+
+    public boolean isReservado() {
+        return reservado;
+    }
+
+    public void setReservado(boolean reservado) {
+        this.reservado = reservado;
     }
 }
 
