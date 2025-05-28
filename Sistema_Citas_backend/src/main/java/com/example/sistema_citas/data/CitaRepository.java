@@ -15,10 +15,14 @@ import java.util.Optional;
 public interface CitaRepository extends JpaRepository<Cita, Integer> {
     //antes: extends JpaRepository<Cita, Long>
 
-    @Query("SELECT c FROM Cita c JOIN FETCH c.medico m JOIN FETCH m.usuario WHERE c.usuario.id = :usuarioId ORDER BY c.fechaHora DESC")
+    @Query("SELECT c FROM Cita c JOIN FETCH c.medico m JOIN FETCH m.usuario " +
+            "WHERE c.usuario.id = :usuarioId" +
+            " ORDER BY c.fechaHora DESC, c.horainicio DESC")
     List<Cita> findCitasByUsuarioOrdenadas(@Param("usuarioId") Integer usuarioId);
 
-    @Query("SELECT c FROM Cita c JOIN FETCH c.medico m JOIN FETCH m.usuario u WHERE m.id = :medicoId ORDER BY c.fechaHora DESC")
+    @Query("SELECT c FROM Cita c JOIN FETCH c.medico m JOIN FETCH m.usuario u " +
+            "WHERE m.id = :medicoId " +
+            "ORDER BY c.fechaHora DESC, c.horainicio DESC")
     List<Cita> findCitasByMedicoOrdenadas(@Param("medicoId") Integer medicoId);
 
 
