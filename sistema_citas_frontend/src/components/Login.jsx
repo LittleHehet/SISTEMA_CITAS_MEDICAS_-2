@@ -39,7 +39,7 @@ function Login({ onLoginSuccess }) {
             localStorage.setItem('token', token);
             localStorage.setItem('perfil', perfil);
             localStorage.setItem('perfilCompleto', perfilCompleto);
-            onLoginSuccess(perfil);
+            onLoginSuccess(perfil, perfilCompleto);
 
             // Redirección según perfil
             if (perfil === 'ROLE_PACIENTE') {

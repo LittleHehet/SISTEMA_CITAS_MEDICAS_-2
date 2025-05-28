@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/doctor-patient.png';
 
-function Header({ perfil, onLogout }) {
+function Header({ perfil,perfilCompleto, onLogout }) {
 
     const navigate = useNavigate();
 
@@ -50,7 +50,7 @@ function Header({ perfil, onLogout }) {
                 )}
                 {perfil === 'ROLE_MEDICO' && (
                     <>
-                        {localStorage.getItem('perfilCompleto') === 'true' && (
+                        {perfilCompleto && (
                             <Link to="/GestionCitas">Citas</Link>
                         )}
                         <div className="perfil-wrapper">
@@ -60,6 +60,8 @@ function Header({ perfil, onLogout }) {
                         </div>
                     </>
                 )}
+
+
 
 
                 {perfil === 'ROLE_ADMINISTRADOR' && (

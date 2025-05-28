@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../styles.css';
 
-function MedicoPerfil() {
+function MedicoPerfil({ onPerfilCompletoChange }) {
     const [medico, setMedico] = useState(null);
     const [especialidades, setEspecialidades] = useState([]);
     const [localidades, setLocalidades] = useState([]);
@@ -105,7 +105,6 @@ function MedicoPerfil() {
             if (manana && tarde) return `${manana},${tarde}`;
             if (manana) return `${manana},`;
             if (tarde) return `,${tarde}`;
-            //return ","; // Día sin horario, pero con coma para cumplir con el formato
         }).join(';');
 
         formData.append('horario', horarioFinal);
@@ -123,6 +122,8 @@ function MedicoPerfil() {
             setMensaje('Perfil actualizado correctamente');
             setFotoTimestamp(Date.now());
             setError('');
+            localStorage.setItem('perfilCompleto', 'true');
+            if (onPerfilCompletoChange) onPerfilCompletoChange(true);
         } catch (err) {
             setError('Error al actualizar el perfil');
             setMensaje('');

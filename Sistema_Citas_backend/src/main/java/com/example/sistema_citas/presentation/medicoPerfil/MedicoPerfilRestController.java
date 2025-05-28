@@ -102,13 +102,6 @@ public class MedicoPerfilRestController {
         // Validar formato de horario
         // Validar que haya 7 días separados por punto y coma
         System.out.println("📌 DEBUG - Horario recibido: [" + horario + "]");
-        //horario = "8-11,13-14;8-11,13-14;8-11,13-14;8-11,13-14;8-9,13-14; ; ;";
-
-//        String[] dias = horario.split(";");
-//
-//        if (dias.length != 7) {
-//            return ResponseEntity.badRequest().body("El horario debe tener 7 días separados por punto y coma (;)");
-//        }
         String[] dias = horario.split(";");
 
 // Si vienen menos de 7, se completa con strings vacíos
@@ -166,6 +159,15 @@ public class MedicoPerfilRestController {
         service.updateMedico(medico, fotoFinal);
 
         return ResponseEntity.ok("Perfil actualizado correctamente");
+    }
+
+
+    private boolean perfilIncompleto(Medico medico) {
+        return medico.getEspecialidad() == null || medico.getCosto() == null ||
+                medico.getLocalidad() == null || medico.getHorario() == null ||
+                medico.getHorario().isBlank() || medico.getFrecuenciaCitas() == null ||
+                medico.getFoto() == null || medico.getFoto().getImagen() == null ||
+                medico.getNota() == null || medico.getNota().isBlank();
     }
 
 }
