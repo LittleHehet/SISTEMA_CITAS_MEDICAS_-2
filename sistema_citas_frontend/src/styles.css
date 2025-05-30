@@ -196,6 +196,8 @@ body {
     justify-content: center;
     min-height: calc(100vh - 100px); /* para descontar el header */
     margin: 0 auto;
+    font-size: 1.2rem;
+    padding: 12px 24px;
 }
 
 
@@ -530,8 +532,10 @@ textarea {
 
 .doctor-table th, .doctor-table td {
     border: 1px solid var(--bg-color);
-    padding: 10px;
+    padding: 12px 10px;
     text-align: left;
+    font-size: 1.6rem;
+    color: var(--text-color);
 }
 
 .doctor-table th {
@@ -618,7 +622,7 @@ textarea {
 .submit-buttonConfirmarCita {
     width: 100%;
     padding: 1.2rem;
-    font-size: 1.8rem;
+    font-size: 2rem;
     background: var(--primary-dark-color);
     color: var(--bg-color);
     border-radius: 5px;
@@ -671,6 +675,7 @@ textarea {
 .filter label {
     font-weight: bold;
     margin-right: 5px;
+    font-size: 1.8rem;
 }
 
 .filter select {
@@ -864,7 +869,6 @@ textarea {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    justify-content: center;
     width: 40px;
     height: 40px;
     border: 2px solid #4a90e2;
@@ -960,6 +964,7 @@ textarea {
 }
 
 .horarios .dia-column p {
+    font-size: 1.4rem;
     font-weight: 600;
     color: #333;
     margin-bottom: 10px;
@@ -1004,9 +1009,9 @@ textarea {
     background-color: #007bff;
     color: white;
     border: none;
-    padding: 10px 20px;
-    font-size: 1rem;
-    font-weight: 600;
+    padding: 12px 24px;
+    font-size: 1.3rem;
+    font-weight: 700;
     border-radius: 6px;
     cursor: pointer;
     transition: background-color 0.3s ease;
