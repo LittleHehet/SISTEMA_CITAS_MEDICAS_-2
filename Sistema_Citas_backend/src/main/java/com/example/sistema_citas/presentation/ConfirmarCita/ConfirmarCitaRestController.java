@@ -34,11 +34,6 @@ public class ConfirmarCitaRestController {
             @RequestParam String horaFin,
             HttpSession session
     ) {
-//        Usuario usuario = (Usuario) session.getAttribute("usuario");
-//        if (usuario == null) {
-//            usuario = service.findByCedula(0).orElse(null);
-//            session.setAttribute("usuario", usuario);
-//        }
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String cedulaStr = auth.getName(); // o obtener usuario desde token
         Optional<Usuario> usuarioOpt = service.findByCedula(Integer.parseInt(cedulaStr));
@@ -47,15 +42,7 @@ public class ConfirmarCitaRestController {
         }
         Usuario usuario = usuarioOpt.get();
 
-//        if (!usuario.getPerfil().equals("ROLE_PACIENTE") && !usuario.getPerfil().equals("ROLE_ANONIMO")) {
-//            return ResponseEntity.status(403).body("No autorizado");
-//        }
-//        if (!usuario.getPerfil().equals("ROLE_PACIENTE")) {
-//            return ResponseEntity.status(403).body("No autorizado");
-//        }
         String perfil = usuario.getPerfil();
-        System.out.println(perfil);
-        System.out.println(usuario.getNombre());
         if (!"ROLE_PACIENTE".equalsIgnoreCase(perfil)) {
             return ResponseEntity.status(403).body("No autorizado");
         }
@@ -86,10 +73,6 @@ public class ConfirmarCitaRestController {
             @RequestParam String horaFin,
             HttpSession session
     ) {
-//        Usuario usuario = (Usuario) session.getAttribute("usuario");
-//        if (usuario == null || usuario.getPerfil().equals("ANONIMO")) {
-//            return ResponseEntity.status(401).body("Debe iniciar sesión para reservar la cita.");
-//        }
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null || !auth.isAuthenticated() || "anonymousUser".equals(auth.getName())) {
             return ResponseEntity.status(401).body("Debe iniciar sesión para reservar la cita.");

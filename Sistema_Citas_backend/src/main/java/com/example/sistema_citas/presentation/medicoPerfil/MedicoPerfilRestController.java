@@ -101,7 +101,6 @@ public class MedicoPerfilRestController {
 
         // Validar formato de horario
         // Validar que haya 7 días separados por punto y coma
-        System.out.println("📌 DEBUG - Horario recibido: [" + horario + "]");
         String[] dias = horario.split(";");
 
 // Si vienen menos de 7, se completa con strings vacíos
@@ -118,8 +117,6 @@ public class MedicoPerfilRestController {
 
         // Validar el formato de cada día individualmente
         for (String dia : dias) {
-            // Acepta: "8-12,13-17", "8-12,", ",13-17", ","
-             //¿Qué permite esta nueva expresión? "8-12" "8-12,13-17" "8-12," ",13-17" "," "" (vacío)
             if (!dia.matches("^([0-9]{1,2}-[0-9]{1,2})?(,([0-9]{1,2}-[0-9]{1,2})?)?$")) {
                 return ResponseEntity.badRequest().body("Formato de horario incorrecto en uno de los días: " + dia);
             }
@@ -132,7 +129,7 @@ public class MedicoPerfilRestController {
             try {
                 Foto nuevaFoto = new Foto();
                 nuevaFoto.setImagen(archivoFoto.getBytes());
-                fotoFinal = service.create(nuevaFoto); // ✅ crea y guarda en base de datos
+                fotoFinal = service.create(nuevaFoto);
             } catch (IOException e) {
                 return ResponseEntity.internalServerError().body("Error al procesar la imagen");
             }

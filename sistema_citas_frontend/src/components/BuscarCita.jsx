@@ -13,9 +13,6 @@ function BuscarCita() {
     useEffect(() => {
         cargarBusquedaInicial();
     }, []);
-    useEffect(() => {
-        console.log("Médicos recibidos:", medicos);
-    }, [medicos]);
 
     const cargarBusquedaInicial = async () => {
         const token = localStorage.getItem('token');

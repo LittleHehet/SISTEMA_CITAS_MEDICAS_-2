@@ -33,7 +33,6 @@ public class UsuarioRestController {
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
-        System.out.println("Intento login: cedula=" + loginRequest.getCedula() + ", clave=" + loginRequest.getClave());
 
         Authentication authentication;
         try {
@@ -66,7 +65,6 @@ public class UsuarioRestController {
             Optional<Medico> medicoOpt = service.findMedicobyCedula(usuario.getCedula());
             if (medicoOpt.isPresent()) {
                 Medico medico = medicoOpt.get();
-                System.out.println("Medico estado=" + medico.getEstado());
                 boolean perfilCompleto = !perfilIncompleto(medico);
                 loginResponse.setMedicoEstado(medico.getEstado());
                 loginResponse.setMedicoId(medico.getId());

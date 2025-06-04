@@ -51,24 +51,15 @@ public class ApproveRestController {
 
     @GetMapping
     public ResponseEntity<?> obtenerMedicosPendientes() {
-
-        System.out.println(">>>>>>>>>> HOLA desde obtenerMedicosPendiente <<<<<<<<<<");
-
         List<Usuario> usuariosAux = service.findByPerfil("ROLE_MEDICO");
-        System.out.println("Usuarios con ROLE_MEDICO encontrados: " + usuariosAux.size());
 
         List<UsuarioConEstadoDTO> listaDTO = new ArrayList<>();
 
         for (Usuario usuario : usuariosAux) {
-            System.out.println("Procesando usuario: Cedula = " + usuario.getCedula()
-                    + ", Nombre = " + usuario.getNombre()
-                    + ", Apellido = " + usuario.getApellido());
 
             Optional<Medico> medicoOpt = service.findMedicobyCedula(usuario.getCedula());
             if (medicoOpt.isPresent()) {
                 Medico medico = medicoOpt.get();
-                System.out.println("Medico encontrado para cedula " + usuario.getCedula()
-                        + " con estado: " + medico.getEstado());
 
                 listaDTO.add(new UsuarioConEstadoDTO(
                         usuario.getCedula(),
@@ -79,19 +70,8 @@ public class ApproveRestController {
                 ));
 
             } else {
-                System.out.println("No se encontró un médico con la cédula: " + usuario.getCedula());
             }
         }
-
-        System.out.println("Total DTOs creados: " + listaDTO.size());
-
-        for (UsuarioConEstadoDTO dto : listaDTO) {
-            System.out.println("DTO -> Cedula: " + dto.getCedula()
-                    + ", Nombre: " + dto.getNombre()
-                    + ", Apellido: " + dto.getApellido()
-                    + ", Estado: " + dto.getEstado());
-        }
-
         return ResponseEntity.ok(listaDTO);
     }
 

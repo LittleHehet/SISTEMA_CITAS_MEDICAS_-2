@@ -5,8 +5,8 @@ import java.util.List;
 
 public class MedicoDTO {
     private Integer id;
-    private String nombre;            // nombre del usuario asociado
-    private String apellido;          // apellido del usuario asociado
+    private String nombre;
+    private String apellido;
     private  String estado;
     private String especialidadNombre;
     private String localidadNombre;

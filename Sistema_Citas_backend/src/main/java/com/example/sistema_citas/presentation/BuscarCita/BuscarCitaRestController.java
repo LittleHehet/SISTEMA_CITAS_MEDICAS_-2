@@ -50,7 +50,7 @@ public class BuscarCitaRestController {
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
 
-        // Enviar todo en una sola respuesta
+        // Enviar
         return Map.of(
                 "medicos", medicosDTO,
                 "especialidades", service.getAllEspecialidades(),
@@ -76,14 +76,6 @@ public class BuscarCitaRestController {
         List<Dia> semanaCompleta = cc.EstimarSemanaHorario(medico.getHorario(), medico.getFrecuenciaCitas());
         List<Dia> proximosDias = obtenerProximosDiasDisponibles(medico, semanaCompleta, hoy);
 
-//        List<DiaDTO> disponibilidadDTO = proximosDias.stream()
-//                .map(dia -> new DiaDTO(
-//                        dia.getNombre(),
-//                        dia.getFecha(),
-//                        dia.getHorarios().stream()
-//                                .map(h -> new CalcularHorarioDTO(h.getHorainicio(), h.getHorafin()))
-//                                .collect(Collectors.toList())
-//                )).collect(Collectors.toList());
         List<DiaDTO> disponibilidadDTO = proximosDias.stream()
                 .map(dia -> new DiaDTO(
                         dia.getNombre(),
@@ -92,18 +84,6 @@ public class BuscarCitaRestController {
                                 .map(h -> new CalcularHorarioDTO(h.getHorainicio(), h.getHorafin(), h.isReservado()))
                                 .collect(Collectors.toList())
                 )).collect(Collectors.toList());
-
-        System.out.println("=== DEBUG MÉDICO ===");
-        System.out.println("ID: " + medico.getId());
-
-        System.out.println("Usuario: " +
-                (medico.getUsuarios() != null ? medico.getUsuarios().getNombre() + " " + medico.getUsuarios().getApellido() : "null"));
-
-        System.out.println("Especialidad: " +
-                (medico.getEspecialidad() != null ? medico.getEspecialidad().getEspecialidadNombre() : "null"));
-
-        System.out.println("Localidad: " +
-                (medico.getLocalidad() != null ? medico.getLocalidad().getLocalidadNombre() : "null"));
 
         return new MedicoDTO(
                 medico.getId(),
@@ -133,18 +113,6 @@ public class BuscarCitaRestController {
                         diaDisponible.setMedico(medico);
                         diaDisponible.setFecha(fecha);
 
-//                        List<CalcularHorario> horariosDisponibles = diaOriginal.getHorarios().stream()
-//                                .filter(horario -> {
-//                                    Cita cita = service.findCitaByMedicoHorario(
-//                                            medico.getId(),
-//                                            horario.getHorainicio(),
-//                                            horario.getHorafin(),
-//                                            nombreDia,
-//                                            fecha
-//                                    );
-//                                    return cita == null || "cancelada".equalsIgnoreCase(cita.getEstado());
-//                                })
-//                                .collect(Collectors.toList());
                         List<CalcularHorario> horariosDisponibles = diaOriginal.getHorarios().stream()
                                 .peek(horario -> {
                                     Cita cita = service.findCitaByMedicoHorario(

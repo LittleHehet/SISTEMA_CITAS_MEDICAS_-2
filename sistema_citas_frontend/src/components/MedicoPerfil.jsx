@@ -25,7 +25,6 @@ function MedicoPerfil({ onPerfilCompletoChange }) {
             }
         })
             .then(res => {
-                console.log("✅ Datos recibidos:", res.data);
                 const medicoBackend = res.data.medico;
                 if (!medicoBackend || !medicoBackend.usuarios) {
                     setError("Este perfil aún no ha sido aprobado por el administrador.");

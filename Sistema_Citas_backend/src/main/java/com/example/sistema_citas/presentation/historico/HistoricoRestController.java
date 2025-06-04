@@ -46,14 +46,12 @@ public class HistoricoRestController {
             @RequestParam(value = "medicoId", required = false) Integer medicoId,
             @RequestParam(value = "estado", required = false) String estado,
             Authentication authentication) {
-        System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<< HOla desde  obtenerHistorico >>>>>>>>>>>>>>>>>>>>>>: " );
 
         if (authentication == null || authentication.getName() == null) {
             return ResponseEntity.status(401).body("No autenticado");
         }
 
         Integer cedula = Integer.parseInt(authentication.getName());
-        System.out.println("Cédula autenticada: " + cedula);
 
         Optional<Usuario> optUsuario = service.findByCedula(cedula);
         if (optUsuario.isEmpty()) {
@@ -61,22 +59,17 @@ public class HistoricoRestController {
         }
 
         Usuario usuario = optUsuario.get();
-        System.out.println("Usuario encontrado: " + usuario.getNombre());
-        System.out.println("Usuario encontrado y si id es : " + usuario.getId());
         service.cancelarCitasPasadas();
 
         List<Cita> citas = service.findAllCitasbyUser(usuario.getId());
-        System.out.println("Citas antes de filtrar: " + citas.size());
 
         if (medicoId != null && medicoId > 0) {
-            System.out.println("Filtrando por médico ID: " + medicoId);
             citas = citas.stream()
                     .filter(c -> c.getMedico().getId().equals(medicoId))
                     .collect(Collectors.toList());
         }
 
         if (estado != null && !estado.equalsIgnoreCase("all")) {
-            System.out.println("Filtrando por estado: " + estado);
             citas = citas.stream()
                     .filter(c -> c.getEstado().equalsIgnoreCase(estado))
                     .collect(Collectors.toList());
@@ -87,8 +80,7 @@ public class HistoricoRestController {
                 .distinct()
                 .collect(Collectors.toList());
 
-        System.out.println("Citas después de filtrar: " + citas.size());
-        System.out.println("Médicos únicos: " + medicos.size());
+
 
         Map<String, Object> respuesta = new HashMap<>();
         respuesta.put("citas", citas);

@@ -4,7 +4,7 @@ public class UsuarioConEstadoDTO {
     private Integer cedula;
     private String nombre;
     private String apellido;
-    private String estado; // Pendiente, aprobado, etc.
+    private String estado;
     private Integer id;
 
     public UsuarioConEstadoDTO() {
@@ -19,7 +19,7 @@ public class UsuarioConEstadoDTO {
         this.cedula = usuario.getCedula();
         this.nombre = usuario.getNombre();
         this.apellido = usuario.getApellido();
-        this.estado = ""; // Aquí puedes asignar un estado si tienes la info, sino dejar vacío
+        this.estado = "";
         this.id = usuario.getId();
     }
 

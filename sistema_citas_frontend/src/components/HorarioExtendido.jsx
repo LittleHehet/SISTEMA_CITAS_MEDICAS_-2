@@ -28,7 +28,6 @@ function HorarioExtendido() {
             withCredentials: true
         })
             .then(res => {
-                console.log("Respuesta HorarioExtendido:", res.data);
                 setMedico(res.data.medico);
                 setSemanaCompleta(res.data.semanaCompleta);
             })

@@ -5,22 +5,6 @@ import java.util.List;
 
 public class Cont_Citas {
 
-//    private List<CalcularHorario> EstimarHorarioDia(String rango, int frecuencia) {
-//        int Inicio = 0, Fin = 0, Frecuencia = frecuencia;
-//
-//        List<CalcularHorario> horarios = new ArrayList<>();
-//
-//        String regex = "[,]";
-//        String[] rangos = rango.split(regex);
-//        for (String nodo : rangos) {
-//            regex = "[-]";
-//            String[] dias = nodo.split(regex);
-//            Inicio = Integer.parseInt(dias[0].toString());
-//            Fin = Integer.parseInt(dias[1].toString());
-//            horarios.addAll(EstimarHorarioDia(Inicio, Fin, Frecuencia));
-//        }
-//        return horarios;
-//    }
 private List<CalcularHorario> EstimarHorarioDia(String rango, int frecuencia) {
     List<CalcularHorario> horarios = new ArrayList<>();
     String[] rangos = rango.split(",");
@@ -64,14 +48,6 @@ private List<CalcularHorario> EstimarHorarioDia(String rango, int frecuencia) {
         int diacont = 1;
 
         Dia dia;
-
-//        for (String nodo : dias) {
-//            dia = new Dia();
-//            dia.setNombre(diacont++);
-//            agenda.add(dia);
-//            if (nodo.length() > 0)
-//                dia.setHorarios(EstimarHorarioDia(nodo, frecuencia));
-//        }
         for (String nodo : dias) {
             dia = new Dia();
             dia.setNombre(diacont++);

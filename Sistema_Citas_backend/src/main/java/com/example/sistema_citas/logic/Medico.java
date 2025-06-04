@@ -15,13 +15,11 @@ public class Medico {
     private Integer id;
 
     @MapsId
-    //@OneToOne(fetch = FetchType.LAZY, optional = false)
     @OneToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "medico_id", nullable = false)
     private Usuario usuario;
 
 
-    //@ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OneToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "especialidad")
     private Especialidad especialidad;
@@ -30,7 +28,6 @@ public class Medico {
     private BigDecimal costo;
 
 
-    //@ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OneToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "localidad")
     private Localidad localidad;

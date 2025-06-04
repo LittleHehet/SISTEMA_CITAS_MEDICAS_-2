@@ -39,7 +39,7 @@ public class Service {
   @Autowired
   private PasswordEncoder passwordEncoder;
 
-  /* Usario
+  /* Usuario
   ------------------------------------------*/
 
       // Método para encontrar un usuario por su cédula
@@ -63,11 +63,9 @@ public class Service {
     Integer cedulaInt = Integer.parseInt(cedula);
     Optional<Usuario> userOpt = usuarioRepository.findByCedula(cedulaInt);
     if (userOpt.isEmpty()) {
-      System.out.println("Usuario no encontrado para cedula: " + cedula);
       throw new UsernameNotFoundException("Usuario no encontrado: " + cedula);
     }
     Usuario user = userOpt.get();
-    System.out.println("Usuario encontrado: " + user.getNombre() + ", perfil: " + user.getPerfil());
     return new org.springframework.security.core.userdetails.User(
             String.valueOf(user.getCedula()),
             user.getClave(),

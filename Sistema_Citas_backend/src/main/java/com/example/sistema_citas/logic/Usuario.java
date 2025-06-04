@@ -44,7 +44,7 @@ public class Usuario {
         this.nombre = nombre;
         this.apellido = apellido;
         this.clave = clave;
-        this.perfil = perfil;  // Asignar un objeto Perfil real, no solo un id
+        this.perfil = perfil;
     }
 
     public Integer getId() {
