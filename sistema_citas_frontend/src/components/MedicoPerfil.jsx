@@ -89,6 +89,27 @@ function MedicoPerfil({ onPerfilCompletoChange }) {
             return;
         }
 
+        // Validar que los rangos horarios sean correctos
+        for (let i = 0; i < horarios.length; i++) {
+            const {manana, tarde} = horarios[i];
+
+            const validarRango = (texto, min, max) => {
+                if (!texto) return true;
+                const [ini, fin] = texto.split('-').map(n => parseInt(n));
+                return ini <= fin && ini >= min && fin <= max;
+            };
+
+            if (!validarRango(manana, 1, 12)) {
+                setError(`Rango inválido en la mañana del ${diasSemana[i]} (formato 1-12 y primero menor que segundo)`);
+                return;
+            }
+
+            if (!validarRango(tarde, 13, 24)) {
+                setError(`Rango inválido en la tarde del ${diasSemana[i]} (formato 13-24 y primero menor que segundo)`);
+                return;
+            }
+        }
+
         const formData = new FormData();
         formData.append('id', medico.id);
         formData.append('costo', medico.costo);

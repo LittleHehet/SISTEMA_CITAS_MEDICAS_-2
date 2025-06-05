@@ -105,7 +105,7 @@ const HistoricoPaciente = () => {
 
     return (
         <div className="historic">
-            <h1>Paciente - {usuario.nombre || usuario.nombreUsuario || usuario.firstName} - Historial de Citas</h1>
+            <h1>Paciente - {usuario.nombre }  {usuario.apellido} - Historial de Citas</h1>
 
             {error && <div style={{ color: 'red', marginBottom: '1rem' }}>{error}</div>}
 

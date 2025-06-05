@@ -83,9 +83,10 @@ function SignUp() {
                         onChange={handleChange}
                         placeholder="Nombre"
                         required
-                        pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]+"
-                        title="Solo letras"
+                        pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ]+$"
+                        title="Solo letras, sin espacios"
                     />
+
 
                     <label htmlFor="last-name">Apellido:</label>
                     <input
@@ -96,9 +97,10 @@ function SignUp() {
                         onChange={handleChange}
                         placeholder="Apellido"
                         required
-                        pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]+"
-                        title="Solo letras"
+                        pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ]+$"
+                        title="Solo letras, sin espacios"
                     />
+
 
                     <label htmlFor="password">Contraseña:</label>
                     <input
@@ -109,6 +111,8 @@ function SignUp() {
                         onChange={handleChange}
                         placeholder="Contraseña"
                         required
+                        pattern="^\S+$"
+                        title="La contraseña no puede contener espacios"
                     />
 
                     <label htmlFor="confirmPassword">Confirmar Contraseña:</label>
@@ -120,6 +124,8 @@ function SignUp() {
                         onChange={handleChange}
                         placeholder="Confirmar Contraseña"
                         required
+                        pattern="^\S+$"
+                        title="La contraseña no puede contener espacios"
                     />
 
                     <label htmlFor="profile">Perfil:</label>
