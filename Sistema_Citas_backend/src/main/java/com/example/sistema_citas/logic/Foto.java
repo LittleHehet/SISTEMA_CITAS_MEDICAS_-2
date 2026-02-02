@@ -8,10 +8,11 @@ public class Foto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "foto_id")
     private Long id;
 
     @Lob
-    @Column(name = "imagen", columnDefinition = "LONGBLOB", nullable = false)
+    @Column(name = "imagen", nullable = false)
     private byte[] imagen;
     //private byte[] foto;
 
