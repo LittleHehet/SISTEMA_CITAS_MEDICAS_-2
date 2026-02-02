@@ -1,10 +1,19 @@
-# Paso 1: Construcción
+# Paso 1: Construcción (Build)
 FROM maven:3.9.6-eclipse-temurin-21 AS build
-COPY src .
+
+WORKDIR /app
+
+COPY . .
+
 RUN mvn clean package -DskipTests
 
-# Paso 2: Ejecución
+# Paso 2: Ejecución (Runtime)
 FROM eclipse-temurin:21-jre
-COPY --from=build /target/Sistema_Citas-0.0.1-SNAPSHOT.jar app.jar
+
+WORKDIR /app
+
+COPY --from=build /app/target/Sistema_Citas-0.0.1-SNAPSHOT.jar app.jar
+
 EXPOSE 8080
+
 ENTRYPOINT ["java", "-jar", "app.jar"]
