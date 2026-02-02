@@ -1,17 +1,7 @@
-DO $$
-BEGIN
-  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'uq_localidad_nombre') THEN
-ALTER TABLE localidad ADD CONSTRAINT uq_localidad_nombre UNIQUE (localidad_nombre);
-END IF;
+CREATE UNIQUE INDEX IF NOT EXISTS ux_localidad_nombre ON localidad(localidad_nombre);
+CREATE UNIQUE INDEX IF NOT EXISTS ux_especialidad_nombre ON especialidad(especialidad_nombre);
+CREATE UNIQUE INDEX IF NOT EXISTS ux_usuarios_cedula ON usuarios(cedula);
 
-  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'uq_especialidad_nombre') THEN
-ALTER TABLE especialidad ADD CONSTRAINT uq_especialidad_nombre UNIQUE (especialidad_nombre);
-END IF;
-
-  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'uq_usuarios_cedula') THEN
-ALTER TABLE usuarios ADD CONSTRAINT uq_usuarios_cedula UNIQUE (cedula);
-END IF;
-END$$;
 
 -- Localidades (Si el nombre ya existe, no hace nada)
 INSERT INTO localidad (localidad_nombre) VALUES
