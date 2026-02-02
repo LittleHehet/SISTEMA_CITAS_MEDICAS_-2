@@ -12,7 +12,7 @@ public class Localidad {
     private Integer id;
 
     @Size(max = 20)
-    @Column(name = "localidad_nombre", length = 20 , unique = true)
+    @Column(name = "localidad_nombre", unique = true , length = 20 )
     private String localidadNombre;
 
     public Integer getId() {
