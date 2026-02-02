@@ -1,20 +1,18 @@
 package com.example.sistema_citas.logic;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "localidad")
 public class Localidad {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "localidad_id", nullable = false)
     private Integer id;
 
     @Size(max = 20)
-    @Column(name = "localidad_nombre", length = 20)
+    @Column(name = "localidad_nombre", length = 20 , unique = true)
     private String localidadNombre;
 
     public Integer getId() {

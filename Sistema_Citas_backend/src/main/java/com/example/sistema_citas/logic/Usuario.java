@@ -13,7 +13,7 @@ public class Usuario {
     private Integer id;
 
     @NotNull
-    @Column(name = "cedula", nullable = false)
+    @Column(name = "cedula", nullable = false, unique = true)
     private Integer cedula;
 
     @Size(max = 30)
