@@ -1,6 +1,8 @@
 CREATE UNIQUE INDEX IF NOT EXISTS ux_localidad_nombre ON localidad(localidad_nombre);
 CREATE UNIQUE INDEX IF NOT EXISTS ux_especialidad_nombre ON especialidad(especialidad_nombre);
 CREATE UNIQUE INDEX IF NOT EXISTS ux_usuarios_cedula ON usuarios(cedula);
+ALTER TABLE medicos ALTER COLUMN especialidad DROP NOT NULL;
+ALTER TABLE medicos ALTER COLUMN localidad DROP NOT NULL;
 
 
 -- Localidades (Si el nombre ya existe, no hace nada)

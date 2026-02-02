@@ -20,7 +20,7 @@ public class Medico {
     private Usuario usuario;
 
 
-    @OneToOne(fetch = FetchType.EAGER, optional = false)
+    @OneToOne(fetch = FetchType.EAGER, optional = true)
     @JoinColumn(name = "especialidad")
     private Especialidad especialidad;
 
@@ -28,7 +28,7 @@ public class Medico {
     private BigDecimal costo;
 
 
-    @OneToOne(fetch = FetchType.EAGER, optional = false)
+    @OneToOne(fetch = FetchType.EAGER, optional = true)
     @JoinColumn(name = "localidad")
     private Localidad localidad;
 
