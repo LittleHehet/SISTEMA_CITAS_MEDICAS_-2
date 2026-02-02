@@ -1,5 +1,8 @@
 import { Helmet } from "react-helmet";
 import favicon from '../assets/doctor-patient.png';
+
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+
 function Head() {
     return (
         <Helmet>

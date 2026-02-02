@@ -2,13 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+
 function EditarNota() {
     const { id } = useParams(); // Supone que la ruta viene con /editarNota/:id
     const [nota, setNota] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/verDetalleCita?id=${id}`)
+        axios.get(`${API_BASE_URL}/verDetalleCita?id=${id}`)
             .then(res => {
                 if (res.data && res.data.cita) {
                     setNota(res.data.cita.nota || '');
@@ -18,7 +20,7 @@ function EditarNota() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await axios.post('http://localhost:8080/guardarNota', null, {
+        await axios.post(`${API_BASE_URL}/guardarNota`, null, {
             params: { id, nota }
         });
         navigate('/GestionCitas');

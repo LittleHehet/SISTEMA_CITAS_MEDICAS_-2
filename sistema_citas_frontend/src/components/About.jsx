@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import '../styles.css';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+
 function About() {
     const [info, setInfo] = useState(null);
 
     useEffect(() => {
-        fetch('http://localhost:8080/api/about')
+        fetch(`${API_BASE_URL}/api/about`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Error en la respuesta del servidor');

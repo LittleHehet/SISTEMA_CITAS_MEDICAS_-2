@@ -2,7 +2,9 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/doctor-patient.png';
 
-function Header({ perfil,perfilCompleto, onLogout }) {
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+
+function Header({ perfil, perfilCompleto, onLogout }) {
 
     const navigate = useNavigate();
 

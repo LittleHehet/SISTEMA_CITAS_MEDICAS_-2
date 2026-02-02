@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import '../styles.css';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+
 function GestionCitas() {
     const [citas, setCitas] = useState([]);
     const [usuarios, setUsuarios] = useState([]);
@@ -13,7 +15,7 @@ function GestionCitas() {
 
     const fetchCitas = () => {
         const token = localStorage.getItem('token');
-        axios.get(`http://localhost:8080/api/gestion/citas?estado=${estado}&usuarioId=${usuarioId}`, {
+        axios.get(`${API_BASE_URL}/api/gestion/citas?estado=${estado}&usuarioId=${usuarioId}`, {
             headers: { Authorization: `Bearer ${token}` },
             withCredentials: true
         })
@@ -23,7 +25,7 @@ function GestionCitas() {
 
     const fetchUsuarios = () => {
         const token = localStorage.getItem('token');
-        axios.get('http://localhost:8080/api/gestion/usuarios', {
+        axios.get(`${API_BASE_URL}/api/gestion/usuarios`, {
             headers: { Authorization: `Bearer ${token}` },
             withCredentials: true
         })
@@ -38,8 +40,8 @@ function GestionCitas() {
 
     const handleAccion = async (id, accion) => {
         const url = accion === 'completar'
-            ? 'http://localhost:8080/api/gestion/completar'
-            : 'http://localhost:8080/api/gestion/cancelar';
+            ? `${API_BASE_URL}/api/gestion/completar`
+            : `${API_BASE_URL}/api/gestion/cancelar`;
 
         try {
             await axios.post(url, null, {

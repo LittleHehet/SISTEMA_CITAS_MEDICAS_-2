@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../styles.css';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+
 function BuscarCita() {
     const [especialidades, setEspecialidades] = useState([]);
     const [localidades, setLocalidades] = useState([]);
@@ -21,7 +23,7 @@ function BuscarCita() {
             : {}; // Usuario anónimo
 
         try {
-            const res = await axios.get('http://localhost:8080/api/BuscarCita/busqueda', {
+            const res = await axios.get(`${API_BASE_URL}/api/BuscarCita/busqueda`, {
                 headers,
                 withCredentials: true
             });
@@ -54,7 +56,7 @@ function BuscarCita() {
             if (filtros.especialidadId) params.append("especialidadId", filtros.especialidadId);
             if (filtros.localidadId) params.append("localidadId", filtros.localidadId);
 
-            const res = await axios.get(`http://localhost:8080/api/BuscarCita/busqueda?${params.toString()}`, {
+            const res = await axios.get(`${API_BASE_URL}/api/BuscarCita/busqueda?${params.toString()}`, {
                 headers,
                 withCredentials: true
             });
@@ -103,7 +105,7 @@ function BuscarCita() {
                 {medicos.map(medico => (
                     <div className="medico-card" key={medico.id}>
                         <img
-                            src={`http://localhost:8080/api/medico/foto?id=${medico.id}`}
+                            src={`${API_BASE_URL}/api/medico/foto?id=${medico.id}`}
                             alt="Foto del médico"
                             width="70"
                             height="70"

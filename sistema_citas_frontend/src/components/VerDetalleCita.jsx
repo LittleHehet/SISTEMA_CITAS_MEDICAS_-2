@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+
 function VerDetalleCita() {
     const [cita, setCita] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -31,7 +33,7 @@ function VerDetalleCita() {
             return;
         }
 
-        axios.get(`http://localhost:8080/api/gestion/cita?id=${id}`, {
+        axios.get(`${API_BASE_URL}/api/gestion/cita?id=${id}`, {
             headers: { Authorization: `Bearer ${token}` },
             withCredentials: true,
         })
@@ -49,7 +51,7 @@ function VerDetalleCita() {
 
     const handleGuardarNota = () => {
         const token = localStorage.getItem('token');
-        axios.post(`http://localhost:8080/api/gestion/nota`, null, {
+        axios.post(`${API_BASE_URL}/api/gestion/nota`, null, {
             params: { id, nota: notaEdit },
             headers: { Authorization: `Bearer ${token}` },
             withCredentials: true,
@@ -112,7 +114,7 @@ function VerDetalleCita() {
                                     className="submit-button"
                                     onClick={() => {
                                         const token = localStorage.getItem('token');
-                                        axios.post(`http://localhost:8080/api/gestion/notaYCompletar`, null, {
+                                        axios.post(`${API_BASE_URL}/api/gestion/notaYCompletar`, null, {
                                             params: { id, nota: notaEdit },
                                             headers: { Authorization: `Bearer ${token}` },
                                             withCredentials: true,

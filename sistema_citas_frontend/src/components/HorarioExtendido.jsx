@@ -3,6 +3,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import '../styles.css';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+
 function HorarioExtendido() {
     const [medico, setMedico] = useState(null);
     const [semanaCompleta, setSemanaCompleta] = useState([]);
@@ -23,7 +25,7 @@ function HorarioExtendido() {
             return;
         }
 
-        axios.get(`http://localhost:8080/api/HorarioExtendido?medicoId=${medicoId}`, {
+        axios.get(`${API_BASE_URL}/api/HorarioExtendido?medicoId=${medicoId}`, {
             headers,
             withCredentials: true
         })
@@ -66,7 +68,7 @@ function HorarioExtendido() {
 
             <div className="medico-info">
                 <img
-                    src={`http://localhost:8080/api/medico/foto?id=${medico.id}`}
+                    src={`${API_BASE_URL}/api/medico/foto?id=${medico.id}`}
                     alt="Foto del médico"
                     width="70"
                     height="70"

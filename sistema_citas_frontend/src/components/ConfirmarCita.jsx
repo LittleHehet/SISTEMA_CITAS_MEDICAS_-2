@@ -3,6 +3,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import '../styles.css';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+
 function ConfirmarCita() {
     const [medico, setMedico] = useState(null);
     const [dia, setDia] = useState('');
@@ -38,7 +40,7 @@ function ConfirmarCita() {
 
         const headers = { Authorization: `Bearer ${token}` };
 
-        axios.get(`http://localhost:8080/api/ConfirmarCita`, {
+        axios.get(`${API_BASE_URL}/api/ConfirmarCita`, {
             params: { medicoId, dia: diaParam, fecha: fechaParam, horaInicio: horaInicioParam, horaFin: horaFinParam },
             headers,
             withCredentials: true
@@ -61,7 +63,7 @@ function ConfirmarCita() {
         const token = localStorage.getItem('token');
         const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
-        axios.post(`http://localhost:8080/api/ConfirmarCita`, null, {
+        axios.post(`${API_BASE_URL}/api/ConfirmarCita`, null, {
             params: {
                 medicoId: medico.id,
                 dia,
@@ -97,7 +99,7 @@ function ConfirmarCita() {
             <h1 className="titleConfirmarCita">Información del Médico Seleccionado</h1>
 
             <img
-                src={`http://localhost:8080/api/medico/foto?id=${medico.id}`}
+                src={`${API_BASE_URL}/api/medico/foto?id=${medico.id}`}
                 alt="Foto del médico"
                 width="70"
                 height="70"

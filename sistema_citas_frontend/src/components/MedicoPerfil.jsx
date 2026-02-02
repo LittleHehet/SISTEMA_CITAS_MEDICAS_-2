@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../styles.css';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+
 function MedicoPerfil({ onPerfilCompletoChange }) {
     const [medico, setMedico] = useState(null);
     const [especialidades, setEspecialidades] = useState([]);
@@ -19,7 +21,7 @@ function MedicoPerfil({ onPerfilCompletoChange }) {
             return;
         }
 
-        axios.get('http://localhost:8080/api/medico/perfil', {
+        axios.get(`${API_BASE_URL}/api/medico/perfil`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -133,7 +135,7 @@ function MedicoPerfil({ onPerfilCompletoChange }) {
         }
 
         try {
-            const res = await axios.post('http://localhost:8080/api/medico/actualizar', formData, {
+            const res = await axios.post(`${API_BASE_URL}/api/medico/actualizar`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -162,7 +164,7 @@ function MedicoPerfil({ onPerfilCompletoChange }) {
                     <div className="form-group">
                         <label>Vista previa de la foto actual:</label>
                         <img
-                            src={`http://localhost:8080/api/medico/foto?id=${medico.id}&t=${fotoTimestamp}`}
+                            src={`${API_BASE_URL}/api/medico/foto?id=${medico.id}&t=${fotoTimestamp}`}
                             alt="Foto actual"
                             width="150"
                             height="150"

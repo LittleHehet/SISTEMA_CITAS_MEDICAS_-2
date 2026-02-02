@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+
 function SignUp() {
     const [form, setForm] = useState({
         cedula: '',
@@ -29,7 +31,7 @@ function SignUp() {
         }
 
         try {
-            const response = await axios.post('http://localhost:8080/api/signup', {
+            const response = await axios.post(`${API_BASE_URL}/api/signup`, {
                 cedula: parseInt(form.cedula),
                 nombre: form.nombre,
                 apellido: form.apellido,

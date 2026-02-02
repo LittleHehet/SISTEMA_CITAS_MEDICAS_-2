@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+
 const HistoricoPaciente = () => {
     const navigate = useNavigate();
     const [usuario, setUsuario] = useState({});
@@ -43,7 +45,7 @@ const HistoricoPaciente = () => {
         if (!config) return;
 
         try {
-            const response = await axios.get('http://localhost:8080/api/historicoPaciente/perfil', config);
+            const response = await axios.get(`${API_BASE_URL}/api/historicoPaciente/perfil`, config);
             setUsuario(response.data);
         } catch (error) {
             console.error("Error al obtener el perfil:", error);
@@ -65,7 +67,7 @@ const HistoricoPaciente = () => {
                 params.estado = filtros.estado;
             }
 
-            const response = await axios.get('http://localhost:8080/api/historicoPaciente/historico', {
+            const response = await axios.get(`${API_BASE_URL}/api/historicoPaciente/historico`, {
                 ...config,
                 params: params
             });
@@ -95,7 +97,7 @@ const HistoricoPaciente = () => {
         if (!config) return;
 
         try {
-            const response = await axios.get('http://localhost:8080/api/historicoPaciente/medicosDelPaciente', config);
+            const response = await axios.get(`${API_BASE_URL}/api/historicoPaciente/medicosDelPaciente`, config);
             setMedicos(response.data);
         } catch (error) {
             console.error("Error al obtener médicos:", error);
@@ -149,7 +151,7 @@ const HistoricoPaciente = () => {
                     <tr key={cita.id}>
                         <td>
                             <img
-                                src={`http://localhost:8080/api/medico/foto?id=${cita.medico.id}`}
+                                src={`${API_BASE_URL}/api/medico/foto?id=${cita.medico.id}`}
                                 alt="Foto del médico"
                                 width="50"
                                 height="50"

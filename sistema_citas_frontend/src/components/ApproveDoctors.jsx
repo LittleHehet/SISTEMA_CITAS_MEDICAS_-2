@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+
 export function ApproveDoctors() {
     const [usuarios, setUsuarios] = useState([]);
     const [estadoMap, setEstadoMap] = useState({});
@@ -13,7 +15,7 @@ export function ApproveDoctors() {
             return;
         }
 
-        fetch('http://localhost:8080/api/Approve', {
+        fetch(`${API_BASE_URL}/api/Approve`, {
             headers: { Authorization: `Bearer ${token}` },
         })
             .then((res) => {
@@ -56,7 +58,7 @@ export function ApproveDoctors() {
             return;
         }
 
-        fetch('http://localhost:8080/api/Approve/approve', {
+        fetch(`${API_BASE_URL}/api/Approve/approve`, {
             method: 'POST',
             headers: {
                 Authorization: `Bearer ${token}`,
