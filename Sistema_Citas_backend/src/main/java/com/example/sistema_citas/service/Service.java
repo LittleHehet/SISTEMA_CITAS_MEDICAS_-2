@@ -188,5 +188,10 @@ public class Service {
     return citaRepository.cancelarCitasPasadas();
   }
 
+  public Optional<Usuario> findByGoogleSubOrEmail(String sub, String email) {
+    return usuarioRepository.findByGoogleSub(sub)
+            .or(() -> usuarioRepository.findByEmail(email));
+  }
+
 
 }

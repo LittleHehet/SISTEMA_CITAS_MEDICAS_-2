@@ -173,11 +173,7 @@ public class Medico {
         return this.usuario != null ? this.usuario.getApellido() : "";
     }
 
-    public boolean isPendiente() {
-        return this.especialidad != null || this.costo != null
-                || this.localidad != null || this.horario != null || this.frecuenciaCitas != null
-                || this.nota != null || this.foto != null;
-    }
+
 
 
 }

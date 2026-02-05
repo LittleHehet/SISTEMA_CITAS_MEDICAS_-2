@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import '../styles.css';
 import axios from 'axios';
+import { GoogleLogin } from '@react-oauth/google';
+import { jwtDecode } from 'jwt-decode';
+
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 
@@ -63,6 +66,46 @@ function Login({ onLoginSuccess }) {
         }
     };
 
+    const handleGoogleSuccess = async (credentialResponse) => {
+        try {
+            const idToken = credentialResponse.credential; // <-- ID TOKEN (JWT)
+
+            // (Opcional) leer email/nombre del token en el front
+            const decoded = jwtDecode(idToken);
+            // console.log(decoded.email, decoded.name);
+
+            // Guardarlo igual que tu token local (tu app ya usa localStorage.token)
+            localStorage.setItem('token', idToken);
+
+            // Pedile al backend que lo valide y te devuelva el perfil real de tu BD
+            const me = await axios.get(`${API_BASE_URL}/api/auth/me`, {
+                headers: { Authorization: `Bearer ${idToken}` },
+            });
+
+            const { perfil, perfilCompleto, medicoEstado, medicoId } = me.data;
+
+            localStorage.setItem('perfil', perfil);
+            localStorage.setItem('perfilCompleto', perfilCompleto ? 'true' : 'false');
+            onLoginSuccess(perfil, perfilCompleto);
+
+            // Redirección igual que tu login local
+            if (perfil === 'ROLE_PACIENTE') navigate('/BuscarCita');
+            else if (perfil === 'ROLE_ADMINISTRADOR') navigate('/ApproveDoctors');
+            else if (perfil === 'ROLE_MEDICO') {
+                if (medicoEstado?.toLowerCase() !== 'aprobado') {
+                    setError('Tu cuenta está pendiente de aprobación.');
+                    return;
+                }
+                if (!perfilCompleto && medicoId) navigate(`/Medico-Perfil?id=${medicoId}`);
+                else navigate('/GestionCitas');
+            } else {
+                setError('Perfil desconocido');
+            }
+
+        } catch (e) {
+            setError('No se pudo iniciar sesión con Google');
+        }
+    };
 
 
     return (
@@ -97,6 +140,14 @@ function Login({ onLoginSuccess }) {
                         required
                     />
                     <button type="submit">Iniciar sesión</button>
+                    <div style={{ marginTop: '12px' }}>
+                        <GoogleLogin
+                            onSuccess={handleGoogleSuccess}
+                            onError={() => setError('Error con Google Login')}
+                            useOneTap={false}
+                        />
+                    </div>
+
                 </form>
                 {error && <div className="message error">{error}</div>}
             </div>

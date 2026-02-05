@@ -1,4 +1,4 @@
-package com.example.sistema_citas.logic;
+package com.example.sistema_citas.logic.DTO;
 
 import java.math.BigDecimal;
 import java.util.List;

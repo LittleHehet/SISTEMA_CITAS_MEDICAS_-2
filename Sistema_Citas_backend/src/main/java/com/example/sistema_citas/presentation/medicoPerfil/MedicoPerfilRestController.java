@@ -3,13 +3,14 @@ package com.example.sistema_citas.presentation.medicoPerfil;
 import com.example.sistema_citas.data.FotoRepository;
 import com.example.sistema_citas.logic.Foto;
 import com.example.sistema_citas.logic.Medico;
+import com.example.sistema_citas.logic.Usuario;
 import com.example.sistema_citas.service.Service;
 
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,22 +30,66 @@ public class MedicoPerfilRestController {
     @Autowired
     private FotoRepository fotoRepository;
 
+    private Optional<Usuario> getUsuarioAutenticado(Authentication authentication) {
+        if (authentication == null) return Optional.empty();
+
+        Object principal = authentication.getPrincipal();
+
+        // Google JWT
+        if (principal instanceof Jwt jwt) {
+            String sub = jwt.getClaimAsString("sub");
+            String email = jwt.getClaimAsString("email");
+            return service.findByGoogleSubOrEmail(sub, email);
+        }
+
+        // Login normal (cedula)
+        try {
+            Integer cedula = Integer.parseInt(authentication.getName());
+            return service.findByCedula(cedula);
+        } catch (NumberFormatException e) {
+            return Optional.empty();
+        }
+    }
+
+    private Optional<Medico> getMedicoAutenticado(Authentication authentication) {
+        Optional<Usuario> optUsuario = getUsuarioAutenticado(authentication);
+        if (optUsuario.isEmpty()) return Optional.empty();
+
+        Usuario usuario = optUsuario.get();
+
+        // Seguridad: solo MEDICO
+        if (usuario.getPerfil() == null || !usuario.getPerfil().equalsIgnoreCase("ROLE_MEDICO")) {
+            return Optional.empty();
+        }
+
+        // 1) Ideal para Google: Medico por relación Usuario
+        Optional<Medico> medicoOpt = service.findMedicoByUsuario(usuario);
+        if (medicoOpt.isPresent()) return medicoOpt;
+
+        // 2) Fallback para login local: Medico por cédula
+        if (usuario.getCedula() != null) {
+            return service.findMedicobyCedula(usuario.getCedula());
+        }
+
+        return Optional.empty();
+    }
+
     @GetMapping("/perfil")
     public ResponseEntity<?> obtenerPerfilDesdeToken(Authentication authentication) {
-        if (authentication == null || authentication.getName() == null) {
-            return ResponseEntity.status(401).body("No autenticado");
-        }
+        Usuario usuario = getUsuarioAutenticado(authentication)
+                .orElse(null);
 
-        Integer cedula = Integer.parseInt(authentication.getName());
+        if (usuario == null) return ResponseEntity.status(401).body("No autenticado");
 
-        Optional<Medico> medicoOpt = service.findMedicobyCedula(cedula);
-        if (medicoOpt.isEmpty()) {
+        if (!"ROLE_MEDICO".equalsIgnoreCase(usuario.getPerfil()))
+            return ResponseEntity.status(403).body("No autorizado");
+
+        Optional<Medico> medicoOpt = service.findMedicoByUsuario(usuario);
+        if (medicoOpt.isEmpty())
             return ResponseEntity.status(404).body("Médico no encontrado");
-        }
 
         Medico medico = medicoOpt.get();
 
-        // IMPORTANTE: asegurarse de que medico.getUsuarios() NO sea null
         if (medico.getUsuarios() == null) {
             return ResponseEntity.status(403).body("El perfil aún no ha sido aprobado por el administrador.");
         }
@@ -65,10 +110,12 @@ public class MedicoPerfilRestController {
             if (foto != null && foto.getImagen() != null) {
                 byte[] imagen = foto.getImagen();
                 String mimeType = "image/jpeg";
-                if (imagen[0] == (byte) 0x89 && imagen[1] == (byte) 0x50) {
+                if (imagen.length >= 2 && imagen[0] == (byte) 0x89 && imagen[1] == (byte) 0x50) {
                     mimeType = "image/png";
                 }
-                return ResponseEntity.ok().contentType(MediaType.parseMediaType(mimeType)).body(imagen);
+                return ResponseEntity.ok()
+                        .contentType(MediaType.parseMediaType(mimeType))
+                        .body(imagen);
             }
         }
         return ResponseEntity.notFound().build();
@@ -76,7 +123,9 @@ public class MedicoPerfilRestController {
 
     @PostMapping(value = "/actualizar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> actualizarPerfil(
-            @RequestParam("id") Integer id,
+            // ⚠️ Recomendado: NO confiar en el id que manda el front. Igual lo dejamos por compatibilidad.
+            @RequestParam(value = "id", required = false) Integer idFront,
+
             @RequestParam("costo") Integer costo,
             @RequestParam("frecuenciaCitas") Integer frecuenciaCitas,
             @RequestParam("nota") String nota,
@@ -86,44 +135,37 @@ public class MedicoPerfilRestController {
             @RequestParam(value = "archivoFoto", required = false) MultipartFile archivoFoto,
             Authentication authentication
     ) {
-        if (authentication == null || authentication.getName() == null) {
-            return ResponseEntity.status(401).body("No autenticado");
-        }
+        Optional<Medico> medicoOpt = getMedicoAutenticado(authentication);
 
-        Integer cedula = Integer.parseInt(authentication.getName());
-
-        Optional<Medico> medicoOpt = service.findMedicobyCedula(cedula);
         if (medicoOpt.isEmpty()) {
-            return ResponseEntity.badRequest().body("Médico no encontrado");
+            return ResponseEntity.status(401).body("No autenticado");
         }
 
         Medico medico = medicoOpt.get();
 
-        // Validar formato de horario
-        // Validar que haya 7 días separados por punto y coma
-        String[] dias = horario.split(";");
+        // Seguridad extra: si mandan id y no coincide, rechazás
+        if (idFront != null && !idFront.equals(medico.getId())) {
+            return ResponseEntity.status(403).body("No autorizado (id no corresponde al médico autenticado).");
+        }
 
-// Si vienen menos de 7, se completa con strings vacíos
+        // Validar formato de horario: 7 días separados por ;
+        String[] dias = horario.split(";");
         if (dias.length < 7) {
             String[] diasCompletos = new String[7];
             System.arraycopy(dias, 0, diasCompletos, 0, dias.length);
-            for (int i = dias.length; i < 7; i++) {
-                diasCompletos[i] = ""; // rellena los días faltantes
-            }
+            for (int i = dias.length; i < 7; i++) diasCompletos[i] = "";
             dias = diasCompletos;
         } else if (dias.length > 7) {
             return ResponseEntity.badRequest().body("El horario tiene más de 7 días. Verifique el formato.");
         }
 
-        // Validar el formato de cada día individualmente
         for (String dia : dias) {
             if (!dia.matches("^([0-9]{1,2}-[0-9]{1,2})?(,([0-9]{1,2}-[0-9]{1,2})?)?$")) {
                 return ResponseEntity.badRequest().body("Formato de horario incorrecto en uno de los días: " + dia);
             }
         }
 
-
-        // Procesar foto si se envío
+        // Foto
         Foto fotoFinal = medico.getFoto();
         if (archivoFoto != null && !archivoFoto.isEmpty()) {
             try {
@@ -135,14 +177,12 @@ public class MedicoPerfilRestController {
             }
         }
 
-        // Actualizar campos permitidos
         medico.setCosto(BigDecimal.valueOf(costo));
         medico.setFrecuenciaCitas(frecuenciaCitas);
         medico.setNota(nota);
         medico.setFoto(fotoFinal);
         medico.setHorario(horario);
 
-        // NUEVO: actualizar especialidad y localidad
         service.getAllEspecialidades().stream()
                 .filter(e -> e.getId().equals(especialidadId))
                 .findFirst()
@@ -158,7 +198,6 @@ public class MedicoPerfilRestController {
         return ResponseEntity.ok("Perfil actualizado correctamente");
     }
 
-
     private boolean perfilIncompleto(Medico medico) {
         return medico.getEspecialidad() == null || medico.getCosto() == null ||
                 medico.getLocalidad() == null || medico.getHorario() == null ||
@@ -166,5 +205,4 @@ public class MedicoPerfilRestController {
                 medico.getFoto() == null || medico.getFoto().getImagen() == null ||
                 medico.getNota() == null || medico.getNota().isBlank();
     }
-
 }

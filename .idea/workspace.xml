@@ -4,11 +4,49 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="57a7ca52-0f35-487f-88a4-68b2a28e2d5f" name="Changes" comment="" />
+    <list default="true" id="57a7ca52-0f35-487f-88a4-68b2a28e2d5f" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/presentation/Auth/AuthMeController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/presentation/error/ApiErrorHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/security/GoogleJwtAuthConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sistema_Citas_backend/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Sistema_Citas_backend/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/data/UsuarioRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/data/UsuarioRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/logic/CalcularHorarioDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/logic/DTO/CalcularHorarioDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/logic/CitaDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/logic/DTO/CitaDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/logic/DiaDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/logic/DTO/DiaDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/logic/Foto.java" beforeDir="false" afterPath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/logic/Foto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/logic/Medico.java" beforeDir="false" afterPath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/logic/Medico.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/logic/MedicoDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/logic/DTO/MedicoDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/logic/Usuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/logic/Usuario.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/logic/UsuarioConEstadoDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/logic/DTO/UsuarioConEstadoDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/presentation/Approve/ApproveRestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/presentation/Approve/ApproveRestController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/presentation/BuscarCita/BuscarCitaRestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/presentation/BuscarCita/BuscarCitaRestController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/presentation/ConfirmarCita/ConfirmarCitaRestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/presentation/ConfirmarCita/ConfirmarCitaRestController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/presentation/Gestion/GestionRestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/presentation/Gestion/GestionRestController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/presentation/historico/HistoricoRestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/presentation/historico/HistoricoRestController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/presentation/medicoPerfil/MedicoPerfilRestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/presentation/medicoPerfil/MedicoPerfilRestController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/security/JwtAuthFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/security/JwtAuthFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/security/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/service/Service.java" beforeDir="false" afterPath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/service/Service.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/util/JwtUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/java/com/example/sistema_citas/util/JwtUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/resources/import.sql" beforeDir="false" afterPath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/resources/import.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/resources/templates/error/customError.html" beforeDir="false" afterPath="$PROJECT_DIR$/Sistema_Citas_backend/src/main/resources/templates/error/customError.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sistema_citas_frontend/.env" beforeDir="false" afterPath="$PROJECT_DIR$/sistema_citas_frontend/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sistema_citas_frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/sistema_citas_frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sistema_citas_frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/sistema_citas_frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sistema_citas_frontend/src/components/Login.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/sistema_citas_frontend/src/components/Login.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sistema_citas_frontend/src/main.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/sistema_citas_frontend/src/main.jsx" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CopilotPersistence">
+    <persistenceIdMap>
+      <entry key="_C:/Universidad/SISTEMA_CITAS_MEDICAS_-2" value="2xFAcQe9KXLGLelCd82Sv8SVCGy" />
+    </persistenceIdMap>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -37,9 +75,9 @@
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "william",
+    "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "E:/Universidad/2025/Ciclo I/Programación IV/Proyecto II/SISTEMA_CITAS_MEDICAS_-2/Sistema_Citas_backend/src/main/java/com/example/sistema_citas",
+    "last_opened_file_path": "C:/Universidad/SISTEMA_CITAS_MEDICAS_-2",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -57,8 +95,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-a94e463ab2e7-intellij.indexing.shared.core-IU-243.25659.59" />
-        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-IU-243.25659.59" />
+        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.26094.121" />
+        <option value="bundled-js-predefined-d6986cc7102b-b26f3e71634d-JavaScript-IU-251.26094.121" />
       </set>
     </attachedChunks>
   </component>
@@ -71,10 +109,19 @@
       <option name="presentableId" value="Default" />
       <updated>1747523527104</updated>
       <workItem from="1747523528346" duration="2950000" />
+      <workItem from="1770321546843" duration="32000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="github-copilot-workspace">
+    <instructionFileLocations>
+      <option value=".github/instructions" />
+    </instructionFileLocations>
+    <promptFileLocations>
+      <option value=".github/prompts" />
+    </promptFileLocations>
   </component>
 </project>

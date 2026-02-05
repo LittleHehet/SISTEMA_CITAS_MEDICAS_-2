@@ -12,9 +12,9 @@ public class Foto {
     private Long id;
 
     @Lob
+    @Basic(fetch = FetchType.LAZY)
     @Column(name = "imagen", nullable = false)
     private byte[] imagen;
-    //private byte[] foto;
 
     @Column(name = "tipo_mime")
     private String tipoMime;

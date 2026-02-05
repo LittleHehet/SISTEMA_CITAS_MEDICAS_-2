@@ -5,6 +5,7 @@ import com.example.sistema_citas.logic.Cita;
 import com.example.sistema_citas.logic.Medico;
 import com.example.sistema_citas.logic.Usuario;
 import com.example.sistema_citas.service.Service;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -23,23 +24,38 @@ public class HistoricoRestController {
     @Autowired
     private Service service;
 
-    @GetMapping("/perfil")
-    public ResponseEntity<?> obtenerPerfilDesdeToken(Authentication authentication) {
-        if (authentication == null || authentication.getName() == null) {
-            return ResponseEntity.status(401).body("No autenticado");
+    private Optional<Usuario> getUsuarioAutenticado(Authentication authentication) {
+        if (authentication == null) return Optional.empty();
+
+        Object principal = authentication.getPrincipal();
+
+        // Si viene de Google/JWT
+        if (principal instanceof Jwt jwt) {
+            String sub = jwt.getClaimAsString("sub");
+            String email = jwt.getClaimAsString("email");
+
+            return service.findByGoogleSubOrEmail(sub, email); // te muestro abajo cómo
         }
 
-
-        Integer cedula = Integer.parseInt(authentication.getName());
-        Optional<Usuario> Opt = service.findByCedula(cedula);
-
-        if (Opt.isEmpty()) {
-            return ResponseEntity.status(404).body("Usuario no encontrado");
+        // Si viene login normal (cedula)
+        try {
+            Integer cedula = Integer.parseInt(authentication.getName());
+            return service.findByCedula(cedula);
+        } catch (NumberFormatException e) {
+            return Optional.empty();
         }
-
-        return ResponseEntity.ok(Opt.get());
     }
 
+
+    @GetMapping("/perfil")
+    public ResponseEntity<?> obtenerPerfilDesdeToken(Authentication authentication) {
+        Optional<Usuario> opt = getUsuarioAutenticado(authentication);
+
+        if (opt.isEmpty()) {
+            return ResponseEntity.status(401).body("No autenticado");
+        }
+        return ResponseEntity.ok(opt.get());
+    }
 
     @GetMapping("/historico")
     public ResponseEntity<?> obtenerHistorico(
@@ -47,15 +63,9 @@ public class HistoricoRestController {
             @RequestParam(value = "estado", required = false) String estado,
             Authentication authentication) {
 
-        if (authentication == null || authentication.getName() == null) {
-            return ResponseEntity.status(401).body("No autenticado");
-        }
-
-        Integer cedula = Integer.parseInt(authentication.getName());
-
-        Optional<Usuario> optUsuario = service.findByCedula(cedula);
+        Optional<Usuario> optUsuario = getUsuarioAutenticado(authentication);
         if (optUsuario.isEmpty()) {
-            return ResponseEntity.status(404).body("Usuario no encontrado");
+            return ResponseEntity.status(401).body("No autenticado");
         }
 
         Usuario usuario = optUsuario.get();
@@ -80,8 +90,6 @@ public class HistoricoRestController {
                 .distinct()
                 .collect(Collectors.toList());
 
-
-
         Map<String, Object> respuesta = new HashMap<>();
         respuesta.put("citas", citas);
         respuesta.put("medicos", medicos);
@@ -89,19 +97,17 @@ public class HistoricoRestController {
         return ResponseEntity.ok(respuesta);
     }
 
+
     @GetMapping("/medicosDelPaciente")
     public ResponseEntity<?> obtenerTodosLosMedicosDelPaciente(Authentication authentication) {
-        if (authentication == null || authentication.getName() == null) {
+
+        Optional<Usuario> optUsuario = getUsuarioAutenticado(authentication);
+        if (optUsuario.isEmpty()) {
             return ResponseEntity.status(401).body("No autenticado");
         }
 
-        Integer cedula = Integer.parseInt(authentication.getName());
-        Optional<Usuario> optUsuario = service.findByCedula(cedula);
-        if (optUsuario.isEmpty()) {
-            return ResponseEntity.status(404).body("Usuario no encontrado");
-        }
-
         Usuario usuario = optUsuario.get();
+
         List<Cita> citas = service.findAllCitasbyUser(usuario.getId());
         List<Medico> medicos = citas.stream()
                 .map(Cita::getMedico)

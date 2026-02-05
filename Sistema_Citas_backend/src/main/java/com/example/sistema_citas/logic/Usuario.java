@@ -12,8 +12,7 @@ public class Usuario {
     @Column(name = "usuarios_id", nullable = false)
     private Integer id;
 
-    @NotNull
-    @Column(name = "cedula", nullable = false, unique = true)
+    @Column(name = "cedula", unique = true)
     private Integer cedula;
 
     @Size(max = 30)
@@ -27,19 +26,30 @@ public class Usuario {
     private String apellido;
 
     @Size(max = 100)
-    @NotNull
-    @Column(name = "clave", nullable = false, length = 100)
+    @Column(name = "clave", length = 100)
     private String clave;
 
     @NotNull
     @Column(name = "perfil")
     private String perfil;
 
-    public Usuario() {
-    }
+    @Size(max = 120)
+    @Column(name = "email", unique = true, length = 120)
+    private String email;
 
 
-    public Usuario(Integer cedula, String nombre, String apellido, String clave, String perfil) {
+    @NotNull
+    @Column(name = "auth_provider", nullable = false, length = 20)
+    private String authProvider = "LOCAL";
+
+
+    @Size(max = 64)
+    @Column(name = "google_sub", unique = true, length = 64)
+    private String googleSub;
+
+    public Usuario() {}
+
+    public Usuario(Integer cedula, String nombre, String apellido, String clave, String perfil ) {
         this.cedula = cedula;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -67,16 +77,8 @@ public class Usuario {
         return nombre;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
     public String getApellido() {
         return apellido;
-    }
-
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
     }
 
     public String getClave() {
@@ -95,4 +97,12 @@ public class Usuario {
         this.perfil = perfil;
     }
 
+    public String getEmail() {return email;}
+    public void setEmail(String email) {this.email = email;}
+    public String getAuthProvider() {return authProvider;}
+    public void setAuthProvider(String authProvider) {this.authProvider = authProvider;}
+    public String getGoogleSub() {return googleSub;}
+    public void setGoogleSub(String googleSub) {this.googleSub = googleSub;}
+    public void setNombre(String givenName) {this.nombre = givenName;}
+    public void setApellido(String familyName) {this.apellido = familyName;}
 }

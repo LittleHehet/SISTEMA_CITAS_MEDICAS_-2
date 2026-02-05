@@ -4,19 +4,15 @@ import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.Locale;
 import com.example.sistema_citas.logic.*;
-import com.example.sistema_citas.data.EspecialidadRepository;
-import com.example.sistema_citas.data.LocalidadRepository;
+import com.example.sistema_citas.logic.DTO.CalcularHorarioDTO;
+import com.example.sistema_citas.logic.DTO.DiaDTO;
+import com.example.sistema_citas.logic.DTO.MedicoDTO;
 import com.example.sistema_citas.service.Service;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import org.springframework.security.core.Authentication;
 
 @RestController
 @RequestMapping("/api/BuscarCita")

@@ -41,6 +41,17 @@ Sistema de Citas Médicas es una aplicación web diseñada para gestionar citas 
    ```
 5. Accede a la aplicación desde tu navegador en `http://localhost:5173` (o el puerto configurado).
 
+## Autenticación
+
+La aplicación soporta dos métodos de autenticación:
+
+- JWT local (HS256) para login con credenciales
+- Google OAuth 2.0 (ID Token RS256)
+
+Ambos tokens son aceptados en las mismas rutas protegidas mediante
+un filtro de autenticación híbrido.
+
+
 ## 📄 Pantallas Principales
 
 - Inicio de Sesión y Registro

@@ -9,6 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.*;
@@ -25,6 +26,27 @@ public class ConfirmarCitaRestController {
     @Autowired
     private CitaRepository citaRepository;
 
+    private Optional<Usuario> getUsuarioAutenticado(Authentication authentication) {
+        if (authentication == null) return Optional.empty();
+
+        Object principal = authentication.getPrincipal();
+
+        // Google JWT
+        if (principal instanceof Jwt jwt) {
+            String sub = jwt.getClaimAsString("sub");
+            String email = jwt.getClaimAsString("email");
+            return service.findByGoogleSubOrEmail(sub, email);
+        }
+
+        // Login normal (cedula)
+        try {
+            Integer cedula = Integer.parseInt(authentication.getName());
+            return service.findByCedula(cedula);
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+
     @GetMapping
     public ResponseEntity<?> obtenerDatosCita(
             @RequestParam Integer medicoId,
@@ -35,12 +57,14 @@ public class ConfirmarCitaRestController {
             HttpSession session
     ) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String cedulaStr = auth.getName(); // o obtener usuario desde token
-        Optional<Usuario> usuarioOpt = service.findByCedula(Integer.parseInt(cedulaStr));
+        Optional<Usuario> usuarioOpt = getUsuarioAutenticado(auth);
+
         if (usuarioOpt.isEmpty()) {
             return ResponseEntity.status(401).body("Usuario no autenticado");
         }
+
         Usuario usuario = usuarioOpt.get();
+
 
         String perfil = usuario.getPerfil();
         if (!"ROLE_PACIENTE".equalsIgnoreCase(perfil)) {
@@ -78,10 +102,12 @@ public class ConfirmarCitaRestController {
             return ResponseEntity.status(401).body("Debe iniciar sesión para reservar la cita.");
         }
         String cedulaStr = auth.getName();
-        Optional<Usuario> usuarioOpt = service.findByCedula(Integer.parseInt(cedulaStr));
+        Optional<Usuario> usuarioOpt = getUsuarioAutenticado(auth);
+
         if (usuarioOpt.isEmpty()) {
             return ResponseEntity.status(401).body("Debe iniciar sesión para reservar la cita.");
         }
+
         Usuario usuario = usuarioOpt.get();
 
         Optional<Medico> medicoOpt = service.findMedicoById(medicoId);

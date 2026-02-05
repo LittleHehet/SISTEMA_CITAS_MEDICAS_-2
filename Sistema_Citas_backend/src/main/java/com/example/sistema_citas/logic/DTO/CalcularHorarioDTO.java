@@ -1,7 +1,4 @@
-package com.example.sistema_citas.logic;
-
-import java.time.LocalDate;
-import java.util.List;
+package com.example.sistema_citas.logic.DTO;
 
 // DTO para CalcularHorario
 public class CalcularHorarioDTO {

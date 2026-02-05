@@ -1,4 +1,6 @@
-package com.example.sistema_citas.logic;
+package com.example.sistema_citas.logic.DTO;
+
+import com.example.sistema_citas.logic.Usuario;
 
 public class UsuarioConEstadoDTO {
     private Integer cedula;

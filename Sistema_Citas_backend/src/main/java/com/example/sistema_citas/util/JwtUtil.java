@@ -74,4 +74,17 @@ public class JwtUtil {
     private boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
+
+    private boolean isLikelyGoogleToken(String token) {
+        try {
+            String[] parts = token.split("\\.");
+            if (parts.length < 2) return false;
+
+            String headerJson = new String(Base64.getUrlDecoder().decode(parts[0]));
+            // Google normalmente RS256
+            return headerJson.contains("\"alg\":\"RS256\"");
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

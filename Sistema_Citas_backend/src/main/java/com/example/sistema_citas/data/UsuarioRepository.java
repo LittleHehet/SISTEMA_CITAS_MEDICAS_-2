@@ -22,17 +22,9 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     // Buscar todos los usuarios de un perfil específico
     List<Usuario> findByPerfil(String perfil);
 
+    Optional<Usuario> findByGoogleSub(String googleSub);
+    Optional<Usuario> findByEmail(String email);
+
+
 }
 
-
-/*CREATE TABLE usuarios(
-    usuarios_id INT 		 NOT NULL AUTO_INCREMENT,
-    cedula 		INT 		 NOT NULL,
-    nombre 		VARCHAR(30)  NOT NULL,
-    apellido 	VARCHAR(30)  NOT NULL,
-    clave 		VARCHAR(100) NOT NULL,
-    perfil_id 	int 		 NOT NULL,
-    CONSTRAINT usuarios_pk PRIMARY KEY(usuarios_id),
-    CONSTRAINT usuario_fk  FOREIGN KEY (perfil_id) REFERENCES perfiles (perfil_id)
-);
-*/

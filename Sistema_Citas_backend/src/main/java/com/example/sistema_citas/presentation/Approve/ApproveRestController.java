@@ -2,16 +2,13 @@ package com.example.sistema_citas.presentation.Approve;
 
 
 import com.example.sistema_citas.logic.Medico;
-import com.example.sistema_citas.logic.UsuarioConEstadoDTO;
+import com.example.sistema_citas.logic.DTO.UsuarioConEstadoDTO;
 import com.example.sistema_citas.service.Service;
 import com.example.sistema_citas.logic.Usuario;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.ui.Model;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.*;
 
@@ -50,30 +47,36 @@ public class ApproveRestController {
 
 
     @GetMapping
-    public ResponseEntity<?> obtenerMedicosPendientes() {
+    public ResponseEntity<?> obtenerMedicosPendientes(Authentication authentication) {
+
+        if (authentication == null) {
+            return ResponseEntity.status(401).body("No autenticado");
+        }
+
+        boolean esAdministrador = authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMINISTRADOR"));
+
+        if (!esAdministrador) {
+            return ResponseEntity.status(403).body("Acceso denegado: no es administrador");
+        }
+
         List<Usuario> usuariosAux = service.findByPerfil("ROLE_MEDICO");
 
         List<UsuarioConEstadoDTO> listaDTO = new ArrayList<>();
-
         for (Usuario usuario : usuariosAux) {
-
             Optional<Medico> medicoOpt = service.findMedicobyCedula(usuario.getCedula());
-            if (medicoOpt.isPresent()) {
-                Medico medico = medicoOpt.get();
-
-                listaDTO.add(new UsuarioConEstadoDTO(
-                        usuario.getCedula(),
-                        usuario.getNombre(),
-                        usuario.getApellido(),
-                        medico.getEstado(),
-                        usuario.getId()
-                ));
-
-            } else {
-            }
+            medicoOpt.ifPresent(m -> listaDTO.add(new UsuarioConEstadoDTO(
+                    usuario.getCedula(),
+                    usuario.getNombre(),
+                    usuario.getApellido(),
+                    m.getEstado(),
+                    usuario.getId()
+            )));
         }
+
         return ResponseEntity.ok(listaDTO);
     }
+
 
 
 
